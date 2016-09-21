@@ -163,14 +163,14 @@ class opcm():
                 line.set_data(self.x[labels==label][:,0],self.x[labels==label][:,1])
                 line_center.set_data(self.theta[label][0],self.theta[label][1])
                 circle.center=self.theta[label][0],self.theta[label][1]
-                circle.set_radius(self.ita[label])
+                circle.set_radius(np.sqrt(self.ita[label]))
         else:
             for label,line ,line_center,circle in zip(range(self.m),self.lines[:self.m],self.line_centers[:self.m],self.circles[:self.m]):
                 line.set_data(self.x[labels==label][:,0],self.x[labels==label][:,1])
                 line_center.set_data(self.theta[label][0],self.theta[label][1])
                 circle.center=self.theta[label][0],self.theta[label][1]
-                circle.set_radius(self.ita[label])
-                print label,self.ita[label]
+                circle.set_radius(np.sqrt(self.ita[label]))
+                print label,np.sqrt(self.ita[label])
             for label,line ,line_center,circle in zip(range(self.m,self.m_ori),self.lines[self.m:],self.line_centers[self.m:],self.circles[self.m:]):
                 line.set_data([],[])
                 line_center.set_data([],[])
