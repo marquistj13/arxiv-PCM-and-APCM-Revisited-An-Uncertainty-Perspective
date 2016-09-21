@@ -43,7 +43,9 @@ class apcm():
         # the limit of axixes
         ax.set_xlim(self.x_lim)
         ax.set_ylim(self.y_lim)
-        return self.lines, self.line_centers, self.title
+        # add circles to indication the standard deviation, i.e., the influence of each cluster
+        self.circles=[ax.add_patch(plt.Circle((0,0),radius=0,color='k',fill=None,lw=2)) for _ in range(self.m_ori)]
+        return self.lines,self.line_centers,self.title,self.circles
 
     def init_theta_ita(self):
         """
@@ -139,10 +141,11 @@ class apcm():
             self.adapt_ita()
 
             p += 1
-            if (len(theta_ori) == len(self.theta)) & (np.linalg.norm(self.theta - theta_ori) < self.error):
+            if (len(theta_ori) == len(self.theta)) and (np.linalg.norm(self.theta - theta_ori) < self.error):
                 break
-            yield p
-            # yield self.x,self.theta,np.argmax(self.u,axis=1),self.m
+            yield p  # here the current iteration result has been recorded in the class, the result is ready for plotting.
+            # note that the yield statement returns p as an argument to the callback function __call__(self, p) which is called by the
+            # animation process
 
     def __call__(self, p):
         """
@@ -153,16 +156,23 @@ class apcm():
         self.title.set_text("%d th iteration." % p)
         # self.title.set_text(p)
         labels = np.argmax(self.u, axis=1)
-        if self.m == self.m_ori:
-            for label, line, line_center in zip(range(self.m), self.lines, self.line_centers):
-                line.set_data(self.x[labels == label][:, 0], self.x[labels == label][:, 1])
-                line_center.set_data(self.theta[label][0], self.theta[label][1])
+        # the following logic is as this: if the final cluster number is equal to the specified value
+        #then draw all the clusters, otherwise, the deleted clusters are not plotted
+        if self.m==self.m_ori:
+            for label,line,line_center,circle in zip(range(self.m),self.lines,self.line_centers,self.circles):
+                line.set_data(self.x[labels==label][:,0],self.x[labels==label][:,1])
+                line_center.set_data(self.theta[label][0],self.theta[label][1])
+                circle.center=self.theta[label][0],self.theta[label][1]
+                circle.set_radius(self.ita[label])
         else:
-            for label, line, line_center in zip(range(self.m), self.lines[:self.m], self.line_centers[:self.m]):
-                line.set_data(self.x[labels == label][:, 0], self.x[labels == label][:, 1])
-                line_center.set_data(self.theta[label][0], self.theta[label][1])
-            for label, line, line_center in zip(range(self.m, self.m_ori), self.lines[self.m:],
-                                                self.line_centers[self.m:]):
-                line.set_data(self.x[labels == label][:, 0], self.x[labels == label][:, 1])
-                line_center.set_data(self.theta[label][0], self.theta[label][1])
-        return self.lines, self.line_centers, self.title
+            for label,line ,line_center,circle in zip(range(self.m),self.lines[:self.m],self.line_centers[:self.m],self.circles[:self.m]):
+                line.set_data(self.x[labels==label][:,0],self.x[labels==label][:,1])
+                line_center.set_data(self.theta[label][0],self.theta[label][1])
+                circle.center=self.theta[label][0],self.theta[label][1]
+                circle.set_radius(self.ita[label])
+            for label,line ,line_center,circle in zip(range(self.m,self.m_ori),self.lines[self.m:],self.line_centers[self.m:],self.circles[self.m:]):
+                line.set_data([],[])
+                line_center.set_data([],[])
+                circle.set_radius(0)
+        # return self.lines,self.line_centers,self.title
+        return self.lines,self.line_centers,self.title,self.circles
