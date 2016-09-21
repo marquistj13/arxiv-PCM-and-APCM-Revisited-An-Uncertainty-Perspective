@@ -170,6 +170,7 @@ class apcm():
                 line_center.set_data(self.theta[label][0],self.theta[label][1])
                 circle.center=self.theta[label][0],self.theta[label][1]
                 circle.set_radius(self.ita[label])
+                print label,self.ita[label]
             for label,line ,line_center,circle in zip(range(self.m,self.m_ori),self.lines[self.m:],self.line_centers[self.m:],self.circles[self.m:]):
                 line.set_data([],[])
                 line_center.set_data([],[])
