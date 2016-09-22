@@ -127,8 +127,11 @@ class opcm():
     def adapt_ita(self):
         labels = np.argmax(self.u, axis=1)
         for cntr_index in range(self.m):
-            dist_2_cntr = map(np.linalg.norm, self.x[labels == cntr_index] - self.theta[cntr_index])
-            self.ita[cntr_index] = sum(np.square(dist_2_cntr)) / np.sum(labels == cntr_index)
+            # dist_2_cntr = map(np.linalg.norm, self.x[labels == cntr_index] - self.theta[cntr_index])
+            # self.ita[cntr_index] = sum(np.square(dist_2_cntr)) / np.sum(labels == cntr_index)
+            # next is the original pcm update of bandwidth, all points are used to compute it
+            dist_2_cntr = map(np.linalg.norm, self.x - self.theta[cntr_index])
+            self.ita[cntr_index] = sum(np.square(dist_2_cntr)) / np.shape(self.x)[0]
         pass
 
     def fit(self):
