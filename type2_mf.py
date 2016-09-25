@@ -29,8 +29,8 @@ for i,sigma_v0_i in enumerate(sigma_v0):
 marginal_ax=axs[2]
 def exp_marginal(x,mu,v0,sigma_v0):
     d=np.abs(x-mu)
-    v_square=0.5*(v0**2+2*sigma_v0*d+2*v0*np.sqrt(v0**2+4*sigma_v0*d))
-    return np.exp(-v_square/sigma_v0**2)
+    v_square=0.5*v0**2+sigma_v0*d+0.5*v0*np.sqrt(v0**2+4*sigma_v0*d)
+    return np.exp(-d**2/v_square)
 # def exp_marginal(x,mu,v0,sigma_v0):
 #     d=np.abs(x-mu)
 #     v_square=d
