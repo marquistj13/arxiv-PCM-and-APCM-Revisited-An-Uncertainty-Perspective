@@ -9,7 +9,7 @@ plt.style.use('ggplot')
 
 
 class opcm():
-    def __init__(self, X, m, alpha,ax, x_lim, y_lim, error=0.005, maxiter=10000):
+    def __init__(self, X, m, alpha,ax, x_lim, y_lim, error=0.0005, maxiter=10000):
         """
         :param X: scikit-learn form, i.e., pf shape (n_samples, n_features)
         :param m: NO.of initial clusters
@@ -127,11 +127,11 @@ class opcm():
     def adapt_ita(self):
         labels = np.argmax(self.u, axis=1)
         for cntr_index in range(self.m):
-            # dist_2_cntr = map(np.linalg.norm, self.x[labels == cntr_index] - self.theta[cntr_index])
-            # self.ita[cntr_index] = sum(np.square(dist_2_cntr)) / np.sum(labels == cntr_index)
+            dist_2_cntr = map(np.linalg.norm, self.x[labels == cntr_index] - self.theta[cntr_index])
+            self.ita[cntr_index] = sum(np.square(dist_2_cntr)) / np.sum(labels == cntr_index)
             # next is the original pcm update of bandwidth, all points are used to compute it
-            dist_2_cntr = map(np.linalg.norm, self.x - self.theta[cntr_index])
-            self.ita[cntr_index] = sum(np.square(dist_2_cntr)) / np.shape(self.x)[0]
+            # dist_2_cntr = map(np.linalg.norm, self.x - self.theta[cntr_index])
+            # self.ita[cntr_index] = sum(np.square(dist_2_cntr)) / np.shape(self.x)[0]
         pass
 
     def fit(self):
