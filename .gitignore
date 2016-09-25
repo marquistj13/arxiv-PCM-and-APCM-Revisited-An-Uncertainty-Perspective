@@ -3,6 +3,7 @@
 
 # Pycharm workspace file
 *.xml
+*.iml
 
 # Windows image file caches
 Thumbs.db
