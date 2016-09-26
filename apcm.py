@@ -102,18 +102,9 @@ class apcm():
             new_ita = self.alpha / (self.ita_hat * self.ita[cntr_index])
             u[:, cntr_index] = np.exp(-new_ita * np.square(dist_2_cntr))
         self.u = u
-        # # update theta (centers)
-        # for cntr_index in range(self.m):
-        #     self.theta[cntr_index] = np.sum(u[:, cntr_index][:, np.newaxis] * self.x, axis=0) / sum(u[:, cntr_index])
-        # pass
         # update theta (centers)
-        labels = np.argmax(self.u, axis=1)
         for cntr_index in range(self.m):
-            # now we try to allow the cluster members to calculate the center
-            u_selected=u[labels==cntr_index]
-            x_seletecd=self.x[labels==cntr_index]
-            self.theta[cntr_index] = np.sum(u_selected[:, cntr_index][:, np.newaxis]
-                                            * x_seletecd,axis=0) / sum(u_selected[:, cntr_index])
+            self.theta[cntr_index] = np.sum(u[:, cntr_index][:, np.newaxis] * self.x, axis=0) / sum(u[:, cntr_index])
         pass
 
     def cluster_elimination(self):
