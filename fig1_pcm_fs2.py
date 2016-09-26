@@ -30,7 +30,7 @@ def _generateFig1():
 if __name__=='__main__':
     X=_generateFig1()
     fig,ax=plt.subplots()
-    clf=pcm_fs2(X,3,8,ax=ax,x_lim=(-10,20),y_lim=(-8,16))
+    clf=pcm_fs2(X,3,6,ax=ax,x_lim=(-10,20),y_lim=(-8,16))
     # we should set "blit=False,repeat=False" or the program would fail. "init_func=clf.init_animation" plot the
     # background of each frame There is not much point to use blit=True, if most parts of your plot should be
     # refreshed. see http://stackoverflow.com/questions/14844223/python-matplotlib-blit-to-axes-or-sides-of-the
