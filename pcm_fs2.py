@@ -111,8 +111,13 @@ class pcm_fs2():
             u[:, cntr_index] = v_exp_marginal(dist_2_cntr,self.ita[cntr_index],self.sig_v0)
         self.u = u
         # update theta (centers)
+        labels = np.argmax(self.u, axis=1)
         for cntr_index in range(self.m):
-            self.theta[cntr_index] = np.sum(u[:, cntr_index][:, np.newaxis] * self.x, axis=0) / sum(u[:, cntr_index])
+            # now we try to allow the cluster members to calculate the center
+            u_selected=u[labels==cntr_index]
+            x_seletecd=self.x[labels==cntr_index]
+            self.theta[cntr_index] = np.sum(u_selected[:, cntr_index][:, np.newaxis]
+                                            * x_seletecd,axis=0) / sum(u_selected[:, cntr_index])
         pass
 
     def cluster_elimination(self):
