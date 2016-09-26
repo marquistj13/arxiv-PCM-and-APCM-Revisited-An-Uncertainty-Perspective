@@ -112,7 +112,9 @@ class pcm_fs2():
         self.u = u
         # update theta (centers)
         for cntr_index in range(self.m):
-            self.theta[cntr_index] = np.sum(u[:, cntr_index][:, np.newaxis] * self.x, axis=0) / sum(u[:, cntr_index])
+            samples_mask=u[:, cntr_index]>=0.3#only those without too much noise can be used to calculate centers
+            self.theta[cntr_index] = np.sum(u[samples_mask][:, cntr_index][:, np.newaxis]
+                                            * self.x[samples_mask], axis=0) / sum(u[samples_mask][:, cntr_index])
         pass
 
     def cluster_elimination(self):
