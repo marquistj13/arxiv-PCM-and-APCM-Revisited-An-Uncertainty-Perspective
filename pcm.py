@@ -125,6 +125,12 @@ class pcm():
         pass
 
     def adapt_ita(self):
+        """
+        Note that this function is not called in the fit() function as in the usual pcm.
+        However, we could call this function to believe that the bandwidth estimated in
+        this way is too large (because of noise).
+        :return:
+        """
         labels = np.argmax(self.u, axis=1)
         for cntr_index in range(self.m):
             # dist_2_cntr = map(np.linalg.norm, self.x[labels == cntr_index] - self.theta[cntr_index])
