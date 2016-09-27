@@ -147,7 +147,7 @@ class pcm():
             theta_ori = self.theta.copy()
             self.update_u_theta()
             self.cluster_elimination()
-            # self.adapt_ita()
+            self.adapt_ita()
 
             p += 1
             if (len(theta_ori) == len(self.theta)) and (np.linalg.norm(self.theta - theta_ori) < self.error):
