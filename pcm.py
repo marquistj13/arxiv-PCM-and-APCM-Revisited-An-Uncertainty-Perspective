@@ -138,6 +138,10 @@ class pcm():
             # next is the original pcm update of bandwidth, all points are used to compute it
             dist_2_cntr = map(np.linalg.norm, self.x - self.theta[cntr_index])
             self.ita[cntr_index] = sum(np.square(dist_2_cntr)) / np.shape(self.x)[0]
+            # the following update style would underestimate the bandwidth, however, its not the same way as apcm
+            # we say the bandwidth would be over estimated if all points are used to calculate the bandwidth in the
+            # apcm way. the point is that, we can never actually know the belongingness of each point in fuzzy clustering
+            # self.ita[cntr_index] = np.dot(np.square(dist_2_cntr),self.u[:,cntr_index]) / sum(self.u[:,cntr_index])
         pass
 
     def fit(self):
