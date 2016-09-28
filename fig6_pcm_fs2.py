@@ -13,9 +13,9 @@ def _generateFig1():
     :return:
     """
 
-    x0,y0=make_blobs(n_samples=400,n_features=2,centers=[[1,0]],cluster_std=0.3,random_state=45)
-    x1,y1=make_blobs(n_samples=400,n_features=2,centers=[[3,1.5]],cluster_std=0.3,random_state=45)
-    x2,y2=make_blobs(n_samples=400,n_features=2,centers=[[2.5,2]],cluster_std=0.3,random_state=45)
+    x0,y0=make_blobs(n_samples=400,n_features=2,centers=[[1,0]],cluster_std=0.2,random_state=45)
+    x1,y1=make_blobs(n_samples=400,n_features=2,centers=[[3,1.5]],cluster_std=0.2,random_state=45)
+    x2,y2=make_blobs(n_samples=400,n_features=2,centers=[[2.5,2]],cluster_std=0.2,random_state=45)
     y1+=1
     y2+=2
     X=np.vstack((x0,x1,x2))
@@ -32,7 +32,7 @@ def _generateFig1():
 if __name__=='__main__':
     X=_generateFig1()
     fig,ax=plt.subplots()
-    clf=pcm_fs2(X,3,0.1,alpha_cut=0.5,ax=ax,x_lim=(-1,5),y_lim=(-1,3.5))
+    clf=pcm_fs2(X,5,0.1,alpha_cut=0.3,ax=ax,x_lim=(-1,5),y_lim=(-1,3.5))
     # we should set "blit=False,repeat=False" or the program would fail. "init_func=clf.init_animation" plot the
     # background of each frame There is not much point to use blit=True, if most parts of your plot should be
     # refreshed. see http://stackoverflow.com/questions/14844223/python-matplotlib-blit-to-axes-or-sides-of-the
