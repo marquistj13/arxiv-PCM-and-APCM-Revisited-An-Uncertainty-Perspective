@@ -4,7 +4,7 @@ import skfuzzy as fuzz
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-colors = ['b', 'orange', 'g', 'r', 'c', 'm', 'y', 'k', 'Brown', 'ForestGreen']
+colors = ['b', 'orange', 'g', 'r', 'c', 'm', 'y', 'k', 'Brown', 'ForestGreen']*3
 plt.style.use('ggplot')
 
 
