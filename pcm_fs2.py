@@ -17,7 +17,7 @@ v_exp_marginal = np.vectorize(exp_marginal)
 
 
 class pcm_fs2():
-    def __init__(self, X, m, sig_v0, ax, x_lim, y_lim, error=0.005, maxiter=10000):
+    def __init__(self, X, m, sig_v0, ax, x_lim, y_lim, alpha_cut=0.1, error=0.005, maxiter=10000):
         """
         :param X: scikit-learn form, i.e., pf shape (n_samples, n_features)
         :param m: NO.of initial clusters
@@ -31,6 +31,7 @@ class pcm_fs2():
         self.ax = ax
         self.x_lim = x_lim  # tuple
         self.y_lim = y_lim
+        self.alpha_cut = alpha_cut
         self.error = error
         self.maxiter = maxiter
         # use fcm to initialise the clusters
@@ -112,7 +113,7 @@ class pcm_fs2():
         self.u = u
         # update theta (centers)
         for cntr_index in range(self.m):
-            samples_mask=u[:, cntr_index]>=0.3#only those without too much noise can be used to calculate centers
+            samples_mask=u[:, cntr_index]>=self.alpha_cut#only those without too much noise can be used to calculate centers
             self.theta[cntr_index] = np.sum(u[samples_mask][:, cntr_index][:, np.newaxis]
                                             * self.x[samples_mask], axis=0) / sum(u[samples_mask][:, cntr_index])
         pass
