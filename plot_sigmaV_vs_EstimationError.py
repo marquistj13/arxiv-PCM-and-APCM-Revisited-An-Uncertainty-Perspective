@@ -38,18 +38,13 @@ if __name__ == '__main__':
     results=[]
     for alpha_cut in [0.1,0.3,0.5]:
         tmp_alpha_cut=[]
-        for sigma_v in np.r_[1:15:100j]:
+        # for sigma_v in np.r_[1:15:100j]:
+        for sigma_v in np.arange(1, 20):
             clf = pcm_fs2(X, 3, sigma_v,alpha_cut=alpha_cut, ax=ax, x_lim=(-10, 20), y_lim=(-8, 16)).fit()
-            cluster_number = len(clf.theta)
-            if cluster_number < 2:  # we have 2 clusters in this data set.
-                center_error=10 # just use this for test. I don't know how to express this quantity.
-                pass
-            else:  # we assume that the algorithm is sure to result in only 2 clusters.
-                center_error = np.linalg.norm(clf.theta - theta_true)  # do we need to check the correspondence of them?
-            tmp_alpha_cut.append([[sigma_v,center_error,cluster_number]])
+            center_error = np.linalg.norm(clf.theta - theta_true)
+            tmp_alpha_cut.append([sigma_v,center_error])
         results.append(tmp_alpha_cut)
-    results=np.array(results)# shape: n_alpha_cut x n_sigma_v x 1 x 3
-    results=np.squeeze(results)#Remove single-dimensional entries from the shape of an array
+    results=np.array(results)# shape: n_alpha_cut x n_sigma_v  x 2
     print results.shape
     for i,result_i in enumerate(results):
         ax.plot(result_i[:,0],result_i[:,1],'.-',color=colors[i])
