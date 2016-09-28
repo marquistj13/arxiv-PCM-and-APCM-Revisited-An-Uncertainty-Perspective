@@ -38,7 +38,7 @@ if __name__ == '__main__':
     results=[]
     for alpha_cut in [0.1,0.3,0.5]:
         tmp_alpha_cut=[]
-        for sigma_v in np.arange(1, 20):
+        for sigma_v in np.r_[1:15:100j]:
             clf = pcm_fs2(X, 3, sigma_v,alpha_cut=alpha_cut, ax=ax, x_lim=(-10, 20), y_lim=(-8, 16)).fit()
             cluster_number = len(clf.theta)
             if cluster_number < 2:  # we have 2 clusters in this data set.
