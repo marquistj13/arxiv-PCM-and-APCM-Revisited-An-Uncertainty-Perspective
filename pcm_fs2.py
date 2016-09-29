@@ -4,7 +4,7 @@ import skfuzzy as fuzz
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-colors = ['b', 'orange', 'g', 'r', 'c', 'm', 'y', 'k', 'Brown', 'ForestGreen']*3
+colors = ['b', 'orange', 'g', 'r', 'c', 'm', 'y', 'k', 'Brown', 'ForestGreen'] * 3
 plt.style.use('ggplot')
 
 
@@ -109,11 +109,11 @@ class pcm_fs2():
         u = np.zeros((np.shape(self.x)[0], self.m))
         for cntr_index in range(self.m):
             dist_2_cntr = map(np.linalg.norm, self.x - self.theta[cntr_index])
-            u[:, cntr_index] = v_exp_marginal(dist_2_cntr,self.ita[cntr_index],self.sig_v0)
+            u[:, cntr_index] = v_exp_marginal(dist_2_cntr, self.ita[cntr_index], self.sig_v0)
         self.u = u
         # update theta (centers)
         for cntr_index in range(self.m):
-            samples_mask=u[:, cntr_index]>=self.alpha_cut#only those without too much noise can be used to calculate centers
+            samples_mask = u[:,cntr_index] >= self.alpha_cut  # only those without too much noise can be used to calculate centers
             self.theta[cntr_index] = np.sum(u[samples_mask][:, cntr_index][:, np.newaxis]
                                             * self.x[samples_mask], axis=0) / sum(u[samples_mask][:, cntr_index])
         pass
@@ -132,14 +132,31 @@ class pcm_fs2():
         if p > 0:
             self.u = np.delete(self.u, index_delete, axis=1)
             self.theta = np.delete(self.theta, index_delete, axis=0)
+            self.ita = np.delete(self.ita, index_delete, axis=0)
             self.m -= p
         pass
 
     def adapt_ita(self):
+        """
+        in the hard partition, if no point belongs to cluster i then it will be removed.
+        :return:
+        """
+        p=0
+        index_delete = []  # store the cluster index to be deleted
+
         labels = np.argmax(self.u, axis=1)
         for cntr_index in range(self.m):
             dist_2_cntr = map(np.linalg.norm, self.x[labels == cntr_index] - self.theta[cntr_index])
             self.ita[cntr_index] = sum(dist_2_cntr) / np.sum(labels == cntr_index)
+            if np.isclose(self.ita[cntr_index],0):
+                p += 1
+                index_delete.append(cntr_index)
+            # remove the respective center related quantities
+        if p > 0:
+            self.u = np.delete(self.u, index_delete, axis=1)
+            self.theta = np.delete(self.theta, index_delete, axis=0)
+            self.ita = np.delete(self.ita, index_delete, axis=0)
+            self.m -= p
         pass
 
     def fit(self):
@@ -182,7 +199,7 @@ class pcm_fs2():
                 line_center.set_data(self.theta[label][0], self.theta[label][1])
                 circle.center = self.theta[label][0], self.theta[label][1]
                 circle.set_radius(self.ita[label])
-                print label, self.ita[label]
+                print label, self.ita[label], len(self.ita)
             for label, line, line_center, circle in zip(range(self.m, self.m_ori), self.lines[self.m:],
                                                         self.line_centers[self.m:], self.circles[self.m:]):
                 line.set_data([], [])
