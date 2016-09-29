@@ -114,8 +114,10 @@ class pcm_fs2():
         # update theta (centers)
         for cntr_index in range(self.m):
             samples_mask = u[:,cntr_index] >= self.alpha_cut  # only those without too much noise can be used to calculate centers
-            self.theta[cntr_index] = np.sum(u[samples_mask][:, cntr_index][:, np.newaxis]
+            if np.any(samples_mask):# avoid null value for the following calculation
+                self.theta[cntr_index] = np.sum(u[samples_mask][:, cntr_index][:, np.newaxis]
                                             * self.x[samples_mask], axis=0) / sum(u[samples_mask][:, cntr_index])
+
         pass
 
     def cluster_elimination(self):
