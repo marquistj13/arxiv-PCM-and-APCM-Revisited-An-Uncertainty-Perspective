@@ -3,8 +3,9 @@
 .\#*
 *~
 
-# Python compiled file
+# Python compiled file and Numpy file
 *.pyc
+*.npz
 
 # Pycharm workspace file
 *.xml
