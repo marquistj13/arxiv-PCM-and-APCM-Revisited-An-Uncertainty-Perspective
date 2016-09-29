@@ -36,15 +36,15 @@ if __name__ == '__main__':
     theta_true = np.array([[13, 13], [5, 0]])
     fig, ax = plt.subplots()
     results = []
-    for alpha_cut in np.arange(0.1, 1, 0.1):  # 0.1 to 0.9
+    for alpha_cut in np.arange(0.1, 1, 0.05):  # 0.1 to 0.9
         tmp_alpha_cut = []
-        for sigma_v in np.arange(0.1, 2, 0.1):
+        for sigma_v in np.arange(0.01, 2, 0.01):
             clf = pcm_fs2(X, 10, sigma_v, alpha_cut=alpha_cut, ax=ax, x_lim=(-10, 20), y_lim=(-8, 16)).fit()
             tmp_alpha_cut.append(len(clf.theta))
         results.append(tmp_alpha_cut)
     results = np.array(results)
     print results.shape
-    np.savez(r'./alpha_cut_sigmaV', alpha_cut=np.arange(0.1, 1, 0.1), sigma_v=np.arange(0.1, 2, 0.1), results=results)
+    np.savez(r'./alpha_cut_sigmaV_long', alpha_cut=np.arange(0.1, 1, 0.1), sigma_v=np.arange(0.1, 2, 0.1), results=results)
 
     plt.show()
 
