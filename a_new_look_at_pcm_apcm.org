@@ -1,0 +1,53 @@
+#+STARTUP: content
+#+OPTIONS: 
+#+OPTIONS: toc:nil
+# set DATE to void to avoid it's display
+#+DATE: 
+#+LATEX_CLASS: IEEEtran
+#+LaTeX_CLASS_OPTIONS: [journal]
+#+LATEX_HEADER: \usepackage{subfig}
+# generate roman numbers
+#+LATEX_HEADER: \newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}} 
+# bold and italic vector
+#+LATEX_HEADER: \newcommand{\vect}[1]{\boldsymbol{#1}}
+# In IEEEtran_HOWTO the equations section on page 8. this 2500 config is to estore IEEEtran ability to automatically break within multiline equations
+#+LATEX_HEADER: \interdisplaylinepenalty=2500
+
+#+TITLE: A New Look at PCM and APCM
+
+\begin{abstract}
+We propose a unified framework for pcm and apcm, from the viewpoint (or by considering?) of uncertainty of the bandwidth parameter. It's shown that the difference between them is how much confidence we have in the data. In fact, the uncertainty of the bandwidth parameter is into the membership of  a point, this is done by using Prof. LiXin Wang's new formulation of the Type 2 fuzzy set, i.e. the conditional fuzzy set framework. Thus this paper also serves as a justify for this new formulation.
+\end{abstract}
+
+** Type 2 fuzzy set
+*** type2 fuzzy set 的曲线flat程度和不确定性的关系（越平坦越不确定）。
+*** explain the reasonable (ness?) of the type 2 fuzzy set formulation.
+We believe that the calculation of bandwidth underestimates the true value, that is, the points that contribute to the calculation of bandwidth coudn't be just those points that have high membership values higher than in other clusters, However, if all points are used to calculate the bandwidth, the bandwidth would be over estimated because of noisy data.
+the point is that, we can never actually know the belongingness of each point in fuzzy clustering, but we are sure that the number of points is larger than those obtained by hard thresholding (or choose the biggest?).
+(however this means that if we use the Gaussian fuzzy set, we can then only use this type2 formulation when we are sure that we underestimate the parameter?
+或者从另外一个角度，反推上面这一段的观点？ first we can see from the marginal fuzzy set that the estimated bandwidth is underestimated, and we use sigma_v to correctify this. This is easy to see. The point is that, belongingness (接下来就是上面这一段啦，我好聪明，这都能圆过去）。
+当然分析的时候应该把另外一个更新方式拉出来批判一下，we have tested that if we use all points to estimate bandwidth, then its obviously overestimated. The type2 FS provides us a tool find a value between this two values by considering the uncertainty of the bandwidth.
+** PCM and APCM
+apcm introduces the concept of smallest physical cluster to cope with the situation where close clusters are equally sized. The unified framework will cope with this situation by noise level.
+** The unified Framework
+** Analysis of the parameters
+1. 先从最本质的讲起吧。It's too noisy for the smaller cluster in the sense that if all points are used to compute its center (update its center), then the center will be dragged towards the larger cluster because there are more points in the larger cluster. Similarly, the larger cluster is dragged by the smaller cluster in the same way. 
+   The $\alpha-\text{cut}$ trick proposed in \cite{krishnapuram_possibilistic_1993} is used to compute the bandwidth with only the "good" feature point , and it's used here to update the center. but if we increase the sigma_v (uncertainty of the bandwidth), its easy to see from the MF figure that the two clusters are in noisy environment again.
+2. If the two clusters are closer than in fig.1, then  we have to  specify a larger noise level ( $\alpha$ is large), and the allowed uncertainty of bandwidth is also larger.
+   if the noise level is set very high, the bandwidth should be increased in order to search the correct center in dense region and also to enable possible cluster elimination, because a high noise level may indicate that fewer points are actually contributed to the adaption of center.  however the bandwidth shouldn't be too large. ( I have a plot, when bandwidth is not correspondingly increased, an redundant cluster is not eliminated.)
+3. this is the way how pcm misses out the smaller cluster. $\alpha$ and sigma_v are used together to constrain each cluster to stay in there clusters ,while still allowing to eliminate clusters in the same dense region.
+4. 要先说一下不同noise level下，center 估计误差和 sigma_v的关系。稍微解释一下这个关系
+   我初步画图的结果显示，此图正好证实了根据noise level vs 中心估计误差曲线可以判定何时由apcm转化为pcm的。
+5. 然后给出一个example来理解这个关系。考多少分能反映一个人的真实水平，if you say that he or she should scores at least 60, you have assumed that the easy degree of the paper is normal. However if the test is very hard, you only need to score say, 30. That is, weather the score would reflect the level of the 考试者 or not depends on the hardness of the test.
+6. 引出Type3 FS的必要性。但beyond our scope,因此留给读者来解决。
+   Similarly  .for summarize, We can be sure that the uncertainty of bandwidth ( sigma_v ) depends on the noise level, but can we model the relationship between them? For this problem, it's reasonable to use the concept of "Type 3 Fuzzy Set" which doesn't exit up to now, we leave it as an open question for the reader.
+   在吃完晚饭的路上，我突然意识到，Type3是一个很难的问题,但我查了一下的确有。我再把上一段修改一下。
+   It seems that the bandwidth can also be a Type-2 fuzzy set, and its parameter is the noise level. Can we use the framework of marginal fuzzy set to do this job(i.e. to construct the Type3 fs)? yes we can. now the marginal fuzzy set of the membership u has only one parameter sigma_v, so we can finally cancel out sigma_v if we can model the fuzziness of sigma_v with the noise level as a parameter, we leave it...
+   当然还得再补上一句：the fussiness of u depends on the fussiness of the bandwidth, whose fussiness depends on the the noise level, i.e. the Type 3 fuzzy set. It seems feasible to use the framework of marginal fuzzy to （后边接上上一段，哈哈）。
+7. 当然我们期望找到噪声程度和sigma_v的关系，这样就可以cancel out sigma_v 了，从而唯一的参数就是从数据中估计出来的noise level啦。
+
+
+#+BEGIN_LaTeX
+\bibliographystyle{IEEEtran}
+\bibliography{D:/emacs/etc/ZoteroOutput,IEEEabrv}
+#+END_LaTeX
