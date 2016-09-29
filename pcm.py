@@ -121,6 +121,7 @@ class pcm():
         if p > 0:
             self.u = np.delete(self.u, index_delete, axis=1)
             self.theta = np.delete(self.theta, index_delete, axis=0)
+            self.ita = np.delete(self.ita, index_delete, axis=0)
             self.m -= p
         pass
 
@@ -131,6 +132,8 @@ class pcm():
         this way is too large (because of noise).
         :return:
         """
+        p=0
+        index_delete = []  # store the cluster index to be deleted
         labels = np.argmax(self.u, axis=1)
         for cntr_index in range(self.m):
             # dist_2_cntr = map(np.linalg.norm, self.x[labels == cntr_index] - self.theta[cntr_index])
@@ -142,6 +145,15 @@ class pcm():
             # we say the bandwidth would be over estimated if all points are used to calculate the bandwidth in the
             # apcm way. the point is that, we can never actually know the belongingness of each point in fuzzy clustering
             # self.ita[cntr_index] = np.dot(np.square(dist_2_cntr),self.u[:,cntr_index]) / sum(self.u[:,cntr_index])
+            if np.isclose(self.ita[cntr_index],0):
+                p += 1
+                index_delete.append(cntr_index)
+            # remove the respective center related quantities
+        if p > 0:
+            self.u = np.delete(self.u, index_delete, axis=1)
+            self.theta = np.delete(self.theta, index_delete, axis=0)
+            self.ita = np.delete(self.ita, index_delete, axis=0)
+            self.m -= p
         pass
 
     def fit(self):
