@@ -31,12 +31,14 @@ cbar.ax.set_ylabel('# of contacts', rotation=270)
 
 # put the major ticks at the middle of each cell
 ax.set_xticks(np.arange(data.shape[1]) + 0.5, minor=False)
-ax.set_yticks(np.arange(data.shape[0]) + 0.5, minor=False)
-ax.invert_yaxis()
+from  pprint import pprint
+pprint(sigma_v[9::10])
+ax.set_yticks(np.arange(data.shape[0])[9::10] + 0.5, minor=False)
+# ax.invert_yaxis()
 
 #lebels
 column_labels = map(str,alpha_cut)
-row_labels = map(str,sigma_v)
+row_labels = map(str,sigma_v[9::10])
 ax.set_xticklabels(column_labels, minor=False)
 ax.set_yticklabels(row_labels, minor=False)
 
