@@ -38,13 +38,13 @@ if __name__ == '__main__':
     results = []
     for alpha_cut in np.arange(0.1, 1, 0.05):  # 0.1 to 0.9
         tmp_alpha_cut = []
-        for sigma_v in np.arange(2, 4, 0.1):
+        for sigma_v in np.arange(4, 15, 0.1):
             clf = pcm_fs2(X, 10, sigma_v, alpha_cut=alpha_cut, ax=ax, x_lim=(-10, 20), y_lim=(-8, 16)).fit()
             tmp_alpha_cut.append(len(clf.theta))
         results.append(tmp_alpha_cut)
     results = np.array(results)
     print results.shape
-    np.savez(r'./alpha_cut_sigmaV_long2', alpha_cut=np.arange(0.1, 1, 0.05), sigma_v=np.arange(2, 4, 0.1), results=results)
+    np.savez(r'./alpha_cut_sigmaV_long3', alpha_cut=np.arange(0.1, 1, 0.05), sigma_v=np.arange(4, 15, 0.1), results=results)
 
     plt.show()
 
