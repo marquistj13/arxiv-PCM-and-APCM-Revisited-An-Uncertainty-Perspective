@@ -44,7 +44,7 @@ if __name__ == '__main__':
         results.append(tmp_alpha_cut)
     results = np.array(results)
     print results.shape
-    np.savez(r'./alpha_cut_sigmaV_long', alpha_cut=np.arange(0.1, 1, 0.1), sigma_v=np.arange(0.1, 2, 0.1), results=results)
+    np.savez(r'./alpha_cut_sigmaV_long', alpha_cut=np.arange(0.1, 1, 0.05), sigma_v=np.arange(0.01, 2, 0.01), results=results)
 
     plt.show()
 
