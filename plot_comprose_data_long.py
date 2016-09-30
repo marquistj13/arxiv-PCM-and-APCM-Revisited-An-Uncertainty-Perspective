@@ -43,9 +43,9 @@ data[data >= 5] = 5
 X, Y = np.meshgrid(alpha_cut, sigma_v)
 # plt.scatter(x=X,y=Y,c=results)
 
-fig, ax = plt.subplots(figsize=(4.5, 3.5), dpi=300, facecolor='white')
+fig, ax = plt.subplots(figsize=(3.5, 2.5), dpi=300, facecolor='white')
 dpi = fig.dpi  # extract the dpi value
-fig.set_size_inches(4.5, 3.5)  # physical size
+# fig.set_size_inches(3.5, 2.5)  # physical size
 
 heatmap = ax.pcolor(data, cmap=cMap, norm=norm)
 # legend
@@ -53,8 +53,9 @@ cbar = plt.colorbar(heatmap, cmap=cMap, norm=norm, boundaries=bounds)
 # cbar = plt.colorbar(heatmap, cmap=cMap, norm=norm, boundaries=bounds, ticks=[1, 2, 3, 4, 5])
 cbar.ax.get_yaxis().set_ticks([])
 cbar.ax.get_yaxis().set_ticks([])
-for j, lab in enumerate([r'$m_{final}=1$', '$m_{final}=2$', '$m_{final}=3$', '$m_{final}=4$', '$m_{final}\geq5$']):
-    cbar.ax.text(2.8, (2 * j + 1) / 10.0, lab, ha='center', va='center', fontname='Times New Roman',
+# for j, lab in enumerate([r'$m_{final}=1$', '$m_{final}=2$', '$m_{final}=3$', '$m_{final}=4$', '$m_{final}\geq5$']):
+for j, lab in enumerate([r'$m=1$', '$m=2$', '$m=3$', '$m=4$', '$m\geq5$']):
+    cbar.ax.text(2.3, (2 * j + 1) / 10.0, lab, ha='center', va='center', fontname='Times New Roman',
                  fontsize='xx-small')
 cbar.ax.get_yaxis().labelpad = 15
 
@@ -63,7 +64,9 @@ ax.set_xticks(np.arange(data.shape[1]) + 0.5, minor=False)
 ax.set_yticks(np.arange(data.shape[0])[9::10] + 0.5, minor=False)
 
 # labels
-column_labels = map(str, alpha_cut)
+# we know the 'column' is 0.1 to 0.95, so we manullary set it, and remove the '0' on the left
+# column_labels = map(str, alpha_cut)
+column_labels = map(lambda x:str(x).lstrip('0'), np.arange(.1,1,0.05))
 # we know the 'row' is 0 to 16, so we manullary set it
 # row_labels = map(str, sigma_v[9::10])
 row_labels = map(str, range(1,17,1))
@@ -71,7 +74,7 @@ ax.set_xticklabels(column_labels, minor=False, fontsize=4)
 ax.set_yticklabels(row_labels, minor=False, fontsize=4)
 
 # remove extra 0 in the ticks
-formatter = FuncFormatter(lambda x, pos: str(x).rstrip('0'))
+formatter = FuncFormatter(lambda x, pos: str(x).lstrip('0'))
 for _, axi in np.ndenumerate([ax]):
     # axi.yaxis.set_major_formatter(formatter) #it doesn't work for yaxis,I don't know why
     # axi.xaxis.set_major_formatter(formatter) # also not works
