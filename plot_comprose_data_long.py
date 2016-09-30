@@ -74,7 +74,8 @@ ax.set_yticklabels(row_labels, minor=False, fontsize=4)
 formatter = FuncFormatter(lambda x, pos: str(x).rstrip('0'))
 for _, axi in np.ndenumerate([ax]):
     # axi.yaxis.set_major_formatter(formatter) #it doesn't work for yaxis,I don't know why
-    axi.xaxis.set_major_formatter(formatter)
+    # axi.xaxis.set_major_formatter(formatter) # also not works
+    pass
 for _, axi in np.ndenumerate([ax]):
     # Hide the right and top spines
     axi.spines['right'].set_visible(False)
