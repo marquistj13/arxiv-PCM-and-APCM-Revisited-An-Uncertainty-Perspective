@@ -16,13 +16,13 @@ raw_data2 = np.load(r'./alpha_cut_sigmaV_long2.npz')
 alpha_cut2, sigma_v2, data2 = raw_data2['alpha_cut'], raw_data2['sigma_v'], raw_data2['results']
 
 # in raw_data1,the range of sigma_v1is [0.01,2] the step of sigma_v1 is 0.01, we need to sub-sample it.
-alpha_cut1=alpha_cut1[9::10]#result: [0.1,0.2,...,1.9]
+sigma_v1=sigma_v1[9::10]#result: [0.1,0.2,...,1.9]
 # we also need to sub-sample the corresponding column of data1
 data1=data1[:,9::10]
 
 #compine the two data sets
-alpha_cut=np.hstack((alpha_cut1,alpha_cut2))
-sigma_v=sigma_v1 # the two are the same
+sigma_v=np.hstack((sigma_v1,sigma_v2))
+alpha_cut=alpha_cut1 # the two are the same
 print data1.shape,data2.shape
 data=np.hstack((data1,data2))
 
