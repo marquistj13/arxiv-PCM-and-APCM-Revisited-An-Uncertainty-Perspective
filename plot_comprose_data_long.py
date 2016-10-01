@@ -8,6 +8,7 @@ from matplotlib.ticker import FuncFormatter
 # this plot mainly refer to
 # http://stackoverflow.com/questions/9707676/defining-a-discrete-colormap-for-imshow-in-matplotlib
 # and http://stackoverflow.com/questions/7229971/2d-grid-data-visualization-in-python
+# and http://stackoverflow.com/questions/15908371/matplotlib-colorbars-and-its-text-labels
 # discrete color scheme
 cMap = ListedColormap(['green', 'blue', 'yellow', 'red', 'black'])
 # cMap = ListedColormap(['blue', 'green', 'yellow',  'black'])
