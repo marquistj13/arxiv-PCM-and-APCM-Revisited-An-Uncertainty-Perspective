@@ -159,7 +159,7 @@ def specific_case():
     # plot the marginal fuzzy set (also called membership function), we vary
     # the hyper-parameter sigma_v0 to see its influence
     marginal_ax = axs[2]
-    for i, sigma_v0_i in enumerate(np.r_[[0], 0.5:2:4j]):  # add sigma_v0_i=0 to indicate the original MF
+    for i, sigma_v0_i in enumerate(np.r_[[0], 0.5:5:4j]):  # add sigma_v0_i=0 to indicate the original MF
         marginal_ax.plot(x, v_exp_marginal(x, x_mu, v0, sigma_v0_i), '.-', color=colors[i], markersize=marker_size,
                          lw=line_width, label=r"$\sigma_v={0}$".format(sigma_v0_i))
     # set legend and text
