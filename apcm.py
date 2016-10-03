@@ -92,6 +92,7 @@ class apcm():
             ita[cntr_index] = np.dot(dist_2_cntr, u_orig[:, cntr_index]) / sum(u_orig[:, cntr_index])
         self.ita = ita
         self.ita_hat = min(ita)
+        print "In init:self.ita_hat/self.alpha",self.ita_hat/self.alpha
         pass
 
     def update_u_theta(self):
