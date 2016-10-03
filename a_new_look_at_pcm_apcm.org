@@ -33,10 +33,10 @@ if a point is very close to the center, then the corrected bandwidth is almost s
 then say that, knowing the uncertainty of the bandwidth doesn't mean that the mf of a point to some cluster becomes more certain.(Does a pdf share this property? Does the t2mf of Wang only gives this kind of interpretation?)
 
 frome the above analysis, we obtain the following definition
-Definition 1: A gaussian mf with uncertain bandwidth has the property that, it decreases slower from the center than the true bandwidth. so if we are more certain about the bandwidth, the gaussian will have a more fast decreasing rate. Let's make it more straightforward, a gaussian mf is a mf that has a slower decreasing rate of membership from the center than the mf with the true bandwidth.
+Definition 1: A gaussian mf with uncertain bandwidth has the property that, it decreases slower from the center than the true bandwidth. so if we are more certain about the bandwidth, the gaussian will have a more fast decreasing rate. Let's make it more straightforward, a gaussian mf with a uncertain bandwidth is a mf that has a slower decreasing rate of membership from the mode than the mf with the true bandwidth. and the mf will decrease slower when the uncertainty of the bandwidth increases.
 
 
-From the other hand, adopting this interpretation means that the bandwidth we estimated is smaller than its truth. This point can be understood by the following two points.
+From the other hand, adopting this interpretation means that the bandwidth we estimated should be smaller than its truth, then it's possible to approximating the true mf. This point can be understood by the following two points.
 **** type2 fuzzy set 的曲线flat程度和不确定性的关系（越平坦越不确定）。
 The cluster elimination ability provides a new view of clustering process. 从MF不确定性的角度来阐述clustering process。 At first, all clusters are with unknown centers and infinite bandwidth, i.e., with all points fully belonging to all clusters. After initialization with over-numbered clusters, each cluster is over confident about its bandwidth, i.e., its bandwidth is smaller than it should has. If a cluster is initialized with a bandwidth larger than its truth value, we say  it's less confident about its bandwidth. The above analysis also shows that the bandwidth does have uncertainty.
 然后引入我对于clustering的新的Definition: The clustering process is to make the MF curve of one cluster in each dense region less flat (if the bandwidth is over estimated) or more flat (otherwise).
