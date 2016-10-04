@@ -105,10 +105,13 @@ def specific_case():
     primary_ax = axs[0]
     x = np.r_[0:25:800j]
     x_mu = 12.5
-    sigma_x = np.r_[1:4:4j]
+    # sigma_x = [2.1,2.5,2.9]
     # for i, sigma_x_i in enumerate(sigma_x):
-    #     primary_ax.plot(x, v_expfun(x, x_mu, sigma_x_i), '.-', color=colors[i])
+    #     primary_ax.plot(x, v_expfun(x, x_mu, sigma_x_i), '.-', color=colors[0], markersize=marker_size, lw=line_width)
+    primary_ax.plot(x, v_expfun(x, x_mu, 2.1), '.-', color=colors[0], markersize=marker_size, lw=line_width, alpha=0.1)
     primary_ax.plot(x, v_expfun(x, x_mu, 2.5), '.-', color=colors[0], markersize=marker_size, lw=line_width)
+    primary_ax.plot(x, v_expfun(x, x_mu, 2.9), '.-', color=colors[0], markersize=marker_size, lw=line_width, alpha=0.1)
+    primary_ax.fill_between(x, v_expfun(x, x_mu, 2.1), v_expfun(x, x_mu, 2.9), color='b', alpha=0.5)
     # plot the center line
     x_tmp = np.zeros(50) + 12.5
     y_tmp = np.linspace(0, 1, 50)
@@ -129,10 +132,10 @@ def specific_case():
     secondary_ax = axs[1]
     v = np.r_[0:5:100j]
     v0 = 2.5  # the estimated bandwidth from data
-    sigma_v0 = np.r_[0.5:5:4j]  # standard deviation (or uncertainty) of the bandwidth
+    sigma_v0 = np.r_[0.5:2:4j]  # standard deviation (or uncertainty) of the bandwidth
     for i, sigma_v0_i in enumerate(sigma_v0):
         secondary_ax.plot(v, v_expfun(v, v0, sigma_v0_i), '.-', label=r"$\sigma_v={0}$".format(sigma_v0_i),
-                          color=colors[i+1], markersize=marker_size, lw=line_width)
+                          color=colors[i + 1], markersize=marker_size, lw=line_width)
     # secondary_ax.set_ylabel(r"$\mu_v(v)$",fontsize = label_fontsize)
     # secondary_ax.set_title("Secondary Fuzziness",fontsize = title_fontsize)
     # set legend and text
@@ -159,7 +162,7 @@ def specific_case():
     # plot the marginal fuzzy set (also called membership function), we vary
     # the hyper-parameter sigma_v0 to see its influence
     marginal_ax = axs[2]
-    for i, sigma_v0_i in enumerate(np.r_[[0], 0.5:5:4j]):  # add sigma_v0_i=0 to indicate the original MF
+    for i, sigma_v0_i in enumerate(np.r_[[0], sigma_v0]):  # add sigma_v0_i=0 to indicate the original MF
         marginal_ax.plot(x, v_exp_marginal(x, x_mu, v0, sigma_v0_i), '.-', color=colors[i], markersize=marker_size,
                          lw=line_width, label=r"$\sigma_v={0}$".format(sigma_v0_i))
     # set legend and text
