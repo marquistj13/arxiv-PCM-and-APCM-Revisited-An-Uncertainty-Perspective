@@ -63,7 +63,8 @@ Definition 3 (marginal fuzzy sets, Compositional Rule of Inference Scheme): Let 
 #+END_LaTeX
 
 Then the basic philosophy to dealing with type-2 fuzziness is to use (\ref{marginal_fs}) to "cancel out" the secondary fuzziness $V$ and transform the type-2 problems back to the ordinary type-1 framework. We can explicitly model the uncertainty of the membership caused by some parameter $V$ and "cancel" $V$ to get the type-1 marginal fuzzy set. Then the effect of the uncertainty of $V$ is incorporated into type-1 marginal fuzzy set. 
-For example, suppose we have estimated the center $x_0$ and bandwidth $v_0$ of a Gaussian membership function $\mu_X{x}$ to represent some cluster, and we want to consider the uncertainty of $\mu_X{x}$ caused by the uncertainty of the bandwidth parameter $V$. First, the conditional fuzzy set $X|V$ is constructed as follows:
+*** An Example to Illustrate the Incorporation of Uncertainty
+Suppose we have estimated the center $x_0$ and bandwidth $v_0$ of a Gaussian membership function $\mu_X{x}$ to represent some cluster, and we want to consider the uncertainty of $\mu_X{x}$ caused by the uncertainty of the bandwidth parameter $V$. First, the conditional fuzzy set $X|V$ is constructed as follows:
 #+BEGIN_LaTeX
 \begin{equation}
 \mu_{X|V}(x|V)=e^{-\frac{|x-x_0|^2}{V^2}}
@@ -100,7 +101,6 @@ where $v_{new}=0.5v^2_0+0.5v_0\sqrt{v_0^2+4\sigma_v|x-x_0|}+\sigma_v|x-c|}$. The
 #+END_LaTeX
 Fig.\ref{primary_fuzziness} shows the primary fuzziness when $x_0$ is estimated as 12.5 and $v_0$ is estimated as 2.5 but with uncertainty. Fig.\ref{secondary_fuzziness} shows the secondary fuzziness (uncertainty) of $v_0$ with various $\sigma_v$s. Note that we don't intend to model the uncertainty of $\sigma_v$ here. So we assume $\sigma_v$ is a given value. Fig.\ref{marginal_fuzziness} shows the marginal fuzzy fuzzy set into which the uncertainty has been incorporated.
 
-*** The new view offered by the new formulation of type2 fs
 We can see from (\ref{marginal_result}) and Fig.\ref{marginal_fuzziness} that 
 the marginal fuzzy set curve is more flat when the estimated bandwidth has much uncertainty, i.e., $\sigma_v$ is large.
 For a specific $\sigma_v$, the corrected bandwidth ($v_new$ in (\ref{marginal_result})) is almost the same as $v_0$ when $d(x_i,x_0)$ is small, and $v_new$ increases as $d(x_i,x_0)$ becomes large.
