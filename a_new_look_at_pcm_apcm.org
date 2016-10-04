@@ -24,34 +24,91 @@ apcm introduces the concept of smallest physical cluster to cope with the situat
 The main difference(or clustering behavior?) between pcm and apcm is that in apcm we can protect the small cluster from being dragged to the big cluster by manually specifying the bandwidth of the  minimum physical cluster. In this way, if the bandwidth of the small cluster is over-estimated, minimum physical cluster bandwidth will correct it to a lower value, or larger value otherwise.
 
 From formula x, we see that the membership of a point to some cluster is determined by the cluster center and the bandwidth. So we propose that the center update should be modified to avoid being dragged by the large cluster.
-** Type 2 fuzzy set
-*** introduction of the new formulation of type2 fs
-According to Zadeh \cite{zadeh_concept_1975}, a type-2 fuzzy set (T2 FS) is a fuzzy set whose membership values are type-1 fuzzy set on $[0,1]$. When written in more precise mathematical terms,  this definition becomes as follows:
-Definition 1 (from \cite{wang_new_2016}): A type-2 fuzzy set $\tilde{X}$ is a fuzzy set defined on the universe of discourse $\Omega_X$ whose membership value $\mu_\tilde{X}(x)$ for a given $x\in\Omega_X$ is a type-1 fuzzy set  $U(x)=\mu_\tilde{X}(x)$ defined on $\Omega_X\subseteq[0,1]$ with membership function \mu_{U(x)}(x,\mu_x) where $\mu_x\in\Omega_X\subseteq[0,1]$. The x is called _primary variable_ and $\mu_x$ is called the _secondary variable_. \qedsymbol
+** The Conditional Fuzzy Set Framework
+In this section, we first review the conditional fuzzy set framework. Then we show through an example that this new definition of a type-2 fuzzy is natural and reasonable to incorporate the uncertainty of the estimated bandwidth.
+*** The Conditional Fuzzy Set Framework
+According to Zadeh \cite{zadeh_concept_1975}, a type-2 fuzzy set (T2 FS) is a fuzzy set whose membership values are type-1 fuzzy set on $[0,1]$. When written in more precise mathematical terms,  this definition becomes as follows \cite{wang_new_2016}:
 
-It's clear that T2 FS is just that one fussiness (uncertainty) depends on another fuzziness. However Definition 1 makes T2 FS a complex subject. Recently Li-Xin Wang \cite{wang_new_2016} proposes a conditional fuzzy set framework to define a type-2 fuzzy set. This framework resembles the concept of conditional probability in probability theory, which studies the dependence of one randomness on the other randomness.
+Definition 1 (type-2 fuzzy sets ): A type-2 fuzzy set $\tilde{X}$ is a fuzzy set defined on the universe of discourse $\Omega_X$ whose membership value $\mu_\tilde{X}(x)$ for a given $x\in\Omega_X$ is a type-1 fuzzy set  $U(x)=\mu_\tilde{X}(x)$ defined on $\Omega_X\subseteq[0,1]$ with membership function \mu_{U(x)}(x,\mu_x) where $\mu_x\in\Omega_X\subseteq[0,1]$. The x is called /primary variable/ and $\mu_x$ is called the /secondary variable/. \qedsymbol
 
-In most real-world applications we choose the membership functions to have a fixed structure with some free parameters, such as the Gaussian membership function with the center or standard deviation as free parameters. In such formulations, the uncertainty (fuzziness) of the membership comes from the uncertainties of the free parameters; i.e., the parameter uncertainties are the causes, while the membership uncertainty is the effect, and it is natural to choose the independent cause as the secondary variable to characterize the secondary fuzziness, rather than choosing the dependent effect as the secondary variable.
+It's clear that T2 FS is just that one fussiness (uncertainty) depends on another fuzziness. However Definition 1 makes T2 FS a complex subject. To simplify this problem, Li-Xin Wang \cite{wang_new_2016} proposes a conditional fuzzy set framework:
 
+Definition 2 (conditional fuzzy sets): Let $X$ and $V$ be fuzzy sets defined on $\Omega_X$ and $\Omega_Y$, respectively. A _conditional fuzzy set_, denoted as $X|V$, is a fuzzy set defined on $\Omega_X$ with membership function:
+#+BEGIN_LaTeX
+\begin{equation}
+\mu_{X|V}(x|V),\;\;\;\;\;\;x\in\Omega_X
+\end{equation}
+#+END_LaTeX
+depending on the fuzzy set $V$ whose membership function is $\mu_V(v)$ with $v\in\Omega_V$. The x is called the /primary variable/ and $v$ is called the /secondary variable/; the membership function $\mu_{X|V}(x|V)$ characterizes the /primary fuzziness/ while the membership function $\mu_V(v)$ characterizes the /secondary fuzziness/.
 
+This framework resembles the concept of conditional probability in probability theory, which studies the dependence of one randomness on the other randomness. It is shown in \cite{wang_new_2016} that the above two definitions are equivalent. However the conditional fuzzy set framework provide a much more natural framework to model the dependence among multiple fuzziness than the type-2 fuzzy set formulation.
+In most real-world applications we choose the membership functions to have a fixed structure with some free parameters, such as the Gaussian membership function with the center or standard deviation as free parameters. In such formulations, the uncertainty (fuzziness) of the membership comes from the uncertainties of the free parameters; i.e., the parameter uncertainties are the causes, while the membership uncertainty is the effect, and it is natural to choose the independent cause as the secondary variable to characterize the secondary fuzziness (as in Definition 2 for a conditional fuzzy set), rather than choosing the dependent effect as the secondary variable (as in Definition 1 for a type-2 fuzzy set).
 
+It is also shown in\cite{wang_new_2016} that a conditional fuzzy set $X|V$ is equivalent to a fuzzy relation on $\Omega_X\times\Omega_V$ with membership function:
+#+BEGIN_LaTeX
+\label{fuzzy_relation}
+\begin{equation}
+\mu_{X|V}(x,v)=t[\mu_{X|V}(x|v),\mu_V(v)]
+\end{equation}
+#+END_LaTeX
+where $x\in\Omega_X$, $v\in\Omega_V$, $t[*,*]$ is the $t$-norm operator with minimum and product as the most common choices, and $\mu_{X|V}(x,v)$ is the membership function $\mu_{X|V}(x|V)$ of the conditional fuzzy set $X|V$ with the fuzzy set $V$  replaced by a free variable $v\in\Omega_V$
 
+In the study of several random variables, the statistics of each are called marginal, and the probability density function (pdf) of a single random variable is called a marginal pdf. Similarly, since the conditional fuzzy set or the type-2 fuzzy set contains two fuzzy variables (the primary and secondary variables), the concept of marginal fuzzy set for conditional fuzzy sets is introduced in \cite{wang_new_2016} as follows:
+Definition 3 (marginal fuzzy sets, Compositional Rule of Inference Scheme): Let $X|V$ be a conditional fuzzy set defined in Definition 2 whoese membership function $\mu_{X|V}(x,v)$ is given by (\ref{fuzzy_relation}). The /marginal fuzzy set/ of $X|V$, denoted as $X$, is a type-1 fuzzy set on $\Omega_X$ whose membership function $\mu_X(x)$ is determined through Zadeh's Compositional Rule of Inference:
+#+BEGIN_LaTeX
+\label{marginal_fs}
+\begin{equation}
+\mu_X(x)=\max_{v\in\Omega_V}\min[\mu_{X|V}(x|v),\mu_V(v)],\;\;x\in\Omega_X
+\end{equation}
+#+END_LaTeX
 
- 
+Then the basic philosophy to dealing with type-2 fuzziness is to use (\ref{marginal_fs}) to "cancel out" the secondary fuzziness $V$ and transform the type-2 problems back to the ordinary type-1 framework. We can explicitly model the uncertainty of the membership caused by some parameter $V$ and "cancel" $V$ to get the type-1 marginal fuzzy set. Then the effect of the uncertainty of $V$ is incorporated into type-1 marginal fuzzy set. 
+For example, suppose we have estimated the center $x_0$ and bandwidth $v_0$ of a Gaussian membership function $\mu_X{x}$ to represent some cluster, and we want to consider the uncertainty of $\mu_X{x}$ caused by the uncertainty of the bandwidth parameter $V$. First, the conditional fuzzy set $X|V$ is constructed as follows:
+#+BEGIN_LaTeX
+\begin{equation}
+\mu_{X|V}(x|V)=e^{-\frac{|x-x_0|^2}{V^2}}
+\end{equation}
+#+END_LaTeX
+and the uncertainty (fuzziness) of $V$ is also modeled as a Gaussian fuzzy set with the membership function:
+#+BEGIN_LaTeX
+\begin{equation}
+\mu_V(v)=e^{-\frac{(v-v0)^2}{\sigma^2_v}}
+\end{equation}
+#+END_LaTeX
+where $\sigma_v$ is a given constant determining the uncertainty of parameter $V$. Then according to Definition 3 (\ref{marginal_fs}), the marginal fuzzy set $X$ of $X|V$ with membership function:
+#+BEGIN_LaTeX
+\label{marginal_result}
+\begin{IEEEeqnarray}{ll}
+\mu_X(x)&=\max_{v\in R_+ }\min\left[e^{-\frac{|x-x_0|^2}{V^2}},e^{-\frac{(v-v0)^2}{\sigma^2_v}}\right] \nonumber \\
+        &=e^{-\frac{|x-x_0|^2}{v_{new}}
+\end{IEEEeqnarray}
+#+END_LaTeX
+where $v_{new}=0.5v^2_0+0.5v_0\sqrt{v_0^2+4\sigma_v|x-x_0|}+\sigma_v|x-c|}$. The last line is achieved at the highest point of the intersection $e^{-\frac{|x-x_0|^2}{V^2}}=e^{-\frac{(v-v0)^2}{\sigma^2_v}}$ which gives $v^2=v_{new}$ and substituting it into $e^{-\frac{|x-x_0|^2}{V^2}}$ or $e^{-\frac{(v-v0)^2}{\sigma^2_v}}$ gives the result. Let $d(x_i,x_0)$ denote the distance from a point $x_i$ to the center $x_0$. Then result (\ref{marginal_result}) can be generalized by replacing $|x-c|$ with $d(x_i,x_0)$.
+#+BEGIN_LaTeX
+\begin{figure*}[!t]
+   \centering
+   \subfloat[a]
+    {\includegraphics[width=1.2in]{img/type2_mf_1_primary.png}\label{primary_fuzziness}}
+   \hfil
+   \subfloat[b]
+    {\includegraphics[width=1.2in]{img/type2_mf_2_secondary.png}\label{secondary_fuzziness}}
+   \hfil
+   \subfloat[c]
+    {\includegraphics[width=1.2in]{img/type2_mf_3_marginal.png}\label{marginal_fuzziness}}
+   \label{illustrate_bandwidth_marginal}
+\end{figure*}
+#+END_LaTeX
+Fig.\ref{primary_fuzziness} shows the primary fuzziness when $x_0$ is estimated as 12.5 and $v_0$ is estimated as 2.5 but with uncertainty. Fig.\ref{secondary_fuzziness} shows the secondary fuzziness (uncertainty) of $v_0$ with various $\sigma_v$s. Note that we don't intend to model the uncertainty of $\sigma_v$ here. So we assume $\sigma_v$ is a given value. Fig.\ref{marginal_fuzziness} shows the marginal fuzzy fuzzy set into which the uncertainty has been incorporated.
+
 *** The new view offered by the new formulation of type2 fs
-**** New interpretation of uncertainty offered by the marginal fs curve.
-first say the conclusion from the curve that the more uncertain, the more flat of the mf curve.
-if a point is very close to the center, then the corrected bandwidth is almost same as v0, (i.e., the shape is almost same, as we can see from the marginal fuzzy set picture), with the distance to the center increasing, the curve becomes more flat. This is very different from simply specifying a larger bandwidth and is more intuitive.
+We can see from (\ref{marginal_result}) and Fig.\ref{marginal_fuzziness} that 
+the marginal fuzzy set curve is more flat when the estimated bandwidth has much uncertainty, i.e., $\sigma_v$ is large.
+For a specific $\sigma_v$, the corrected bandwidth ($v_new$ in (\ref{marginal_result})) is almost the same as $v_0$ when $d(x_i,x_0)$ is small, and $v_new$ increases as $d(x_i,x_0)$ becomes large.
+In other words, the uncertainty of the bandwidth $v_0$ is incorporated into the marginal fuzzy set $\mu_X(x)$ in such a way that membership function of points with small $d(x_i,x_0)$ remains almost the same shape as the one with $\sigma_v=0$ (i.e., with no uncertainty in $v_0$), and membership function of points with large $d(x_i,x_0)$ deviates much from the one with $\sigma_v=0$. The degree of deviation is controlled by $\sigma_v$ and $d(x_i,x_0)$. This behavior is very intuitive in the sense that the uncertainty of bandwidth $v_0$ is obviously reflected in the membership of $x_i$ only when $x_i$ is far from the center and $x_i$ can be seen as a noisy datum in this case. 
 
-knowing the uncertainty of the bandwidth doesn't mean that the mf of a point to some cluster becomes more certain.
-(Does a pdf share this property? Does the t2mf of Wang only gives this kind of interpretation?)
-In contrast, it's difficult to differentiate between  the membership of points far from the center. 远离中心的点的隶属度的区分度没那么大了,即相差没那么大了。
+(Below is a few open questions. The marginal fuzzy set incorporates uncertainty of the bandwidth by making the membership function curve more flat.  But why not make it more steep? Does the steepness of a membership function curve reflects uncertainty of the bandwidth? If so, small cluster with small bandwidth has less uncertainty than the big cluster? Note that if the curve is very steep, we can be very sure that the membership of point $x_1$ is very different from point $x_2$. But if the curve is less steep, their memberships become similar, we can't easily differentiate them any more. )
 
-frome the above analysis, we obtain the following definition
-Definition 1: A gaussian mf with uncertain bandwidth has the property that, it decreases slower from the center than the true bandwidth. so if we are more certain about the bandwidth, the gaussian will have a more fast decreasing rate. Let's make it more straightforward, a gaussian mf with a uncertain bandwidth is a mf that has a slower decreasing rate of membership from the mode than the mf with the true bandwidth. and the mf will decrease slower when the uncertainty of the bandwidth increases.
-
-
-From the analysis above, we can conclude that it's reasonable to use the type2 fs to represent the membership of a point to some cluster with uncertain bandwidth. but it's not easy to specify the uncertainty of the bandwidth because we can't even know the true bandwidth. Next we will show that the sigma_v depends on the noise level of the data set.
+From the above analysis, we can conclude that it's reasonable to use the marginal fuzzy set to incorporate the uncertainty of the bandwidth. But it's not easy to specify $\sigma_v$ so that the uncertainty of the bandwidth is properly represented. Next we will show that the choice of $\sigma_v$ depends on noise level of the data set.
 ** The unified Framework
 *** introduce the framework
 
