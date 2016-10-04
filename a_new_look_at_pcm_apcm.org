@@ -26,7 +26,7 @@ The main difference(or clustering behavior?) between pcm and apcm is that in apc
 From formula x, we see that the membership of a point to some cluster is determined by the cluster center and the bandwidth. So we propose that the center update should be modified to avoid being dragged by the large cluster.
 ** The Conditional Fuzzy Set Framework
 In this section, we first review the conditional fuzzy set framework. Then we show through an example that this new definition of a type-2 fuzzy is natural and reasonable to incorporate the uncertainty of the estimated bandwidth.
-
+*** The Conditional Fuzzy Set Framework
 According to Zadeh \cite{zadeh_concept_1975}, a type-2 fuzzy set (T2 FS) is a fuzzy set whose membership values are type-1 fuzzy set on $[0,1]$. When written in more precise mathematical terms,  this definition becomes as follows \cite{wang_new_2016}:
 
 Definition 1 (type-2 fuzzy sets ): A type-2 fuzzy set $\tilde{X}$ is a fuzzy set defined on the universe of discourse $\Omega_X$ whose membership value $\mu_\tilde{X}(x)$ for a given $x\in\Omega_X$ is a type-1 fuzzy set  $U(x)=\mu_\tilde{X}(x)$ defined on $\Omega_X\subseteq[0,1]$ with membership function \mu_{U(x)}(x,\mu_x) where $\mu_x\in\Omega_X\subseteq[0,1]$. The x is called /primary variable/ and $\mu_x$ is called the /secondary variable/. \qedsymbol
@@ -100,6 +100,7 @@ where $v_{new}=0.5v^2_0+0.5v_0\sqrt{v_0^2+4\sigma_v|x-x_0|}+\sigma_v|x-c|}$. The
 #+END_LaTeX
 Fig.\ref{primary_fuzziness} shows the primary fuzziness when $x_0$ is estimated as 12.5 and $v_0$ is estimated as 2.5 but with uncertainty. Fig.\ref{secondary_fuzziness} shows the secondary fuzziness (uncertainty) of $v_0$ with various $\sigma_v$s. Note that we don't intend to model the uncertainty of $\sigma_v$ here. So we assume $\sigma_v$ is a given value. Fig.\ref{marginal_fuzziness} shows the marginal fuzzy fuzzy set into which the uncertainty has been incorporated.
 
+*** The new view offered by the new formulation of type2 fs
 We can see from (\ref{marginal_result}) and Fig.\ref{marginal_fuzziness} that 
 the marginal fuzzy set curve is more flat when the estimated bandwidth has much uncertainty, i.e., $\sigma_v$ is large.
 For a specific $\sigma_v$, the corrected bandwidth ($v_new$ in (\ref{marginal_result})) is almost the same as $v_0$ when $d(x_i,x_0)$ is small, and $v_new$ increases as $d(x_i,x_0)$ becomes large.
