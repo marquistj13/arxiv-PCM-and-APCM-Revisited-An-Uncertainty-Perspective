@@ -6,8 +6,6 @@
 #+LATEX_CLASS: IEEEtran
 #+LaTeX_CLASS_OPTIONS: [journal]
 #+LATEX_HEADER: \usepackage{subfig}
-# generate roman numbers
-#+LATEX_HEADER: \newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}} 
 # bold and italic vector
 #+LATEX_HEADER: \newcommand{\vect}[1]{\boldsymbol{#1}}
 # In IEEEtran_HOWTO the equations section on page 8. this 2500 config is to estore IEEEtran ability to automatically break within multiline equations
@@ -19,7 +17,72 @@
 We propose a unified framework for pcm and apcm, from the viewpoint (or by considering?) of uncertainty of the bandwidth parameter. It's shown that the difference between them is how much confidence we have in the data. In fact, the uncertainty of the bandwidth parameter is into the membership of  a point, this is done by using Prof. LiXin Wang's new formulation of the Type 2 fuzzy set, i.e. the conditional fuzzy set framework. Thus this paper also serves as a justify for this new formulation.
 \end{abstract}
 
-** PCM and APCM
+** PCM and APCM Review and Questions
+*** review of pcm and apcm
+Typicality is one of the most commonly used interpretations of memberships in applications of fuzzy set theory. The membership value produced by fuzzy c-means (FCM) \cite{bezdek_pattern_2013} can't be used to indicate the typicality of a point in the cluster. Possibilistic c-means (PCM) \cite{krishnapuram_possibilistic_1993} solves this problem by forcing the membership of a point to be small if it's far from the cluster center (prototype). This intuition is incorporated into the objection function by adding a penalty term:
+#+BEGIN_LaTeX
+\begin{equation}
+J(\Theta,U)=\sum_{j=1}^{c}J_j=\sum_{j=1}^{c}\left[\sum_{i=1}^{N}u_{ij}d_{ij}^2+\gamma_j \sum_{i=1}^{N}f(u_{ij})\right]
+\end{equation}
+#+END_LaTeX
+where $\Theta=(\theta_1,\ldots,\theta_c)$ is a $c$-tuple of prototypes, $d_{ij}^2$ is the distance of feature point $x_i$ to prototype $\theta_j$, $N$ is the total number of feature vectors, $c$ is the number of clusters, and $U=[u_{ij}]$ is a $N\times c$ matrix where $u_{ij}$ denotes the /degree of compatibility/ of $x_i$ to the $j$th cluster $C_j$ which is represented by $\theta_j$. $\gamma_j$ can be seen as a bandwidth parameter of the possibility (membership) distribution for each cluster. $f(\cdot)$ is a decreasing function of $u_{ij}$ and forces the $u_{ij}$ as large as possible, thus avoiding the trivial solution that $u_{ij}=0$. A good choice for $f(\cdot)$ is proposed in \cite{krishnapuram_possibilistic_1996}:
+#+BEGIN_LaTeX
+\begin{equation}
+f(u_{ij})=u_{ij}\log u_{ij}-u_{ij}
+\end{equation}
+#+END_LaTeX 
+
+After minimizing $J(\Theta,U)$ with respect to $u_{ij}$ and $\theta_j$, we get the following update equations:
+#+BEGIN_LaTeX
+\begin{IEEEeqnarray}{ll}
+u_{ij}&=\exp\left(-\frac{d^2_{ij}}{\gamma_j}\right) \label{pcm_u_update}  \\
+\theta_j&=\frac{\Sigma_{i=1}^Nu_{ij}x_i}{\Sigma_{i=1}^Nu_{ij}} \label{pcm_theta_update}
+\end{IEEEeqnarray}
+#+END_LaTeX
+
+In PCM, the clusters do not have a lot of mobility, so a reasonable good initialization is required for the algorithm to converge to the global minimum. A common strategy for initializing is to run the FCM algorithm first and set
+#+BEGIN_LaTeX
+\begin{equation}
+\gamma_j=\frac{\Sigma_{i=1}^Nu_{ij}^{FCM}d^2_{ij}}{\Sigma_{i=1}^Nu_{ij}^{FCM}}
+\end{equation}
+#+END_LaTeX 
+where $d_{ij}=||x_i-\theta_j||$, $\theta_j$s and $u_{ij}^{FCM}$s are the final FCM estimates for cluster prototypes and membership values respectively. Then $\gamma_j$s are fixed and iterations are performed until a specific termination criterion is met.
+
+As pointed out in \cite{krishnapuram_possibilistic_1996}, PCM is primarily a mode-seeking algorithm. In other words, the algorithm can potentially find $c$ dense regions from a data set that may not have $c$ clusters. However, due to the well-known fact that since no link exists among clusters, each $J_j$ can be minimized independently, the $c$ dense regions found may be coincident, as reported in \cite{barni_comments_1996}. It was suggested in \cite{krishnapuram_possibilistic_1996} that this behavior is "a blessing in disguise" and can be utilized by merging coincident clusters after over-specifying $c$. This idea is implemented in the adaptive possibilistic c-means algorithm (APCM) \cite{xenaki_novel_2016} by adapting $\gamma_j$ at each iteration. Cluster $C_j$ is merged with another cluster and is eliminated when there are no points in cluster $C_j$ or $\gamma_j$ becomes $0$. This cluster elimination ability allows us to over-specify the cluster number and the algorithm still produces a reasonable number of clusters, which makes the algorithm very flexible because we don't need to have strong prior knowledge of the cluster number.
+
+However we should prevent the unexpected cluster elimination. In the case where two physical clusters of very different variance that are located very close to each other (see Fig.), the prototype of the small variance cluster is affected by the data points of its nearby big cluster which has numerous points, according to (\ref{pcm_u_update}) and (\ref{pcm_theta_update}). As a result, the two prototypes will merge. APCM alleviates this issue by introducing a parameter in $\gamma_j$ to manually scale the bandwidth:
+#+BEGIN_LaTeX
+\begin{equation}
+\gamma_j=\frac{\hat{\eta}}{\alpha}\eta_j
+\end{equation}
+#+END_LaTeX 
+where $\hat{\eta}$ is a constant defined as the minimum among all initial $\eta_j$s, $\hat{\eta}=\min_j\eta_j$, and $\alpha$ is chosen so that the quantity $\hat{\eta}/\alpha$ equals to the mean absolute deviation ($\eta_j$)  of the smallest physical cluster formed in the dataset. $\eta_j$ is initialized as
+#+BEGIN_LaTeX
+\begin{equation}
+\label{apcm_eta_init}
+\eta_j=\frac{\Sigma_{i=1}^Nu_{ij}^{FCM}d_{ij}}{\Sigma_{i=1}^Nu_{ij}^{FCM}}  
+\end{equation}
+#+END_LaTeX 
+respectively, where $d_{ij}=||x_i-\theta_j||$, $\theta_j$s and $u_{ij}^{FCM}$s in \ref{apcm_eta_init} are the final parameter estimates obtained by FCM. $\eta_j$ is updated at each iteration as the /mean absolute deviation/ of the most compatible to cluster $C_j$ data points which form a set $A_j$, i.e., $A_j=\{x_i|u_{ij}=\max_r u_{ir}\}$.
+#+BEGIN_LaTeX
+\begin{equation}
+\label{apcm_eta_update}
+\eta_j=\frac{1}{n_j}\sum_{x_i:}||x_i-\mu_j||
+\end{equation}
+#+END_LaTeX 
+where $n_j$ and $\mu_j$ are the number of points in $A_j$ and the mean vector of points in $A_j$ respectively. APCM only allows points in $A_j$ to update $\eta_j$, which is an essential condition for succeeding cluster elimination, as by this way, $\eta_j$ can become $0$. APCM chooses $\mu_j$ and not $\theta_j$ to update $\eta_j$ because $\theta_j$ may vary significantly while $\mu_j$ is more stable during the first few iterations.
+
+*** analysis and questions
+1. present two typical scenarios.
+   1. fig1 in apcm. the big cluster is inintialized into two cluster, how to ensure that they do merge?
+      must have enough bandwidth to move to the dense region
+   2. fig6 in apcm. the two cluster are too close, how to ensure that they don't merge?
+      bandwidth shouldn't be too large so that the two clusters don't merge.
+      if $\alpha$ is small, the actural bandwidth would be very large, that is why apcm would result in two clusters for fig. (see Fig.7 in \cite{xenaki_novel_2016} for the clustering result of apcm on data set Fig.6)
+2. What is the link between PCM and APCM?
+   It seems that the main difference of them is whether $\gamma_j$ varies. Can they be unified in the same framework?
+These two questions will be answered in Section.x. The next Section will show how to use type-2 fuzzy set to incorporate the uncertainty of estimated bandwidth into the membership value of point $x_i$.
+
 apcm introduces the concept of smallest physical cluster to cope with the situation where close clusters are equally sized. The unified framework will cope with this situation by noise level.
 The main difference(or clustering behavior?) between pcm and apcm is that in apcm we can protect the small cluster from being dragged to the big cluster by manually specifying the bandwidth of the  minimum physical cluster. In this way, if the bandwidth of the small cluster is over-estimated, minimum physical cluster bandwidth will correct it to a lower value, or larger value otherwise.
 
