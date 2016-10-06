@@ -93,8 +93,8 @@ def specific_case():
         axi.yaxis.set_ticks_position('left')
         axi.xaxis.set_ticks_position('bottom')
     for _, ax in np.ndenumerate(axs):
-        zed = [tick.label.set_fontsize(4) for tick in ax.xaxis.get_major_ticks()]
-        zed = [tick.label.set_fontsize(4) for tick in ax.yaxis.get_major_ticks()]
+        zed = [tick.label.set_fontsize(3) for tick in ax.xaxis.get_major_ticks()]
+        zed = [tick.label.set_fontsize(3) for tick in ax.yaxis.get_major_ticks()]
 
     # plot the primary membership function of x. sigma_x represents the bandwidth, we vary
     # this parameter to see the variation of membership functio
