@@ -15,7 +15,7 @@ def _generateFig1():
     :return:
     """
 
-    x0, y0 = make_blobs(n_samples=400, n_features=2, centers=[[13, 13]], cluster_std=1, random_state=45)
+    x0, y0 = make_blobs(n_samples=200, n_features=2, centers=[[13, 13]], cluster_std=1, random_state=45)
     x1, y1 = make_blobs(n_samples=1000, n_features=2, centers=[[5, 0]], cluster_std=3.7, random_state=45)
     y1 += 1
     X = np.vstack((x0, x1))
@@ -45,7 +45,7 @@ if __name__ == '__main__':
             tmp_alpha_cut.append([sigma_v,center_error])
         results.append(tmp_alpha_cut)
     results=np.array(results)# shape: n_alpha_cut x n_sigma_v  x 2
-    np.savez(r'./sigmaV_alpha_cut',alpha_cut=[0.1,0.3,0.5],sigma_v=np.r_[1:15:100j],results=results)
+    np.savez(r'./data/sigmaV_alpha_cut',alpha_cut=[0.1,0.3,0.5],sigma_v=np.r_[1:15:100j],results=results)
     print results.shape
     for i,result_i in enumerate(results):
         ax.plot(result_i[:,0],result_i[:,1],'.-',color=colors[i])
