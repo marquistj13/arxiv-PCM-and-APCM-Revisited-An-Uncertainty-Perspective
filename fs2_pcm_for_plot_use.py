@@ -36,7 +36,7 @@ class pcm_fs2():
         self.maxiter = maxiter
         # use fcm to initialise the clusters
         self.init_theta_ita()
-        pass
+        return None
 
     def init_animation(self):
         ax = self.ax
@@ -102,6 +102,7 @@ class pcm_fs2():
             ita[cntr_index] = np.dot(dist_2_cntr, u_orig[:, cntr_index]) / sum(u_orig[:, cntr_index])
         self.ita = ita
         self.ita_hat = min(ita)
+        self.labels_init=np.argmax(u_orig, axis=1)
         pass
 
     def update_u_theta(self):
