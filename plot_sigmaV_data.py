@@ -8,7 +8,7 @@ from matplotlib.ticker import FuncFormatter
 colors = ['m', 'ForestGreen', 'c', 'b', 'orange', 'g', 'r', 'y', 'k', 'Brown']
 # plt.style.use('grayscale')
 
-raw_data = np.load(r'./sigmaV_alpha_cut.npz')
+raw_data = np.load(r'./data/sigmaV_alpha_cut.npz')
 alpha_cut, sigma_v, data = raw_data['alpha_cut'], raw_data['sigma_v'], raw_data['results']
 
 fig, ax = plt.subplots(figsize=(3.5, 3.5), dpi=300, facecolor='white')
@@ -32,16 +32,16 @@ ax.plot(data_1[:, 0], data_1[:, 1], '.-', color=colors[1], markersize=marker_siz
 data_2 = data[2]
 ax.plot(data_2[:, 0], data_2[:, 1], '.-', color=colors[2], markersize=marker_size, label=r"$\alpha=0.5$")
 
-ax.legend(loc='upper left', fancybox=True, framealpha=0.5, prop={'size': 5})
+ax.legend(loc='lower right', fancybox=True, framealpha=0.5, prop={'size': 5})
 
-ax.axhline(y=7, xmin=0, xmax=16, color='k', ls='--')
+ax.axhline(y=8, xmin=0, xmax=16, color='k', ls='--')
 
 # apcm_color, pcm_color = 'r', 'blue'
 apcm_color, pcm_color = 'k', 'k'
-plt.fill_between(np.linspace(0, 16, 500), np.zeros(500), np.zeros(500) + 7, color=apcm_color, alpha=0.05)
-plt.fill_between(np.linspace(0, 16, 500), np.zeros(500) + 7, np.zeros(500) + 14, color=pcm_color, alpha=0.05)
-ax.text(1, 4, 'APCM', color=apcm_color)
-ax.text(1, 9, 'PCM', color=pcm_color)
+plt.fill_between(np.linspace(0, 16, 500), np.zeros(500), np.zeros(500) + 8, color=apcm_color, alpha=0.05)
+plt.fill_between(np.linspace(0, 16, 500), np.zeros(500) + 8, np.zeros(500) + 16, color=pcm_color, alpha=0.05)
+ax.text(0.1, 5, 'APCM', color=apcm_color)
+ax.text(0.1, 13, 'PCM', color=pcm_color)
 for _, axi in np.ndenumerate([ax]):
     # Hide the right and top spines
     axi.spines['right'].set_visible(False)
@@ -52,6 +52,6 @@ for _, axi in np.ndenumerate([ax]):
 for _, ax in np.ndenumerate([ax]):
     zed = [tick.label.set_fontsize(6) for tick in ax.xaxis.get_major_ticks()]
     zed = [tick.label.set_fontsize(6) for tick in ax.yaxis.get_major_ticks()]
-
+ax.tick_params(length=1)
 plt.savefig(r"./img/plot_sigmaV_data.png", dpi=fig.dpi, bbox_inches="tight")
 plt.show()
