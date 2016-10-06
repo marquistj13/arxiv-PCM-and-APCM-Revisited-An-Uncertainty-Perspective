@@ -18,8 +18,8 @@ def _generateFig1():
     :return:
     """
 
-    x0, y0 = make_blobs(n_samples=200, n_features=2, centers=[[13, 13]], cluster_std=1, random_state=45)
-    x1, y1 = make_blobs(n_samples=1000, n_features=2, centers=[[5, 0]], cluster_std=3.7, random_state=45)
+    x0, y0 = make_blobs(n_samples=1000, n_features=2, centers=[[5, 0]], cluster_std=3.7, random_state=45)
+    x1, y1 = make_blobs(n_samples=200, n_features=2, centers=[[13, 13]], cluster_std=1, random_state=45)
     y1 += 1
     X = np.vstack((x0, x1))
     y = np.hstack((y0, y1))
@@ -82,9 +82,11 @@ if __name__ == '__main__':
     ax_fig1 = axs[0]
     for label in range(2):
         ax_fig1.plot(X[y == label][:, 0], X[y == label][:, 1], '.',
-                     color=colors[label], markersize=marker_size)
+                     color=colors[label], markersize=marker_size, label="Cluster %d" % (label + 1))
     ax_fig1.set_xlim(-10, 20)
     ax_fig1.set_ylim(-15, 20)
+    lg=ax_fig1.legend(loc='upper left', fancybox=True, framealpha=0.8, prop={'size': 2}, borderpad=0.6)
+    lg.get_frame().set_lw(0.4)
     # plot fcm init
     ax_fig2 = axs[1]
     cluster_num = 10
@@ -103,11 +105,14 @@ if __name__ == '__main__':
     ax_fig3 = axs[2]
     for label in range(3):
         ax_fig3.plot(X[y == label][:, 0], X[y == label][:, 1], '.',
-                     color=colors[label], markersize=marker_size)
+                     color=colors[label], markersize=marker_size, label="Cluster %d" % (label + 1))
     ax_fig3.set_xlim(0.1, 3)
     ax_fig3.set_ylim(-0.75, 2.75)
     ax_fig3.set_xticklabels(map(str, ['', 0.5, 1, 1.5, 2, 2.5, 3]), minor=False)
     ax_fig3.set_yticklabels(map(str, ['', -0.5, 0, 0.5, 1, 1.5, 2, 2.5]), minor=False)
+    lg=ax_fig3.legend(loc='upper left', fancybox=True, framealpha=0.8, prop={'size': 2}, borderpad=0.6)
+    lg.get_frame().set_lw(0.4)
+
     # plot fcm init
     ax_fig4 = axs[3]
     cluster_num = 10
