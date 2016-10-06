@@ -18,12 +18,10 @@ norm = mpl.colors.BoundaryNorm(bounds, cMap.N)
 colors = ['b', 'orange', 'g', 'r', 'c', 'm', 'y', 'k', 'Brown', 'ForestGreen']
 # plt.style.use('ggplot')
 
-
-raw_data=np.load(r'./data/alpha_cut_sigmaV_fig1.npz')
+raw_data=np.load(r'./data/alpha_cut_sigmaV_fig6.npz')
 alpha_cut, sigma_v, data = raw_data['alpha_cut'], raw_data['sigma_v'], raw_data['results']
 
 print data.shape
-
 
 data = data.T
 data[data >= 5] = 5
@@ -78,6 +76,6 @@ for _, axi in np.ndenumerate([ax]):
 # See http://stackoverflow.com/questions/19184500/python-matplotlib-pcolor-blank-space
 ax.set_ylim((0, 160))
 
-plt.savefig(r"./img/plot_comprose_data_fig1.png",dpi=fig.dpi,bbox_inches="tight")
+plt.savefig(r"./img/plot_comprose_data_fig6.png",dpi=fig.dpi,bbox_inches="tight")
 plt.show()
 

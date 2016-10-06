@@ -9,30 +9,32 @@ colors = ['b', 'orange', 'g', 'r', 'c', 'm', 'y', 'k', 'Brown', 'ForestGreen']
 plt.style.use('ggplot')
 
 
-def _generateFig1():
+def _generateFig6():
     """
     Two close clusters, one big and the other small,
     :return:
     """
 
-    x0, y0 = make_blobs(n_samples=200, n_features=2, centers=[[13, 13]], cluster_std=1, random_state=45)
-    x1, y1 = make_blobs(n_samples=1000, n_features=2, centers=[[5, 0]], cluster_std=3.7, random_state=45)
+    x0, y0 = make_blobs(n_samples=400, n_features=2, centers=[[1, 0]], cluster_std=0.2, random_state=45)
+    x1, y1 = make_blobs(n_samples=400, n_features=2, centers=[[2.25, 1.5]], cluster_std=0.2, random_state=45)
+    x2, y2 = make_blobs(n_samples=400, n_features=2, centers=[[1.75, 2]], cluster_std=0.2, random_state=45)
     y1 += 1
-    X = np.vstack((x0, x1))
-    y = np.hstack((y0, y1))
+    y2 += 2
+    X = np.vstack((x0, x1, x2))
+    y = np.hstack((y0, y1, y2))
     # Visualize the test data
     fig0, ax0 = plt.subplots()
-    for label in range(2):
+    for label in range(3):
         ax0.plot(X[y == label][:, 0], X[y == label][:, 1], '.',
                  color=colors[label])
-        ax0.set_xlim(-10, 20)
-        ax0.set_ylim(-8, 16)
+    ax0.set_xlim(0.1, 3)
+    ax0.set_ylim(-0.75, 2.75)
     # ax0.set_title('Test data: 200 points x3 clusters.')
     return X
 
 
 if __name__ == '__main__':
-    X = _generateFig1()
+    X = _generateFig6()
     theta_true = np.array([[13, 13], [5, 0]])
     fig, ax = plt.subplots()
     results = []
@@ -44,7 +46,7 @@ if __name__ == '__main__':
         results.append(tmp_alpha_cut)
     results = np.array(results)
     print results.shape
-    np.savez(r'./data/alpha_cut_sigmaV_fig1', alpha_cut=np.arange(0.1, 1, 0.05), sigma_v=np.arange(0.1, 16.1, 0.1), results=results)
+    np.savez(r'./data/alpha_cut_sigmaV_fig6', alpha_cut=np.arange(0.1, 1, 0.05), sigma_v=np.arange(0.1, 16.1, 0.1), results=results)
 
     plt.show()
 
