@@ -13,7 +13,7 @@ def _generateFig1():
     :return:
     """
 
-    x0,y0=make_blobs(n_samples=200,n_features=2,centers=[[13,13]],cluster_std=1,random_state=45)
+    x0,y0=make_blobs(n_samples=300,n_features=2,centers=[[13,13]],cluster_std=1,random_state=45)
     x1,y1=make_blobs(n_samples=1000,n_features=2,centers=[[5,0]],cluster_std=3.7,random_state=45)
     y1+=1
     X=np.vstack((x0,x1))
