@@ -40,12 +40,12 @@ if __name__ == '__main__':
         tmp_alpha_cut=[]
         for sigma_v in np.r_[1:15:100j]:
         # for sigma_v in np.arange(1, 20):
-            clf = pcm_fs2(X, 3, sigma_v,alpha_cut=alpha_cut, ax=ax, x_lim=(-10, 20), y_lim=(-8, 16)).fit()
+            clf = pcm_fs2(X, 2, sigma_v,alpha_cut=alpha_cut, ax=ax, x_lim=(-10, 20), y_lim=(-8, 16)).fit()
             center_error = np.linalg.norm(clf.theta - theta_true)
             tmp_alpha_cut.append([sigma_v,center_error])
         results.append(tmp_alpha_cut)
     results=np.array(results)# shape: n_alpha_cut x n_sigma_v  x 2
-    np.savez(r'./data/sigmaV_alpha_cut',alpha_cut=[0.1,0.3,0.5],sigma_v=np.r_[1:15:100j],results=results)
+    np.savez(r'./data/sigmaV_alpha_cut_2initial',alpha_cut=[0.1,0.3,0.5],sigma_v=np.r_[1:15:100j],results=results)
     print results.shape
     for i,result_i in enumerate(results):
         ax.plot(result_i[:,0],result_i[:,1],'.-',color=colors[i])
