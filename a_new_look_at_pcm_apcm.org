@@ -205,7 +205,8 @@ In other words, the uncertainty of the bandwidth $v_0$ is incorporated into the 
 From the above analysis, we can conclude that it's reasonable to use the marginal fuzzy set to incorporate the uncertainty of the bandwidth. But it's not easy to specify $\sigma_v$ so that the uncertainty of the bandwidth is properly represented. Next we will show that the choice of $\sigma_v$ depends on noise level of the data set.
 ** The unified Framework
 *** introduce the framework
-
+In the PCM region, the small cluster has too  much mobility, so its prototype moves to the dense region of the whole data set, according to \ref{pcm_theta_update}, note that this is of course not the real dense region, it is just the average of good points in the data set, at the same time the big cluster almost stays in the dense region of the big cluster  . The two cluster may or may not merge. If the small cluster has many points, for example, 400 points, or if we set the noise level to 0.1, both this case has the same effect, that is, makes the estimated whole data set  dense region deviate from the big cluster. (Both cases have corresponding picture?)
+In the APCM region, Both clusters stay in their own dense region. That is, we manually confine their bandwidth.
 *** Analysis of the parameters
 1. 先从最本质的讲起吧。It's too noisy for the smaller cluster in the sense that if all points are used to compute its center (update its center), then the center will be dragged towards the larger cluster because there are more points in the larger cluster. Similarly, the larger cluster is dragged by the smaller cluster in the same way. 
    The $\alpha-\text{cut}$ trick proposed in \cite{krishnapuram_possibilistic_1993} is used to compute the bandwidth with only the "good" feature point , and it's used here to update the center. but if we increase the sigma_v (uncertainty of the bandwidth), its easy to see from the MF figure that the two clusters are in noisy environment again.
