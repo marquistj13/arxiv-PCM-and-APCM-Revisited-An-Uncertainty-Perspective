@@ -193,6 +193,7 @@ class pcm_fs2():
                 line_center.set_data(self.theta[label][0], self.theta[label][1])
                 circle.center = self.theta[label][0], self.theta[label][1]
                 circle.set_radius(self.ita[label])
+                print label, self.ita[label], len(self.ita)
         else:
             for label, line, line_center, circle in zip(range(self.m), self.lines[:self.m], self.line_centers[:self.m],
                                                         self.circles[:self.m]):
