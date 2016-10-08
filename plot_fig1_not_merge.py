@@ -86,6 +86,7 @@ if __name__ == '__main__':
         zed = [tick.label.set_fontsize(3) for tick in ax.yaxis.get_major_ticks()]
 
     plt.figure(1)
+    plt.savefig(r".\img\fig1_notmerge.png", dpi=dpi, bbox_inches='tight')
     plt.show()
 
     pass
