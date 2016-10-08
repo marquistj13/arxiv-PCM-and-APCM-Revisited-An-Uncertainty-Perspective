@@ -25,12 +25,10 @@ marker_size = 3
 # data_2=data[2]
 # ax.plot(data_2[:, 0], data_2[:, 1], '^-', color=colors[2],markersize=marker_size,label=r"$\alpha_{cut}=0.5$")
 # without marker
-data_0 = data[0]
-ax.plot(data_0[:, 0], data_0[:, 1], '.-', color=colors[0], markersize=marker_size, label=r"$\alpha=0.1$")
-data_1 = data[1]
-ax.plot(data_1[:, 0], data_1[:, 1], '.-', color=colors[1], markersize=marker_size, label=r"$\alpha=0.3$")
-data_2 = data[2]
-ax.plot(data_2[:, 0], data_2[:, 1], '.-', color=colors[2], markersize=marker_size, label=r"$\alpha=0.5$")
+
+for i,data_i in enumerate(data):
+    ax.plot(data_i[:, 0], data_i[:, 1], '.-', color=colors[i], markersize=marker_size, label=r"$\alpha=%.1f$"%(alpha_cut[i]))
+
 
 ax.legend(loc='lower right', fancybox=True, framealpha=0.5, prop={'size': 5})
 
