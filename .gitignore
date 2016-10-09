@@ -1,3 +1,7 @@
+# Latex tmp file
+*.bbl
+*.pdf
+
 # images
 *.png
 
