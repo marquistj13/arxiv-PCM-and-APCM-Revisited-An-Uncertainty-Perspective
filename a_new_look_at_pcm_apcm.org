@@ -120,6 +120,7 @@ As to Fig.\ref{fig6}, Cluster $2$ and Cluster $3$ are not well separated, so we 
 In summary, the choice of $\alpha$ in the correction term should be dealt with differently. And two needs naturally arise from the above observation.
 1. The above analysis shows that there is some difference between the two problems. In fact, the clustering algorithm faces a more noisy environment in Fig.\ref{fig6_ori} than in Fig.\ref{fig1_ori}. This means that we should have more control over the bandwidth correction term in noisy environment.
 2. The reason APCM introduces a bandwidth correction term is that the estimated bandwidth is not always reliable to recognize the structure underlying the data set. In other words, there is uncertainty in the estimated bandwidth, this uncertainty causes the uncertainty of the membership value of a point through (\ref{pcm_u_update}) , then the uncertainty passes to the cluster center through (\ref{pcm_theta_update}). If this uncertainty is not properly handled, the clustering algorithm would fail. 
+   In fact, the bandwidth estimation uncertainty can be attributed to the noise in data points.
    In APCM, membership values of all points in each cluster are treated equally uncertain, and receive the same bandwidth correction.
    However, we are less confident about the membership value of a point far from the prototype (cluster center) than the membership value of a point near the prototype. So we should have a more flexible bandwidth correction technique.
 
@@ -214,17 +215,19 @@ In other words, the uncertainty of the bandwidth $v_0$ is incorporated into the 
 
 From the above analysis, we can conclude that it's reasonable to use the marginal fuzzy set to incorporate the uncertainty of the bandwidth. But it's not easy to specify $\sigma_v$ so that the uncertainty of the bandwidth is properly represented. Next we will show that the choice of $\sigma_v$ depends on noise level of the data set.
 ** The unified Framework
+In Section , we propose that dataset \ref{fig1} and dataset \ref{fig6} should be dealt with differently, and that the bandwidth correction should be performed in a more reasonable way. In Section , we use type-2 fuzzy set to implement an intuitive way of bandwidth correction. In this section, we will first present the unified framework of PCM and APCM. This unified framework gives us a view of the PCM-based algorithms from noise. Then experiments are performed to  show how the two needs in Section are met.
+*** Algorithm Description
 Based on the analysis in Section. , we propose that the noise exists not only in the form of noisy points, but also in other forms for PCM-based clustering algorithms. We will first deal with the second form of noise: other clusters.
 Our point is that, since the prototype update of one cluster is influence by points of other clusters, according to (\ref{pcm_theta_update}), in the sense that the prototypes are attracted (or even dragged) by other clusters. So each cluster can be seen as a noisy cluster to other clusters. This can also be seen from our analysis in the two typical problems in Section which the clustering algorithm should deal with differently. Based on this observation, we propose to introduce the concept of /noise level/ $\alpha$ of the data set in the update equation of prototypes:
 #+BEGIN_LaTeX
 \begin{equation}
 \label{upcm_theta_update}
-\theta_j=\frac{\Sigma_{i=1}^Nu_{ij}x_i}{\Sigma_{i=1}^Nu_{ij}}\;\; \text{for}\;u_{ij}\geq \alpha.
+\theta_j=\frac{\Sigma_{i=1}^Nu_{ij}x_i}{\Sigma_{i=1}^Nu_{ij}} \quad \text{for}\;u_{ij}\geq \alpha.
 \end{equation}
 #+END_LaTeX 
 The $\alpha\text{-cut}$ trick is used in \cite{krishnapuram_possibilistic_1993} to compute the bandwidth with only the "good" feature point, and it's used here to update the center. By setting an appropriate $\alpha$, the influence of points in other clusters on the $\theta_j$ update is reduced. So we can select different $\alpha$ s for dataset Fig.\ref{fig1} and Fig.\ref{fig6}.
 
-The first form of noise, i.e., noisy points directly resulted in the uncertainty of the  bandwidth estimation, according to (\ref{apcm_eta_update}).  Then this uncertainty causes the uncertainty of the membership value of a point through (\ref{pcm_u_update}). In Section. , the intuition that we have more  we are less confident about the membership value of a point far from the prototype (cluster center) than the membership value of a point near the prototype, is respected in the conditional fuzzy set formulation of the membership function. so we can control the shape of the membership function through the bandwidth uncertainty parameter $\sigma_v$. To easy computation, we use $\theta_j$ to replace $\mu_j$ in (\ref{apcm_eta_update}):
+The first form of noise, i.e., noisy points directly resulted in the uncertainty of the  bandwidth estimation, according to (\ref{apcm_eta_update}).  Then this uncertainty causes the uncertainty of the membership value of a point through (\ref{pcm_u_update}). In Section. , the intuition that we have more  we are less confident about the membership value of a point far from the prototype (cluster center) than the membership value of a point near the prototype, is respected in the conditional fuzzy set formulation of the membership function. so we can control the shape of the membership function through the bandwidth uncertainty parameter $\sigma_v$. Note that the shape (or bandwidth correction) is controlled in a more flexible way than simply scaling the bandwidth like \eqref{corrected_eta}. To easy computation, we use $\theta_j$ to replace $\mu_j$ in (\ref{apcm_eta_update}):
 #+BEGIN_LaTeX
 \begin{equation}
 \label{upcm_eta_update}
@@ -240,8 +243,8 @@ Then the membership function is modified according to (\ref{marginal_result}) as
 #+END_LaTeX
 where $\gamma_j=0.5\eta_{j}^{2}+0.5\eta_{j}\sqrt{\eta_{j}^{2}+4\sigma_vd_{ij}}+\sigma_vd_{ij}$ and $d_{ij}=||x_i-\theta_j||$.
 
-The UPCM algorithm is explicitly stated in "Algorithm 1".
-
+The above reformulation of PCM and APCM makes up the unified framework (UPCM) from the viewpoint of noise (uncertainty). In UPCM, $\alpha$ and $\sigma_v$ are used together to constrain each cluster to stay in there physical clusters, while still allowing to eliminate clusters in the same dense region.
+The UPCM algorithm is explicitly stated in Algorithm 1.
 #+BEGIN_LaTeX
 \begin{algorithm}[H]
 \caption{ [$\Theta$, $U$, $label$] = UPCM($X$, $m_{ini}$, $\alpha$, $\sigma_v$)}
@@ -269,14 +272,19 @@ The UPCM algorithm is explicitly stated in "Algorithm 1".
 \end{algorithmic}
 \end{algorithm}
 #+END_LaTeX
+*** Performance
+In this subsection, we will show the performance of UPCM on dataset \ref{fig1} and dataset \ref{fig6} in Section . This also shows the flexibility endowed by UPCM.
 
- addressed by 
-$\alpha$ and sigma_v are used together to constrain each cluster to stay in there physical clusters, while still allowing to eliminate clusters in the same dense region.
-but if we increase the sigma_v (uncertainty of the bandwidth), its easy to see from the MF figure that the two clusters are in noisy environment again.
+First, we will show how PCM and APCM are unified in UPCM. 
+In Fig.\ref{fig_transition_apcm_pcm}, the PCM region means that estimated clusters (prototypes) are both in the large cluster (Cluster 1 in Fig.\ref{fig1_ori}) and the APCM region means that estimated clusters (prototypes) are in each physical cluster respectively.
+In the PCM region, the parameters given to the algorithm allows the small cluster to have enough bandwidth (mobility) to move to the dense region of the whole data set (Actually, this dense region is the weighted average of points in the dataset), according to (\ref{pcm_theta_update}). At the same time, the large cluster (prototype) stays in the dense region of the large physical cluster. In this example, the two prototypes are close enough to merge. However, if the small physical cluster has more points, say 400, the two prototypes will merge only when we specify a large $\sigma_v$, as can be seen in Fig.\ref{fig1_notmerge}.
+In the APCM region, the bandwidth (mobility) of each cluster is properly confined through $\sigma_v$, so both clusters are correctly estimated.
+Another feature we can see from Fig.\ref{fig_transition_apcm_pcm} is that high setting of noise level $\alpha$ allows us to specify a wider range of  $\sigma_v$, while still producing good clusters. This verifies our assumption that the existence of other clusters can be seen as threat or noise to other clusters. 
+The APCM algorithm estimation error curve is smooth, in contrast, the UPCM is more robust, in the sense that, in the apcm region, the estimates are more robust.
 
-
+Then we will show that the main difference of dataset Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} is noise level.
+The resulting number of clusters on dataset Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} are shown in Fig.\ref{fig1_comprose} and Fig.\ref{fig6_comprose} respectively. The results verifies that dataset Fig.\ref{fig6_ori} is more noisy than Fig.\ref{fig1_ori}. 
 We can see from Fig.\ref{fig6_comprose} that for the data set Fig.\ref{fig6_ori} and initialization of Fig.\ref{fig6_init}, it's better to specify a high noise level $\alpha$ so that the algorithm still estimates the correct number of clusters in a wider range of $\sigma_v$. In contrast, dataset Fig.\ref{fig1_ori} is less noisy than dataset Fig.\ref{fig6_ori}, so the algorithm's performance didn't rely too much on the specification of $\alpha$.
-
 An explanation of Fig.\ref{fig1_comprose} and Fig.\ref{fig6_ori}. a high noise level may indicate that fewer points are actually contributed to the adaption of center, so we should specify a large $\sigma_v$ to give the clusters more mobility to merge.
 
 #+CAPTION: The center-estimation error with respect to degree of uncertainty ($\sigma_v$) under various noise levels ($\alpha$). The centers are estimated by UPCM on dataset Fig.\ref{fig1}. The error is computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$. Note that, the estimated two cluster centers are both considered to be \hat{\theta}_1 when the algorithm results in only $1$ cluster. In the APCM region, the estimated clusters are almost exactly in the two physical clusters. In the PCM region, the small cluster is 'dragged' towards the large cluster.
@@ -290,17 +298,13 @@ An explanation of Fig.\ref{fig1_comprose} and Fig.\ref{fig6_ori}. a high noise l
 [[file:img/fig1_notmerge.png]]
 
 
-In Fig.\ref{fig_transition_apcm_pcm}, the PCM region means that estimated clusters (prototypes) are both in the large cluster (Cluster 1 in Fig.\ref{fig1_ori}) and the APCM region means that estimated clusters (prototypes) are in each physical cluster respectively.
-In the PCM region, the parameters given to the algorithm allows the small cluster to have enough bandwidth (mobility) to move to the dense region of the whole data set (Actually, this dense region is the weighted average of points in the dataset), according to (\ref{pcm_theta_update}). At the same time, the large cluster (prototype) stays in the dense region of the large physical cluster. In this example, the two prototypes are close enough to merge. However, if the small physical cluster has more points, say 400, the two prototypes will merge only when we specify a large $\sigma_v$, as can be seen in Fig.\ref{fig1_notmerge}.
-In the APCM region, the bandwidth (mobility) of each cluster is properly confined through $\sigma_v$, so both clusters are correctly estimated.
 
-Another feature we can see from Fig.\ref{fig_transition_apcm_pcm} is that high setting of noise level $\alpha$ allows us to specify a wider range of  $\sigma_v$, while still producing good clusters. This verifies our assumption that the existence of other clusters can be seen as threat or noise to other clusters. 
 
 #+CAPTION: The center-estimation error with respect to $\alpha$). The centers are estimated by APCM on dataset Fig.\ref{fig1}. The error is computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$. Note that, the estimated two cluster centers are both considered to be \hat{\theta}_1 when the algorithm results in only $1$ cluster.
 #+NAME: fig_apcm_estimation_error
 #+ATTR_LATEX: :width 0.5\textwidth
 [[file:img/plot_sigmaV_data_apcm.png]]
-The APCM algorithm estimation error curve is smooth, in contrast, the UPCM is more robust, in the sense that, in the apcm region, the estimates are more robust.
+
 
 #+CAPTION: The number of clusters resulted from UPCM on dataset Fig.\ref{fig1}.
 #+NAME: fig1_comprose
@@ -310,8 +314,8 @@ The APCM algorithm estimation error curve is smooth, in contrast, the UPCM is mo
 #+NAME: fig6_comprose
 #+ATTR_LATEX: :width 0.5\textwidth
 [[file:img/plot_comprose_data_fig6.png]]
-If the algorithm is initialized with 10 clusters, we will face a more challenging problem, that is, the cluster should have enough mobility to move to the dense region of each physical cluster and finally merge, but also shouldn't have too much mobility, to ensure that the two physical clusters not merge.
-The resulting number of clusters on dataset Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} are shown in Fig.\ref{fig1_comprose} and Fig.\ref{fig6_comprose} respectively. The results verifies that dataset Fig.\ref{fig6_ori} is more noisy than Fig.\ref{fig1_ori}. 
+
+
 
 
 
