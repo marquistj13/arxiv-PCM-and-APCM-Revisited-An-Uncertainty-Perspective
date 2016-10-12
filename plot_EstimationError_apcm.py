@@ -26,7 +26,7 @@ marker_size = 3
 # ax.plot(data_2[:, 0], data_2[:, 1], '^-', color=colors[2],markersize=marker_size,label=r"$\alpha_{cut}=0.5$")
 # without marker
 
-ax.plot(alpha,data[:,1], '.-', color=colors[2], markersize=marker_size)
+ax.plot(alpha,data[:,1], '.-', color=colors[0], markersize=marker_size)
 
 # ax.legend(loc='lower right', fancybox=True, framealpha=0.5, prop={'size': 5})
 
@@ -46,8 +46,8 @@ for _, axi in np.ndenumerate([ax]):
     axi.yaxis.set_ticks_position('left')
     axi.xaxis.set_ticks_position('bottom')
 for _, ax in np.ndenumerate([ax]):
-    zed = [tick.label.set_fontsize(6) for tick in ax.xaxis.get_major_ticks()]
-    zed = [tick.label.set_fontsize(6) for tick in ax.yaxis.get_major_ticks()]
+    zed = [tick.label.set_fontsize(8) for tick in ax.xaxis.get_major_ticks()]
+    zed = [tick.label.set_fontsize(8) for tick in ax.yaxis.get_major_ticks()]
 ax.tick_params(length=1)
 plt.savefig(r"./img/plot_sigmaV_data_apcm.png", dpi=fig.dpi, bbox_inches="tight")
 plt.show()

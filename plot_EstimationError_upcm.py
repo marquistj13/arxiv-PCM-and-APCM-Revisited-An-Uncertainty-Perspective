@@ -30,7 +30,7 @@ for i,data_i in enumerate(data):
     ax.plot(data_i[:, 0], data_i[:, 1], '.-', color=colors[i], markersize=marker_size, label=r"$\alpha=%.1f$"%(alpha_cut[i]))
 
 
-ax.legend(loc='lower right', fancybox=True, framealpha=0.5, prop={'size': 5})
+ax.legend(loc='lower right', fancybox=True, framealpha=0.5, prop={'size': 8})
 
 ax.axhline(y=8, xmin=0, xmax=16, color='k', ls='--')
 
@@ -38,8 +38,8 @@ ax.axhline(y=8, xmin=0, xmax=16, color='k', ls='--')
 apcm_color, pcm_color = 'k', 'k'
 # plt.fill_between(np.linspace(0, 16, 500), np.zeros(500), np.zeros(500) + 8, color=apcm_color, alpha=0.05)
 # plt.fill_between(np.linspace(0, 16, 500), np.zeros(500) + 8, np.zeros(500) + 16, color=pcm_color, alpha=0.05)
-ax.text(10, 5, 'APCM', color=apcm_color)
-ax.text(10, 10, 'PCM', color=pcm_color)
+ax.text(10, 6, 'APCM', color=apcm_color)
+ax.text(10, 9, 'PCM', color=pcm_color)
 for _, axi in np.ndenumerate([ax]):
     # Hide the right and top spines
     axi.spines['right'].set_visible(False)
@@ -48,8 +48,8 @@ for _, axi in np.ndenumerate([ax]):
     axi.yaxis.set_ticks_position('left')
     axi.xaxis.set_ticks_position('bottom')
 for _, ax in np.ndenumerate([ax]):
-    zed = [tick.label.set_fontsize(6) for tick in ax.xaxis.get_major_ticks()]
-    zed = [tick.label.set_fontsize(6) for tick in ax.yaxis.get_major_ticks()]
+    zed = [tick.label.set_fontsize(8) for tick in ax.xaxis.get_major_ticks()]
+    zed = [tick.label.set_fontsize(8) for tick in ax.yaxis.get_major_ticks()]
 ax.tick_params(length=1)
 plt.savefig(r"./img/plot_sigmaV_data_2initial.png", dpi=fig.dpi, bbox_inches="tight")
 plt.show()
