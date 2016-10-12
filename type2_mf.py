@@ -137,7 +137,7 @@ def specific_case():
     # secondary_ax.set_ylabel(r"$\mu_v(v)$",fontsize = label_fontsize)
     # secondary_ax.set_title("Secondary Fuzziness",fontsize = title_fontsize)
     # set legend and text
-    lg = secondary_ax.legend(loc='upper right', fancybox=True, framealpha=0.8, prop={'size': 4}, borderpad=0.6)
+    lg = secondary_ax.legend(loc='upper right', fancybox=True, framealpha=0.5, prop={'size': 4}, borderpad=0.6)
     # legend border width
     # refer to:http://stackoverflow.com/questions/3190798/scale-legend-box-border-dashed-and-dotted-lines-when-the-figure-size-is-changed
     # or http://stackoverflow.com/questions/19058485/specifying-the-line-width-of-the-legend-frame-in-matplotlib
@@ -165,7 +165,7 @@ def specific_case():
                          lw=line_width, label=r"$\sigma_v={0}$".format(sigma_v0_i))
     # set legend and text
     # refer to this for borderpad:http://stackoverflow.com/questions/20048352/how-to-adjust-the-size-of-matplotlib-legend-box
-    lg = marginal_ax.legend(loc='upper right', fancybox=True, framealpha=0.8, prop={'size': 4}, borderpad=0.6)
+    lg = marginal_ax.legend(loc='upper right', fancybox=True, framealpha=0.5, prop={'size': 4}, borderpad=0.6)
     # legend border width
     # refer to:http://stackoverflow.com/questions/3190798/scale-legend-box-border-dashed-and-dotted-lines-when-the-figure-size-is-changed
     # or http://stackoverflow.com/questions/19058485/specifying-the-line-width-of-the-legend-frame-in-matplotlib

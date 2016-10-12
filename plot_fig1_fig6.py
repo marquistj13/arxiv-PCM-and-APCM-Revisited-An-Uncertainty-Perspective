@@ -85,7 +85,7 @@ if __name__ == '__main__':
                      color=colors[label], markersize=marker_size, label="Cluster %d" % (label + 1))
     ax_fig1.set_xlim(-10, 20)
     ax_fig1.set_ylim(-15, 20)
-    lg=ax_fig1.legend(loc='upper left', fancybox=True, framealpha=0.8, prop={'size': 3})
+    lg=ax_fig1.legend(loc='upper left', fancybox=True, framealpha=0.5, prop={'size': 4})
     lg.get_frame().set_lw(0.4)
     # plot fcm init
     ax_fig2 = axs[1]
@@ -110,7 +110,7 @@ if __name__ == '__main__':
     ax_fig3.set_ylim(-0.75, 2.75)
     ax_fig3.set_xticklabels(map(str, ['', 0.5, 1, 1.5, 2, 2.5, 3]), minor=False)
     ax_fig3.set_yticklabels(map(str, ['', -0.5, 0, 0.5, 1, 1.5, 2, 2.5]), minor=False)
-    lg=ax_fig3.legend(loc='upper left', fancybox=True, framealpha=0.8, prop={'size': 3})
+    lg=ax_fig3.legend(loc='upper left', fancybox=True, framealpha=0.5, prop={'size': 4})
     lg.get_frame().set_lw(0.4)
 
     # plot fcm init
