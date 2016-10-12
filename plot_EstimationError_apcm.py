@@ -11,7 +11,7 @@ colors = ['m', 'ForestGreen', 'c', 'b', 'orange', 'g', 'r', 'y', 'k', 'Brown']
 raw_data = np.load(r'./data/sigmaV_alpha_apcm.npz')
 alpha,data = raw_data['alpha'],raw_data['results']
 
-fig, ax = plt.subplots(figsize=(1.75, 1.75), dpi=300, facecolor='white')
+fig, ax = plt.subplots(figsize=(3.5, 3.5), dpi=300, facecolor='white')
 dpi = fig.dpi  # extract the dpi value
 # fig.set_size_inches(3.5, 2.5)  # physical size
 # for i, data_i in enumerate(data):
@@ -46,8 +46,8 @@ for _, axi in np.ndenumerate([ax]):
     axi.yaxis.set_ticks_position('left')
     axi.xaxis.set_ticks_position('bottom')
 for _, ax in np.ndenumerate([ax]):
-    zed = [tick.label.set_fontsize(4) for tick in ax.xaxis.get_major_ticks()]
-    zed = [tick.label.set_fontsize(4) for tick in ax.yaxis.get_major_ticks()]
+    zed = [tick.label.set_fontsize(6) for tick in ax.xaxis.get_major_ticks()]
+    zed = [tick.label.set_fontsize(6) for tick in ax.yaxis.get_major_ticks()]
 ax.tick_params(length=1)
 plt.savefig(r"./img/plot_sigmaV_data_apcm.png", dpi=fig.dpi, bbox_inches="tight")
 plt.show()
