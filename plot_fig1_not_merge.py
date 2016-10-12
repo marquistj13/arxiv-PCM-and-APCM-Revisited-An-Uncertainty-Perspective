@@ -36,7 +36,7 @@ def _generateFig1_400_points():
 if __name__ == '__main__':
     axs = []
     dpi = 300
-    fig_size = (1.75, 1.75)
+    fig_size = (3.5, 3.5)
     fig1 = plt.figure(figsize=fig_size, dpi=dpi, num=1)
     ax = fig1.gca()
     axs.append(ax)
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     ax = fig2.gca()
     axs.append(ax)
 
-    marker_size = 1
+    marker_size = 4
 
     X, y = _generateFig1_400_points()
     # 1st case: not merge
@@ -58,14 +58,14 @@ if __name__ == '__main__':
                     color=colors[label], markersize=marker_size,
                     label="Cluster {0} with $\eta$={1:.2f}".format(label,clf.ita[label]))
         # centers,
-        [ax_fig.plot(clf.theta[label][0], clf.theta[label][1], 'rs', markersize=2 * marker_size)[0] for _ in range(clf.m)]
+        [ax_fig.plot(clf.theta[label][0], clf.theta[label][1], 'rs', markersize=1.5 * marker_size)[0] for _ in range(clf.m)]
         # add circles to indication the standard deviation, i.e., the influence of each cluster
         [ax_fig.add_patch(plt.Circle((clf.theta[label][0], clf.theta[label][1]), radius=clf.ita[label], color='k',
                                      fill=None, lw=0.5)) for _ in range(clf.m)]
         print label,clf.ita[label]
     ax_fig.set_xlim(-10, 20)
     ax_fig.set_ylim(-15, 20)
-    lg=ax_fig.legend(loc='upper left', fancybox=True, framealpha=0.5, prop={'size': 4})
+    lg=ax_fig.legend(loc='upper left', fancybox=True, framealpha=0.5, prop={'size': 8})
     lg.get_frame().set_lw(0.4)
     # # ax_fig1.set_xticklabels(map(str, [-10,-5,0,5,10,15,20]), minor=False)
     # # ax_fig1.set_yticklabels(map(str, [-15,-10,-5,0,5,10,15,20]), minor=False)
@@ -83,14 +83,14 @@ if __name__ == '__main__':
                     color=colors[label], markersize=marker_size,
                     label="Cluster {0} with $\eta$={1:.2f}".format(label,clf.ita[label]))
         # centers,
-        [ax_fig.plot(clf.theta[label][0], clf.theta[label][1], 'rs', markersize=2 * marker_size)[0] for _ in range(clf.m)]
+        [ax_fig.plot(clf.theta[label][0], clf.theta[label][1], 'rs', markersize=1.5 * marker_size)[0] for _ in range(clf.m)]
         # add circles to indication the standard deviation, i.e., the influence of each cluster
         [ax_fig.add_patch(plt.Circle((clf.theta[label][0], clf.theta[label][1]), radius=clf.ita[label], color='k',
                                      fill=None, lw=0.5)) for _ in range(clf.m)]
         print label,clf.ita[label]
     ax_fig.set_xlim(-10, 20)
     ax_fig.set_ylim(-15, 20)
-    lg=ax_fig.legend(loc='upper left', fancybox=True, framealpha=0.5, prop={'size': 4})
+    lg=ax_fig.legend(loc='upper left', fancybox=True, framealpha=0.5, prop={'size': 8})
     lg.get_frame().set_lw(0.4)
 
 
@@ -107,8 +107,8 @@ if __name__ == '__main__':
         # axi.set_xticklabels(axi.get_xticks(), minor=False, fontsize=3)
         # axi.set_yticklabels(axi.get_yticks(), minor=False, fontsize=3)  # same fontsize as xaxis
     for _, ax in np.ndenumerate(axs):
-        zed = [tick.label.set_fontsize(4) for tick in ax.xaxis.get_major_ticks()]
-        zed = [tick.label.set_fontsize(4) for tick in ax.yaxis.get_major_ticks()]
+        zed = [tick.label.set_fontsize(8) for tick in ax.xaxis.get_major_ticks()]
+        zed = [tick.label.set_fontsize(8) for tick in ax.yaxis.get_major_ticks()]
 
     plt.figure(1)
     plt.savefig(r".\img\fig1_notmerge.png", dpi=dpi, bbox_inches='tight')
