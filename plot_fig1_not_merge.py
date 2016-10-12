@@ -36,37 +36,62 @@ def _generateFig1_400_points():
 if __name__ == '__main__':
     axs = []
     dpi = 300
-    fig_size = (1.2, 1.2)
+    fig_size = (1.75, 1.75)
     fig1 = plt.figure(figsize=fig_size, dpi=dpi, num=1)
     ax = fig1.gca()
     axs.append(ax)
+    fig2 = plt.figure(figsize=fig_size, dpi=dpi, num=2)
+    ax = fig2.gca()
+    axs.append(ax)
 
-    marker_size = 0.4
+    marker_size = 1
 
     X, y = _generateFig1_400_points()
-    # 1st case: alpha_cut=0.1
-    ax_fig1 = axs[0]
+    # 1st case: not merge
+    ax_fig = axs[0]
     cluster_num = 2
     clf = pcm_fs2(X, cluster_num, 4, alpha_cut=0, ax=ax, x_lim=(-10, 20), y_lim=(-8, 16)).fit()
     labels = np.argmax(clf.u, axis=1)
     print clf.m
     for label in range(clf.m):
-        ax_fig1.plot(X[labels == label][:, 0], X[labels == label][:, 1], '.',
-                     color=colors[label], markersize=marker_size,
-                     label="Cluster {0} with $\eta$={1:.2f}".format(label,clf.ita[label]))
+        ax_fig.plot(X[labels == label][:, 0], X[labels == label][:, 1], '.',
+                    color=colors[label], markersize=marker_size,
+                    label="Cluster {0} with $\eta$={1:.2f}".format(label,clf.ita[label]))
         # centers,
-        [ax_fig1.plot(clf.theta[label][0], clf.theta[label][1], 'rs', markersize=4*marker_size)[0] for _ in range(clf.m)]
+        [ax_fig.plot(clf.theta[label][0], clf.theta[label][1], 'rs', markersize=2 * marker_size)[0] for _ in range(clf.m)]
         # add circles to indication the standard deviation, i.e., the influence of each cluster
-        [ax_fig1.add_patch(plt.Circle((clf.theta[label][0], clf.theta[label][1]), radius=clf.ita[label], color='k',
-                                 fill=None, lw=0.5)) for _ in range(clf.m)]
+        [ax_fig.add_patch(plt.Circle((clf.theta[label][0], clf.theta[label][1]), radius=clf.ita[label], color='k',
+                                     fill=None, lw=0.5)) for _ in range(clf.m)]
         print label,clf.ita[label]
-    ax_fig1.set_xlim(-10, 20)
-    ax_fig1.set_ylim(-15, 20)
-    lg=ax_fig1.legend(loc='upper left', fancybox=True, framealpha=0.5, prop={'size': 2})
+    ax_fig.set_xlim(-10, 20)
+    ax_fig.set_ylim(-15, 20)
+    lg=ax_fig.legend(loc='upper left', fancybox=True, framealpha=0.5, prop={'size': 4})
     lg.get_frame().set_lw(0.4)
     # # ax_fig1.set_xticklabels(map(str, [-10,-5,0,5,10,15,20]), minor=False)
     # # ax_fig1.set_yticklabels(map(str, [-15,-10,-5,0,5,10,15,20]), minor=False)
 
+
+    # 2nd case: merge
+    ax_fig = axs[1]
+    cluster_num = 2
+    clf = pcm_fs2(X, cluster_num, 6, alpha_cut=0, ax=ax, x_lim=(-10, 20), y_lim=(-8, 16)).fit()
+    # clf = pcm_fs2(X, cluster_num, 7, alpha_cut=0, ax=ax, x_lim=(-10, 20), y_lim=(-8, 16)).fit()
+    labels = np.argmax(clf.u, axis=1)
+    print clf.m
+    for label in range(clf.m):
+        ax_fig.plot(X[labels == label][:, 0], X[labels == label][:, 1], '.',
+                    color=colors[label], markersize=marker_size,
+                    label="Cluster {0} with $\eta$={1:.2f}".format(label,clf.ita[label]))
+        # centers,
+        [ax_fig.plot(clf.theta[label][0], clf.theta[label][1], 'rs', markersize=2 * marker_size)[0] for _ in range(clf.m)]
+        # add circles to indication the standard deviation, i.e., the influence of each cluster
+        [ax_fig.add_patch(plt.Circle((clf.theta[label][0], clf.theta[label][1]), radius=clf.ita[label], color='k',
+                                     fill=None, lw=0.5)) for _ in range(clf.m)]
+        print label,clf.ita[label]
+    ax_fig.set_xlim(-10, 20)
+    ax_fig.set_ylim(-15, 20)
+    lg=ax_fig.legend(loc='upper left', fancybox=True, framealpha=0.5, prop={'size': 4})
+    lg.get_frame().set_lw(0.4)
 
 
     for _, axi in np.ndenumerate(axs):
@@ -82,11 +107,13 @@ if __name__ == '__main__':
         # axi.set_xticklabels(axi.get_xticks(), minor=False, fontsize=3)
         # axi.set_yticklabels(axi.get_yticks(), minor=False, fontsize=3)  # same fontsize as xaxis
     for _, ax in np.ndenumerate(axs):
-        zed = [tick.label.set_fontsize(3) for tick in ax.xaxis.get_major_ticks()]
-        zed = [tick.label.set_fontsize(3) for tick in ax.yaxis.get_major_ticks()]
+        zed = [tick.label.set_fontsize(4) for tick in ax.xaxis.get_major_ticks()]
+        zed = [tick.label.set_fontsize(4) for tick in ax.yaxis.get_major_ticks()]
 
     plt.figure(1)
     plt.savefig(r".\img\fig1_notmerge.png", dpi=dpi, bbox_inches='tight')
+    plt.figure(2)
+    plt.savefig(r".\img\fig1_merge.png", dpi=dpi, bbox_inches='tight')
     plt.show()
 
     pass
