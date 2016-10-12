@@ -93,10 +93,10 @@ where $n_j$ and $\mu_j$ are the number of points in $A_j$ and the mean vector of
 \begin{figure}[!t]
    \centering
    \subfloat[]
-    {\includegraphics{img/fig1_ori.png}\label{fig1_ori}}
-   \quad
+    {\includegraphics[width=1.75in]{img/fig1_ori.png}\label{fig1_ori}}
+   %\quad
    \subfloat[]
-    {\includegraphics{img/fig1_init.png}\label{fig1_init}}
+    {\includegraphics[width=1.75in]{img/fig1_init.png}\label{fig1_init}}
 \caption{(a) Dataset 1. (b) 10 initial partitions obataind by FCM.}
 \label{fig1}
 \end{figure}
@@ -105,10 +105,10 @@ where $n_j$ and $\mu_j$ are the number of points in $A_j$ and the mean vector of
 \begin{figure}[!t]
    \centering
    \subfloat[]
-    {\includegraphics[width=1.2in]{img/fig6_ori.png}\label{fig6_ori}}
-   \quad
+    {\includegraphics[width=1.75in]{img/fig6_ori.png}\label{fig6_ori}}
+   %\quad
    \subfloat[]
-    {\includegraphics[width=1.2in]{img/fig6_init.png}\label{fig6_init}}
+    {\includegraphics[width=1.75in]{img/fig6_init.png}\label{fig6_init}}
 \caption{(a) Dataset 2. (b) 10 initial partitions obataind by FCM.}
 \label{fig6}
 \end{figure}
@@ -194,13 +194,14 @@ where $v_{new}=0.5v^2_0+0.5v_0\sqrt{v_0^2+4\sigma_v|x-x_0|}+\sigma_v|x-x_0|$. Th
 \begin{figure}[!t]
    \centering
    \subfloat[]
-    {\includegraphics[width=1.2in]{img/type2_mf_1_primary.png}\label{primary_fuzziness}}
+    {\includegraphics[width=1.75in]{img/type2_mf_1_primary.png}\label{primary_fuzziness}}
    %\quad
    \subfloat[]
-    {\includegraphics[width=1.2in]{img/type2_mf_2_secondary.png}\label{secondary_fuzziness}}
+    {\includegraphics[width=1.75in]{img/type2_mf_2_secondary.png}\label{secondary_fuzziness}}
+   \\
    %\quad
    \subfloat[]
-    {\includegraphics[width=1.2in]{img/type2_mf_3_marginal.png}\label{marginal_fuzziness}}
+    {\includegraphics[width=1.75in]{img/type2_mf_3_marginal.png}\label{marginal_fuzziness}}
    \label{illustrate_bandwidth_marginal}
 \caption{Illustration  of type-2 fuzzy set for incorporating uncertainty. (a) Primary fuzziness. (b) Secondary fuzziness with various $\sigma_v\text{s}$. (c) The final marginal fuzzy set after incorporating  uncertainty of the bandwidth with different degrees indexed by $\sigma_v$.}
 \label{type2_fs_uncertainty}
@@ -215,7 +216,7 @@ In other words, the uncertainty of the bandwidth $v_0$ is incorporated into the 
 
 From the above analysis, we can conclude that it's reasonable to use the marginal fuzzy set to incorporate the uncertainty of the bandwidth. But it's not easy to specify $\sigma_v$ so that the uncertainty of the bandwidth is properly represented. Next we will show that the choice of $\sigma_v$ depends on noise level of the data set.
 ** The unified Framework
-In Section , we propose that dataset \ref{fig1} and dataset \ref{fig6} should be dealt with differently, and that the bandwidth correction should be performed in a more reasonable way. In Section , we use type-2 fuzzy set to implement an intuitive way of bandwidth correction. In this section, we will first present the unified framework of PCM and APCM. This unified framework gives us a view of the PCM-based algorithms from noise. Then experiments are performed to  show how the two needs in Section are met.
+In Section , we propose that dataset Fig.\ref{fig1} and dataset Fig.\ref{fig6} should be dealt with differently, and that the bandwidth correction should be performed in a more reasonable way. In Section , we use type-2 fuzzy set to implement an intuitive way of bandwidth correction. In this section, we will first present the unified framework of PCM and APCM. This unified framework gives us a view of the PCM-based algorithms from noise. Then experiments are performed to  show how the two needs in Section are met.
 *** Algorithm Description
 Based on the analysis in Section. , we propose that the noise exists not only in the form of noisy points, but also in other forms for PCM-based clustering algorithms. We will first deal with the second form of noise: other clusters.
 Our point is that, since the prototype update of one cluster is influence by points of other clusters, according to \eqref{pcm_theta_update}, in the sense that the prototypes are attracted (or even dragged) by other clusters. So each cluster can be seen as a noisy cluster to other clusters. This can also be seen from our analysis in the two typical problems in Section which the clustering algorithm should deal with differently. Based on this observation, we propose to introduce the concept of /noise level/ $\alpha$ of the data set in the update equation of prototypes:
@@ -277,30 +278,40 @@ In this subsection, we will show the performance of UPCM on dataset \ref{fig1} a
 
 First, we will show how PCM and APCM are unified in UPCM. 
 In Fig.\ref{fig_transition_apcm_pcm}, the PCM region means that estimated clusters (prototypes) are both in the large cluster (Cluster 1 in Fig.\ref{fig1_ori}) and the APCM region means that estimated clusters (prototypes) are in each physical cluster respectively.
-In the PCM region, the parameters given to the algorithm allows the small cluster to have enough bandwidth (mobility) to move to the dense region of the whole data set (Actually, this dense region is the weighted average of points in the dataset), according to \eqref{pcm_theta_update}. At the same time, the large cluster (prototype) stays in the dense region of the large physical cluster. In this example, the two prototypes are close enough to merge. However, if the small physical cluster has more points, say 400, the two prototypes will merge only when we specify a large $\sigma_v$, as can be seen in Fig.\ref{fig1_notmerge}.
+In the PCM region, the parameters given to the algorithm allows the small cluster to have enough bandwidth (mobility) to move to the dense region of the whole data set (Actually, this dense region is the weighted average of points in the dataset), according to \eqref{pcm_theta_update}. At the same time, the large cluster (prototype) stays in the dense region of the large physical cluster. In this example, the two prototypes are close enough to merge. However, if the small physical cluster has more points, say 400, the two prototypes will merge only when we specify a large $\sigma_v$, as can be seen in Fig.\ref{fig1_merge_case_upcm}.
 In the APCM region, the bandwidth (mobility) of each cluster is properly confined through $\sigma_v$, so both clusters are correctly estimated.
 Another feature we can see from Fig.\ref{fig_transition_apcm_pcm} is that high setting of noise level $\alpha$ allows us to specify a wider range of  $\sigma_v$, while still producing good clusters. This verifies our assumption that the existence of other clusters can be seen as threat or noise to other clusters. 
 The APCM algorithm estimation error curve is smooth, in contrast, the UPCM is more robust, in the sense that, in the apcm region, the estimates are more robust.
+
+#+BEGIN_LaTeX
+\begin{figure}[!t]
+   \centering
+   \subfloat[]
+    {\includegraphics[width=1.75in]{img/plot_sigmaV_data_2initial.png}\label{fig_transition_apcm_pcm}}
+   %\quad
+   \subfloat[]
+    {\includegraphics[width=1.75in]{img/plot_sigmaV_data_apcm.png}\label{fig_apcm_estimation_error}}
+\caption{The center-estimation error with respect to degree of uncertainty ($\sigma_v$) under various noise levels ($\alpha$).  The error is computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$. Note that, the estimated two cluster centers are both considered to be $\hat{\theta}_1$ when the algorithm results in only $1$ cluster. (a) The centers are estimated by UPCM on dataset Fig.\ref{fig1}. In the APCM region, the estimated clusters are almost exactly in the two physical clusters. In the PCM region, the small cluster is "dragged" towards the large cluster. (b) The centers are estimated by APCM on dataset Fig.\ref{fig1}}
+\label{estimation_error_contrast}
+\end{figure}
+#+END_LaTeX
+#+BEGIN_LaTeX
+\begin{figure}[!t]
+   \centering
+   \subfloat[]
+    {\includegraphics[width=1.75in]{img/fig1_notmerge.png}\label{fig1_notmerge}}
+   %\quad
+   \subfloat[]
+    {\includegraphics[width=1.75in]{img/fig1_merge.png}\label{fig1_merge}}
+\caption{The clustering result of UPCM on dataset Fig.\ref{fig1}, in which the small cluster now has 400 points. Parameters are chosen so that UPCM operates in the PCM region corresponding to Fig.\ref{fig_transition_apcm_pcm}. (a) $m_{ini}=2$, $\alpha=4$, $\sigma_v=0$ (b) $m_{ini}=2$, $\alpha=6$, $\sigma_v=0$}
+\label{fig1_merge_case_upcm}
+\end{figure}
+#+END_LaTeX
 
 Then we will show that the main difference of dataset Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} is noise level.
 The resulting number of clusters on dataset Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} are shown in Fig.\ref{fig1_comprose} and Fig.\ref{fig6_comprose} respectively. The results verifies that dataset Fig.\ref{fig6_ori} is more noisy than Fig.\ref{fig1_ori}. 
 We can see from Fig.\ref{fig6_comprose} that for the data set Fig.\ref{fig6_ori} and initialization of Fig.\ref{fig6_init}, it's better to specify a high noise level $\alpha$ so that the algorithm still estimates the correct number of clusters in a wider range of $\sigma_v$. In contrast, dataset Fig.\ref{fig1_ori} is less noisy than dataset Fig.\ref{fig6_ori}, so the algorithm's performance didn't rely too much on the specification of $\alpha$.
 An explanation of Fig.\ref{fig1_comprose} and Fig.\ref{fig6_ori}. a high noise level may indicate that fewer points are actually contributed to the adaption of center, so we should specify a large $\sigma_v$ to give the clusters more mobility to merge.
-
-#+CAPTION: The center-estimation error with respect to degree of uncertainty ($\sigma_v$) under various noise levels ($\alpha$). The centers are estimated by UPCM on dataset Fig.\ref{fig1}. The error is computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$. Note that, the estimated two cluster centers are both considered to be $\hat{\theta}_1$ when the algorithm results in only $1$ cluster. In the APCM region, the estimated clusters are almost exactly in the two physical clusters. In the PCM region, the small cluster is 'dragged' towards the large cluster.
-#+NAME: fig_transition_apcm_pcm
-#+ATTR_LATEX: :width 0.5\textwidth
-[[file:img/plot_sigmaV_data_2initial.png]]
-
-#+CAPTION: The small cluster in Fig.\ref{fig1} now has 400 points.
-#+NAME: fig1_notmerge
-#+ATTR_LATEX: :width 0.5\textwidth
-[[file:img/fig1_notmerge.png]]
-
-#+CAPTION: The center-estimation error with respect to $\alpha$). The centers are estimated by APCM on dataset Fig.\ref{fig1}. The error is computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$. Note that, the estimated two cluster centers are both considered to be $\hat{\theta}_1$ when the algorithm results in only $1$ cluster.
-#+NAME: fig_apcm_estimation_error
-#+ATTR_LATEX: :width 0.5\textwidth
-[[file:img/plot_sigmaV_data_apcm.png]]
 
 #+CAPTION: The number of clusters resulted from UPCM on dataset Fig.\ref{fig1}.
 #+NAME: fig1_comprose
