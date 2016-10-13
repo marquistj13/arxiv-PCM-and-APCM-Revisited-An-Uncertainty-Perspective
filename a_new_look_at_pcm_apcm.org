@@ -283,7 +283,7 @@ In this subsection, we show the performance of UPCM on dataset \ref{fig1} and da
 Experiment 1: This experiment on dataset Fig.\ref{fig1} illustrates how PCM and APCM are unified in UPCM.
 Fig.\ref{estimation_error_contrast} shows the center-estimation error computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$ with respect to parameters of UPCM and APCM. 
 The result of UPCM is shown iIn Fig.\ref{fig_transition_apcm_pcm}. The PCM region means that estimated clusters (prototypes) are both in the large cluster (Cluster 1 in Fig.\ref{fig1_ori}), and the APCM region means that estimated clusters (prototypes) are in each physical cluster respectively.
-In the PCM region, the parameters given to UPCM allows the small cluster to have enough bandwidth (mobility) to move to the dense region of the whole data set (Actually, this dense region is the weighted average of points in the dataset), according to \eqref{pcm_theta_update}. At the same time, the large cluster (prototype) stays in the dense region of the large physical cluster. In other words, the small cluster is dragged towards to the large cluster. For dataset Fig.\ref{1} in this experiment, the two prototypes are close enough to merge into one cluster prototype when parameters (or UPCM) are in the PCM region. However, if the small physical cluster has more points, say 400, the two prototypes will merge only when we specify a large $\sigma_v$, as can be seen in Fig.\ref{fig1_merge_case_upcm}.
+In the PCM region, the parameters given to UPCM allows the small cluster to have enough bandwidth (mobility) to move to the dense region of the whole data set (Actually, this dense region is the weighted average of points in the dataset), according to \eqref{pcm_theta_update}. At the same time, the large cluster (prototype) stays in the dense region of the large physical cluster. In other words, the small cluster is dragged towards to the large cluster. For dataset Fig.\ref{fig1} in this experiment, the two prototypes are close enough to merge into one cluster prototype when parameters (or UPCM) are in the PCM region. However, if the small physical cluster has more points, say 400, the two prototypes will merge only when we specify a large $\sigma_v$, as can be seen in Fig.\ref{fig1_merge_case_upcm}.
 In the APCM region, the bandwidth (mobility) of each cluster is properly confined through $\sigma_v$ and $\alpha$, so both clusters are correctly estimated.
 
 The result of APCM is shown in Fig.\ref{fig_apcm_estimation_error}.
@@ -299,7 +299,7 @@ intermediate states like "not very good". In this sense, we conclude that the pe
    %\quad
    \subfloat[]
     {\includegraphics[width=1.75in]{img/plot_sigmaV_data_apcm.png}\label{fig_apcm_estimation_error}}
-\caption{The center-estimation error computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$ is used to illustrate the behavior of UPCM and APCM. Note that the estimated two cluster centers are both considered to be $\hat{\theta}_1$ when the algorithm results in only $1$ cluster. (a) The center-estimation error with respect to degree of uncertainty ($\sigma_v$) under various noise levels ($\alpha$). The centers are estimated by UPCM with $m_{ini}=2$ on dataset Fig.\ref{fig1}. In the APCM region, the estimated clusters are almost exactly in the two physical clusters. In the PCM region, the small cluster is "dragged" towards the large cluster. (b) The center-estimation error with respect to $\alpha$. The centers are estimated by APCM on dataset Fig.\ref{fig1}}
+\caption{The center-estimation error computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$ is used to illustrate the behavior of UPCM and APCM. Note that the estimated two cluster centers are both considered to be $\hat{\theta}_1$ when the algorithm results in only $1$ cluster. (a) The center-estimation error (the vertical axis) with respect to degree of uncertainty $\sigma_v$ (the horizontal axis) under various noise levels ($\alpha$). The centers are estimated by UPCM with $m_{ini}=2$ on dataset Fig.\ref{fig1}. In the APCM region, the estimated clusters are almost exactly in the two physical clusters. In the PCM region, the small cluster is "dragged" towards the large cluster. (b) The center-estimation error (the vertical axis) with respect to $\alpha$ (the horizontal axis). The centers are estimated by APCM with $m_{ini}=2$ on dataset Fig.\ref{fig1}.}
 \label{estimation_error_contrast}
 \end{figure}
 #+END_LaTeX
@@ -322,11 +322,11 @@ We can see from Fig.\ref{fig6_comprose} that for the data set Fig.\ref{fig6_ori}
 
 Fig.\ref{fig1_comprose} and Fig.\ref{fig6_comprose} illustrate the the interplay between $\alpha$ and $\sigma_v$, i.e., a large specification of noise level $\alpha$ indicate that fewer points are actually contributed to the adaption of prototype $\theta_j$, so we should specify a large $\sigma_v$ to give the clusters in one physical cluster more mobility to merge. This relation between $\alpha$ and $\sigma_v$ also interprets the result of 
 Fig.\ref{fig_transition_apcm_pcm} where a large noise-level parameter $\alpha$ allows us to specify a wide range of $\sigma_v$ and UPCM still produces good clusters.
-#+CAPTION: The number of clusters resulted from UPCM with $m_{ini}=10$ on dataset Fig.\ref{fig1}.
+#+CAPTION: The number of clusters resulted from UPCM with $m_{ini}=10$ on dataset Fig.\ref{fig1}. The horizontal axis represents the noise level $\alpha$. The vertical axis represents the bandwidth estimation uncertainty $\sigma_v$.
 #+NAME: fig1_comprose
 #+ATTR_LATEX: :width 0.5\textwidth
 [[file:img/plot_comprose_data_fig1.png]]
-#+CAPTION: The number of clusters resulted from UPCM with $m_{ini}=10$ on dataset Fig.\ref{fig6}.
+#+CAPTION: The number of clusters resulted from UPCM with $m_{ini}=10$ on dataset Fig.\ref{fig6}. The horizontal axis represents the noise level $\alpha$. The vertical axis represents the bandwidth estimation uncertainty $\sigma_v$.
 #+NAME: fig6_comprose
 #+ATTR_LATEX: :width 0.5\textwidth
 [[file:img/plot_comprose_data_fig6.png]]
