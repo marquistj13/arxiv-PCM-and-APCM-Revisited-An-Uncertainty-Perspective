@@ -1,6 +1,7 @@
 # Latex tmp file
 *.bbl
 *.pdf
+*.tex.bak
 
 # images
 *.png
