@@ -213,7 +213,7 @@ In other words, the uncertainty of the bandwidth $v_0$ is incorporated into the 
 
 From the above analysis, we can conclude that it's reasonable to use the marginal fuzzy set to incorporate the uncertainty of the bandwidth. But it's not easy to specify $\sigma_v$ so that the uncertainty of the bandwidth is properly represented. Next we will show that the choice of $\sigma_v$ depends on noise level of the data set.
 ** The Unified Framework
-In Section \ref{sec-2-2}, we propose that dataset Fig.\ref{fig1} and dataset Fig.\ref{fig6} should be dealt with differently, and that the bandwidth correction should be performed in a more flexible way. In Section \ref{{sec-3}, we use the conditional fuzzy set formulations to implement an intuitive way of bandwidth correction. In this section, points of previous sections are integrated. We will first present the unified framework of PCM and APCM. Then experiments are performed to show how the two needs in Section \ref{sec-2-2} are addressed.
+In Section \ref{sec-2-2}, we propose that dataset Fig.\ref{fig1} and dataset Fig.\ref{fig6} should be dealt with differently, and that the bandwidth correction should be performed in a more flexible way. In Section \ref{{sec-3}, we use the conditional fuzzy set formulations to implement an intuitive way of bandwidth correction. In this section, points of previous sections are integrated. We first present the unified framework of PCM and APCM. Then experiments are performed to show how the two needs in Section \ref{sec-2-2} are addressed.
 *** Algorithm Description
 The analysis in Section \ref{sec-2-2} gives us two hints to take a new look at PCM and APCM. 
 First, the clustering algorithm faces a more noisy environment in Fig.\ref{fig6_ori} than in Fig.\ref{fig1_ori} because there are two close clusters in Fig.\ref{fig6_ori}. So we should have more control over the clustering process in Fig.\ref{fig6_ori}. This fact shows that each physical cluster can be seen as noise to other physical clusters.
@@ -277,16 +277,20 @@ The UPCM algorithm is explicitly stated in Algorithm \ref{alg:upcm}.
 \end{algorithmic}
 \end{algorithm}
 #+END_LaTeX
-*** Performance
-In this subsection, we will show the performance of UPCM on dataset \ref{fig1} and dataset \ref{fig6} in Section . This also shows the flexibility endowed by UPCM.
+*** Experimental Results and Performance
+In this subsection, we show the performance of UPCM on dataset \ref{fig1} and dataset \ref{fig6}. We also show the parameter-choosing flexibility endowed by UPCM.
 
-First, we will show how PCM and APCM are unified in UPCM. 
-In Fig.\ref{fig_transition_apcm_pcm}, the PCM region means that estimated clusters (prototypes) are both in the large cluster (Cluster 1 in Fig.\ref{fig1_ori}) and the APCM region means that estimated clusters (prototypes) are in each physical cluster respectively.
-In the PCM region, the parameters given to the algorithm allows the small cluster to have enough bandwidth (mobility) to move to the dense region of the whole data set (Actually, this dense region is the weighted average of points in the dataset), according to \eqref{pcm_theta_update}. At the same time, the large cluster (prototype) stays in the dense region of the large physical cluster. In this example, the two prototypes are close enough to merge. However, if the small physical cluster has more points, say 400, the two prototypes will merge only when we specify a large $\sigma_v$, as can be seen in Fig.\ref{fig1_merge_case_upcm}.
-In the APCM region, the bandwidth (mobility) of each cluster is properly confined through $\sigma_v$, so both clusters are correctly estimated.
-Another feature we can see from Fig.\ref{fig_transition_apcm_pcm} is that high setting of noise level $\alpha$ allows us to specify a wider range of  $\sigma_v$, while still producing good clusters. This verifies our assumption that the existence of other clusters can be seen as threat or noise to other clusters. 
-The APCM algorithm estimation error curve is smooth, in contrast, the UPCM is more robust, in the sense that, in the apcm region, the estimates are more robust.
+Experiment 1: This experiment on dataset Fig.\ref{fig1} illustrates how PCM and APCM are unified in UPCM.
+Fig.\ref{estimation_error_contrast} shows the center-estimation error computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$ with respect to parameters of UPCM and APCM. 
+The result of UPCM is shown iIn Fig.\ref{fig_transition_apcm_pcm}. The PCM region means that estimated clusters (prototypes) are both in the large cluster (Cluster 1 in Fig.\ref{fig1_ori}), and the APCM region means that estimated clusters (prototypes) are in each physical cluster respectively.
+In the PCM region, the parameters given to UPCM allows the small cluster to have enough bandwidth (mobility) to move to the dense region of the whole data set (Actually, this dense region is the weighted average of points in the dataset), according to \eqref{pcm_theta_update}. At the same time, the large cluster (prototype) stays in the dense region of the large physical cluster. In other words, the small cluster is dragged towards to the large cluster. For dataset Fig.\ref{1} in this experiment, the two prototypes are close enough to merge into one cluster prototype when parameters (or UPCM) are in the PCM region. However, if the small physical cluster has more points, say 400, the two prototypes will merge only when we specify a large $\sigma_v$, as can be seen in Fig.\ref{fig1_merge_case_upcm}.
+In the APCM region, the bandwidth (mobility) of each cluster is properly confined through $\sigma_v$ and $\alpha$, so both clusters are correctly estimated.
 
+The result of APCM is shown in Fig.\ref{fig_apcm_estimation_error}.
+We can similarly define the PCM region where two physical clusters are poorly estimated and define the APCM region where two physical clusters are well estimated.
+However, the transition from PCM region to APCM region is rather smooth so that it's difficult to differentiate between these two regions.
+In contrast, Fig.\ref{fig_transition_apcm_pcm} shows that the specified parameters $\alpha$ and $\sigma_v$ are either "good" or "bad" and can't have  
+intermediate states like "not very good". In this sense, we conclude that the performance of UPCM is robust in choosing parameters and that $\alpha$ and $\sigma_v$ are sufficient to control the clustering process.
 #+BEGIN_LaTeX
 \begin{figure}[!t]
    \centering
@@ -295,7 +299,7 @@ The APCM algorithm estimation error curve is smooth, in contrast, the UPCM is mo
    %\quad
    \subfloat[]
     {\includegraphics[width=1.75in]{img/plot_sigmaV_data_apcm.png}\label{fig_apcm_estimation_error}}
-\caption{The center-estimation error with respect to degree of uncertainty ($\sigma_v$) under various noise levels ($\alpha$).  The error is computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$. Note that, the estimated two cluster centers are both considered to be $\hat{\theta}_1$ when the algorithm results in only $1$ cluster. (a) The centers are estimated by UPCM on dataset Fig.\ref{fig1}. In the APCM region, the estimated clusters are almost exactly in the two physical clusters. In the PCM region, the small cluster is "dragged" towards the large cluster. (b) The centers are estimated by APCM on dataset Fig.\ref{fig1}}
+\caption{The center-estimation error computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$ is used to illustrate the behavior of UPCM and APCM. Note that the estimated two cluster centers are both considered to be $\hat{\theta}_1$ when the algorithm results in only $1$ cluster. (a) The center-estimation error with respect to degree of uncertainty ($\sigma_v$) under various noise levels ($\alpha$). The centers are estimated by UPCM with $m_{ini}=2$ on dataset Fig.\ref{fig1}. In the APCM region, the estimated clusters are almost exactly in the two physical clusters. In the PCM region, the small cluster is "dragged" towards the large cluster. (b) The center-estimation error with respect to $\alpha$. The centers are estimated by APCM on dataset Fig.\ref{fig1}}
 \label{estimation_error_contrast}
 \end{figure}
 #+END_LaTeX
@@ -312,16 +316,17 @@ The APCM algorithm estimation error curve is smooth, in contrast, the UPCM is mo
 \end{figure}
 #+END_LaTeX
 
-Then we will show that the main difference of dataset Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} is noise level.
-The resulting number of clusters on dataset Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} are shown in Fig.\ref{fig1_comprose} and Fig.\ref{fig6_comprose} respectively. The results verifies that dataset Fig.\ref{fig6_ori} is more noisy than Fig.\ref{fig1_ori}. 
-We can see from Fig.\ref{fig6_comprose} that for the data set Fig.\ref{fig6_ori} and initialization of Fig.\ref{fig6_init}, it's better to specify a high noise level $\alpha$ so that the algorithm still estimates the correct number of clusters in a wider range of $\sigma_v$. In contrast, dataset Fig.\ref{fig1_ori} is less noisy than dataset Fig.\ref{fig6_ori}, so the algorithm's performance didn't rely too much on the specification of $\alpha$.
-An explanation of Fig.\ref{fig1_comprose} and Fig.\ref{fig6_ori}. a high noise level may indicate that fewer points are actually contributed to the adaption of center, so we should specify a large $\sigma_v$ to give the clusters more mobility to merge.
+Experiment 2: This experiment shows that the main difference between dataset Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} is the noise level. 
+The resulting cluster number of UPCM with $m_{ini}=10$ on dataset Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} are shown in Fig.\ref{fig1_comprose} and Fig.\ref{fig6_comprose} respectively. The results verifies that dataset Fig.\ref{fig6_ori} is more noisy than Fig.\ref{fig1_ori}. 
+We can see from Fig.\ref{fig6_comprose} that for the data set Fig.\ref{fig6_ori} and initialization of Fig.\ref{fig6_init}, it's better to specify a high noise level $\alpha$ so that the algorithm still estimates the correct number of clusters in a wide range of $\sigma_v$. In contrast, dataset Fig.\ref{fig1_ori} is less noisy than dataset Fig.\ref{fig6_ori} in the sense that the two clusters are not too close, so the algorithm's performance didn't rely too much on the specification of $\alpha$.
 
-#+CAPTION: The number of clusters resulted from UPCM on dataset Fig.\ref{fig1}.
+Fig.\ref{fig1_comprose} and Fig.\ref{fig6_comprose} illustrate the the interplay between $\alpha$ and $\sigma_v$, i.e., a large specification of noise level $\alpha$ indicate that fewer points are actually contributed to the adaption of prototype $\theta_j$, so we should specify a large $\sigma_v$ to give the clusters in one physical cluster more mobility to merge. This relation between $\alpha$ and $\sigma_v$ also interprets the result of 
+Fig.\ref{fig_transition_apcm_pcm} where a large noise-level parameter $\alpha$ allows us to specify a wide range of $\sigma_v$ and UPCM still produces good clusters.
+#+CAPTION: The number of clusters resulted from UPCM with $m_{ini}=10$ on dataset Fig.\ref{fig1}.
 #+NAME: fig1_comprose
 #+ATTR_LATEX: :width 0.5\textwidth
 [[file:img/plot_comprose_data_fig1.png]]
-#+CAPTION: The number of clusters resulted from UPCM on dataset Fig.\ref{fig6}.
+#+CAPTION: The number of clusters resulted from UPCM with $m_{ini}=10$ on dataset Fig.\ref{fig6}.
 #+NAME: fig6_comprose
 #+ATTR_LATEX: :width 0.5\textwidth
 [[file:img/plot_comprose_data_fig6.png]]
@@ -329,7 +334,8 @@ An explanation of Fig.\ref{fig1_comprose} and Fig.\ref{fig6_ori}. a high noise l
 ** Conclusions and Discussions
 
 1. (Below is a few open questions. The marginal fuzzy set incorporates uncertainty of the bandwidth by making the membership function curve more flat.  But why not make it more steep? Does the steepness of a membership function curve reflects uncertainty of the bandwidth? If so, small cluster with small bandwidth has less uncertainty than the big cluster? Note that if the curve is very steep, we can be very sure that the membership of point $x_1$ is very different from point $x_2$. But if the curve is less steep, their memberships become similar, we can't easily differentiate them any more. )
-2. the fussiness of u depends on the fussiness of the bandwidth, whose fussiness depends on the the noise level, i.e. the Type 3 fuzzy set. It seems feasible to use the framework of marginal fuzzy to 
+2. the fussiness of u depends on the fussiness of the bandwidth, whose fussiness depends on the the noise level, i.e. the Type 3 fuzzy set. It seems feasible to use the framework of marginal fuzzy to
+3. The result of Fig.\ref{fig_transition_apcm_pcm} can be also interpreted as follows: we are less uncertain about the estimated bandwidth if we specify a small noise level $\alpha$, so bandwidth-estimation uncertainty $\sigma_v$ should be small.
 It seems that the uncertainty (fuzziness) of the bandwidth can also be a Type-2 fuzzy set, and its parameter is the noise level.
  now the marginal fuzzy set of the membership u has only one parameter sigma_v, so we can finally cancel out sigma_v if we can model the fuzziness of sigma_v with the noise level as a parameter, we leave it...
 
