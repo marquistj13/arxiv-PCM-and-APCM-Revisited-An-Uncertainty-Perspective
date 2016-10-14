@@ -10,7 +10,7 @@ from matplotlib.ticker import FuncFormatter
 # and http://stackoverflow.com/questions/7229971/2d-grid-data-visualization-in-python
 # and http://stackoverflow.com/questions/15908371/matplotlib-colorbars-and-its-text-labels
 # discrete color scheme
-cMap = ListedColormap(['green', 'blue', 'yellow', 'red', 'black'])
+cMap = ListedColormap(['green', 'yellow', 'blue', 'red', 'black'])
 # cMap = ListedColormap(['blue', 'green', 'yellow',  'black'])
 bounds = [0, 1.1, 2.1, 3.1, 4.1, 10.1]
 norm = mpl.colors.BoundaryNorm(bounds, cMap.N)
