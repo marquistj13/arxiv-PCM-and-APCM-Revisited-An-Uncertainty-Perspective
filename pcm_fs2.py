@@ -4,7 +4,7 @@ import skfuzzy as fuzz
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-colors = ['b', 'orange', 'g', 'r', 'c', 'm', 'y', 'k', 'Brown', 'ForestGreen'] * 50
+colors = ['b', 'orange', 'g', 'r', 'c', 'm', 'y', 'k', 'Brown', 'ForestGreen'] * 3
 plt.style.use('ggplot')
 
 
@@ -150,9 +150,6 @@ class pcm_fs2():
             dist_2_cntr = map(np.linalg.norm, self.x[labels == cntr_index] - self.theta[cntr_index])
             self.ita[cntr_index] = sum(dist_2_cntr) / np.sum(labels == cntr_index)
             if np.isclose(self.ita[cntr_index],0):
-                with open(r"./data/fuck.txt",'a') as f:
-                    f.write(r"alpha={},sigma_v={}\n".format(self.alpha_cut,self.sig_v0))
-                    print "len:",len(self.x[labels == cntr_index])
                 p += 1
                 index_delete.append(cntr_index)
             # remove the respective center related quantities

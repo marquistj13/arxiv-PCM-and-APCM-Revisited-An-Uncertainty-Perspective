@@ -13,11 +13,11 @@ def _generateFig1():
     :return:
     """
 
-    x0,y0=make_blobs(n_samples=10,n_features=2,centers=[[6.53,1.39]],cluster_std=np.sqrt(1),random_state=45)
-    x1,y1=make_blobs(n_samples=10,n_features=2,centers=[[20.32,20.29]],cluster_std=np.sqrt(2),random_state=45)
-    x2,y2=make_blobs(n_samples=10,n_features=2,centers=[[28.09,11.38]],cluster_std=np.sqrt(1),random_state=45)
-    noise_x=np.random.uniform(-18,18,size=2)
-    noise_y=np.random.uniform(-8,35,size=2)
+    x0,y0=make_blobs(n_samples=1000,n_features=2,centers=[[6.53,1.39]],cluster_std=np.sqrt(10),random_state=45)
+    x1,y1=make_blobs(n_samples=1000,n_features=2,centers=[[20.32,20.29]],cluster_std=np.sqrt(20),random_state=45)
+    x2,y2=make_blobs(n_samples=100,n_features=2,centers=[[28.09,11.38]],cluster_std=np.sqrt(1),random_state=45)
+    noise_x=np.random.uniform(-18,18,size=200)
+    noise_y=np.random.uniform(-8,35,size=200)
     noise=np.r_['1,2,0',noise_x,noise_y]
     print noise.shape
     y1+=1
@@ -38,7 +38,7 @@ def _generateFig1():
 if __name__=='__main__':
     X=_generateFig1()
     fig,ax=plt.subplots()
-    clf=pcm_fs2(X,150,1,alpha_cut=0.1,ax=ax,x_lim=(-20,40),y_lim=(-10,35))
+    clf=pcm_fs2(X,15,1,alpha_cut=0.1,ax=ax,x_lim=(-20,40),y_lim=(-10,35))
     # we should set "blit=False,repeat=False" or the program would fail. "init_func=clf.init_animation" plot the
     # background of each frame There is not much point to use blit=True, if most parts of your plot should be
     # refreshed. see http://stackoverflow.com/questions/14844223/python-matplotlib-blit-to-axes-or-sides-of-the
