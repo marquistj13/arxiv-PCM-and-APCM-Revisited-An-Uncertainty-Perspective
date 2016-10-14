@@ -17,6 +17,7 @@
 # Pycharm workspace file
 *.xml
 *.iml
+.name
 
 # Windows image file caches
 Thumbs.db
