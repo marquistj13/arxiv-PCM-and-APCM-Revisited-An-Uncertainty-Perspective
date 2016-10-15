@@ -18,7 +18,8 @@ def expfun(x, mu, sigma):
 
 def exp_marginal(x, x_mu, v0, sigma_v0):
     d = np.abs(x - x_mu)
-    v_square = 0.5 * v0 ** 2 + sigma_v0 * d + 0.5 * v0 * np.sqrt(v0 ** 2 + 4 * sigma_v0 * d)
+    # v_square = 0.5 * v0 ** 2 + sigma_v0 * d + 0.5 * v0 * np.sqrt(v0 ** 2 + 4 * sigma_v0 * d)
+    v_square = (0.5 * v0 + 0.5 * np.sqrt(v0 ** 2 + 4 * sigma_v0 * d)) ** 2
     return np.exp(-d ** 2 / v_square)
 
 
@@ -183,8 +184,6 @@ def specific_case():
     marginal_ax.set_yticklabels(primary_ax.get_yticks(), minor=False, fontsize=3)  # same fontsize as xaxis
     # spine length
     marginal_ax.tick_params(length=1)
-
-
 
     for _, ax in np.ndenumerate(axs):
         zed = [tick.label.set_fontsize(8) for tick in ax.xaxis.get_major_ticks()]
