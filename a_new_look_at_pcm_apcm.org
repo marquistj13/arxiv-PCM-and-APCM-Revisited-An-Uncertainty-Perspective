@@ -185,7 +185,6 @@ Let $X|V$ be a conditional fuzzy set defined in Definition \ref{conditional-fs} 
 \label{marginal_fs}
 \mu_X(x)=\max_{v\in\Omega_V}\min[\mu_{X|V}(x|v),\mu_V(v)],\;\;x\in\Omega_X.
 \end{equation}
-\mbox{}
 \end{definition}
 #+END_LaTeX
 
@@ -200,6 +199,7 @@ Suppose we have estimated the center $x_0$ and bandwidth $v_0$ of a Gaussian mem
 and the uncertainty (fuzziness) of $V$ is also modeled as a Gaussian fuzzy set with the membership function:
 #+BEGIN_LaTeX
 \begin{equation}
+\label{secondary_fuzziness_v}
 \mu_V(v)=\exp\left(-\frac{(v-v_0)^2}{\sigma^2_v}\right)
 \end{equation}
 #+END_LaTeX
@@ -245,8 +245,7 @@ Let $d(x_i,x_0)$ denote the distance from a point $x_i$ to the center $x_0$. The
 
 The above example is illustrated in Fig.\ref{type2_fs_uncertainty}. Fig.\ref{primary_fuzziness} shows the primary fuzziness when $x_0$ is estimated as 12.5 and $v_0$ is estimated as 2.5 but with uncertainty. Fig.\ref{secondary_fuzziness} shows the secondary fuzziness (uncertainty) of $v_0$ with various $\sigma_v\text{s}$. Note that we don't intend to model the uncertainty of $\sigma_v$ here. So we assume $\sigma_v$ is a given value. Fig.\ref{marginal_fuzziness} shows the marginal fuzzy fuzzy set into which the uncertainty has been incorporated.
 
-We can see from \eqref{marginal_result} and Fig.\ref{marginal_fuzziness} that 
-the marginal fuzzy set curve is more flat when the estimated bandwidth has much uncertainty, i.e., $\sigma_v$ is large.
+We can see from \eqref{marginal_result} and Fig.\ref{marginal_fuzziness} that the marginal fuzzy set curve is flatter when the estimated bandwidth has much uncertainty, i.e., $\sigma_v$ is large.
 For a specific $\sigma_v$, the corrected bandwidth ($v_{new}$ in \eqref{marginal_result}) is almost the same as $v_0$ when $d(x_i,x_0)$ is small, and $v_{new}$ increases as $d(x_i,x_0)$ becomes large.
 In other words, the uncertainty of the bandwidth $v_0$ is incorporated into the marginal fuzzy set $\mu_X(x)$ in such a way that membership function of points with small $d(x_i,x_0)$ remains almost the same shape as the one with $\sigma_v=0$ (i.e., with no uncertainty in $v_0$), and membership function of points with large $d(x_i,x_0)$ deviates much from the one with $\sigma_v=0$. The degree of deviation is controlled by $\sigma_v$ and $d(x_i,x_0)$. This behavior is very intuitive in the sense that the uncertainty of bandwidth $v_0$ is obviously reflected in the membership of $x_i$ only when $x_i$ is far from the center and $x_i$ can be seen as a noisy datum in this case. 
 
@@ -371,14 +370,13 @@ Fig.\ref{fig_transition_apcm_pcm} where a large noise-level parameter $\alpha$ a
 [[file:img/plot_comprose_data_fig6.png]]
 
 ** Discussions and Further Research
-1. (Below is a few open questions. The marginal fuzzy set incorporates uncertainty of the bandwidth by making the membership function curve more flat.  But why not make it more steep? Does the steepness of a membership function curve reflects uncertainty of the bandwidth? If so, small cluster with small bandwidth has less uncertainty than the big cluster? Note that if the curve is very steep, we can be very sure that the membership of point $x_1$ is very different from point $x_2$. But if the curve is less steep, their memberships become similar, we can't easily differentiate them any more. )
-2. the fussiness of u depends on the fussiness of the bandwidth, whose fussiness depends on the the noise level, i.e. the Type 3 fuzzy set. It seems feasible to use the framework of marginal fuzzy to
-3. The result of Fig.\ref{fig_transition_apcm_pcm} can be also interpreted as follows: we are less uncertain about the estimated bandwidth if we specify a small noise level $\alpha$, so bandwidth-estimation uncertainty $\sigma_v$ should be small.
-4. The difference of the bandwidth correction between APCM and UPCM. APCM can directly scale the bandwidth, while UPCM can't. APCM can reduce the bandwidth while UPCM can't. UPCM accepts the estimated bandwidth and micro-adjust it through $\sigma_v$.
-It seems that the uncertainty (fuzziness) of the bandwidth can also be a Type-2 fuzzy set, and its parameter is the noise level.
- now the marginal fuzzy set of the membership u has only one parameter sigma_v, so we can finally cancel out sigma_v if we can model the fuzziness of sigma_v with the noise level as a parameter, we leave it...
+Discussions
+The UPCM algorithm introduced in this paper unifies PCM and APCM in the same framework. As demonstrated on dataset Fig.\ref{fig1} in Section \ref{sec-4}, UPCM reduces to PCM when we set a small $\alpha$ or a large $\sigma_v$, and UPCM reduces to APCM when clusters are confined in their region and possible cluster elimination are  ensured. The main difference between APCM and UPCM is the way we deal with the bandwidth correction. We think that APCM puts too strong control over the bandwidth correction process, i.e., the estimated bandwidth is directly scaled by the parameter specified the user, which this can explain  Fig.\ref{fig_apcm_estimation_error}, we can say that APCM doesn't trust the bandwidth estimated by the algorithm, so it has a correction term. In contrast, UPCM accepts the estimated bandwidth in a certain degree, The difference of the bandwidth correction between APCM and UPCM. APCM can directly scale the bandwidth, while UPCM can't. APCM can reduce the bandwidth while UPCM can't. UPCM accepts the estimated bandwidth and micro-adjust it through $\sigma_v$.
 
 
+Further Research
+1. The marginal fuzzy set \ref{marginal_result} incorporates uncertainty of the bandwidth by making the membership function curve flatter instead of making it steeper. This observation raises a question: does the steepness of a Gaussian membership function curve reflect uncertainty of the bandwidth? If so, a small cluster with small bandwidth can be interpreted as having less bandwidth uncertainty than a large cluster. In other words, the bandwidth itself can reflect the degree of uncertainty of bandwidth. Note that the steepness of the membership function curve represents the degree membership values differentiate between two points. So a small bandwidth may mean that we are certain about the fact that membership values of two points are very different. This interpretation about the shape of a Gaussian membership function can provide a new view of fuzzy clustering, and needs further investigation.
+2. Based on analysis of the interplay between $\alpha$ and $\sigma_v$ in Section \ref{sec-4-2}, we can choose parameters $\alpha$ and $\sigma_v$ in the following way: specifying a small noise level $\alpha$ means that we are less uncertain about the estimated bandwidth, so we should also specify a small $\sigma_v$, and a large $\alpha$ should correspond to a large $\sigma_v$. This observation indicate that we can relate the choosing of $\sigma_v$ to the noise level $\alpha$. That is, the uncertainty (fuzziness) of the bandwidth \eqref{secondary_fuzziness_v} can also be a type-2 fuzzy set with primary variable $\sigma_v$ and secondary variable $\alpha$ (see Definition \ref{conditional-fs}). Then we can cancel out  parameter $\sigma_v$ so there is only one parameter $\alpha$ for the user to choose. In this way, the clustering process is determined by  noise level $\alpha$ of the dataset. However, modeling the relationship between $\sigma_v$ and $\alpha$ is a difficult issue and needs further research.
 #+BEGIN_LaTeX
 \bibliographystyle{IEEEtran}
 \bibliography{D:/emacs/etc/ZoteroOutput,IEEEabrv}
