@@ -2,6 +2,7 @@
 *.bbl
 *.pdf
 *.tex.bak
+*.thm
 
 # images
 *.png
