@@ -55,7 +55,7 @@ class pcm_fs2():
         # add circles to indication the standard deviation, i.e., the influence of each cluster
         self.circles = [ax.add_patch(plt.Circle((0, 0), radius=0, color='k', fill=None, lw=2)) for _ in
                         range(self.m_ori)]
-        return self.lines, self.line_centers, self.title, self.circles
+        return self.lines + self.line_centers + self.circles + [self.title]
 
     def init_theta_ita(self):
         """
@@ -101,7 +101,6 @@ class pcm_fs2():
             dist_2_cntr = map(np.linalg.norm, self.x - cntr[cntr_index])
             ita[cntr_index] = np.dot(dist_2_cntr, u_orig[:, cntr_index]) / sum(u_orig[:, cntr_index])
         self.ita = ita
-        self.ita_hat = min(ita)
         pass
 
     def update_u_theta(self):
@@ -114,9 +113,9 @@ class pcm_fs2():
         # update theta (centers)
         for cntr_index in range(self.m):
             samples_mask = u[:,cntr_index] >= self.alpha_cut  # only those without too much noise can be used to calculate centers
-            if np.any(samples_mask):# avoid null value for the following calculation
+            if np.any(samples_mask):  # avoid null value for the following calculation
                 self.theta[cntr_index] = np.sum(u[samples_mask][:, cntr_index][:, np.newaxis]
-                                            * self.x[samples_mask], axis=0) / sum(u[samples_mask][:, cntr_index])
+                                                * self.x[samples_mask], axis=0) / sum(u[samples_mask][:, cntr_index])
         pass
 
     def cluster_elimination(self):
@@ -142,17 +141,17 @@ class pcm_fs2():
         in the hard partition, if no point belongs to cluster i then it will be removed.
         :return:
         """
-        p=0
+        p = 0
         index_delete = []  # store the cluster index to be deleted
 
         labels = np.argmax(self.u, axis=1)
         for cntr_index in range(self.m):
             dist_2_cntr = map(np.linalg.norm, self.x[labels == cntr_index] - self.theta[cntr_index])
             self.ita[cntr_index] = sum(dist_2_cntr) / np.sum(labels == cntr_index)
-            if np.isclose(self.ita[cntr_index],0):
+            if np.isclose(self.ita[cntr_index], 0):
                 p += 1
                 index_delete.append(cntr_index)
-            # remove the respective center related quantities
+                # remove the respective center related quantities
         if p > 0:
             self.u = np.delete(self.u, index_delete, axis=1)
             self.theta = np.delete(self.theta, index_delete, axis=0)
@@ -163,7 +162,16 @@ class pcm_fs2():
     def fit(self):
         # The main loop
         p = 0
+        # This re-initialization is necessary if we use animation.save. The reason is: FuncAnimation needs a
+        # save_count parameter to know the  mount of frame data to keep around for saving movies. So the animation
+        # first runs the fit() function to get the number of runs of the algorithm and save the movie, then this number
+        #  is  the run times for the next animation run. This second run is the one we see, not the one we save.
+        #  So we should make sure that the second run of fit() has exactly the same enviroment as the first run.
+        self.m=self.m_ori
+        self.init_animation()
+        self.init_theta_ita()
         while p < self.maxiter:
+            print "in fit:",p,self.m
             theta_ori = self.theta.copy()
             self.update_u_theta()
             self.cluster_elimination()
@@ -208,4 +216,4 @@ class pcm_fs2():
                 line_center.set_data([], [])
                 circle.set_radius(0)
         # return self.lines,self.line_centers,self.title
-        return self.lines, self.line_centers, self.title, self.circles
+        return self.lines + self.line_centers + self.circles + [self.title]
