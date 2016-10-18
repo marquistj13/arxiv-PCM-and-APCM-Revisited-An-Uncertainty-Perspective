@@ -48,14 +48,14 @@ class pcm_fs2():
         # self.line_centers=[ax.plot([],[], 's',color=colors[label])[0] for label in range(self.m_ori) ]
         self.line_centers = [ax.plot([], [], 'rs')[0] for _ in range(self.m_ori)]
         # the title
-        self.title = ax.set_title("")
+        self.text = ax.text(0.02,0.84,'', transform=ax.transAxes)
         # the limit of axixes
         ax.set_xlim(self.x_lim)
         ax.set_ylim(self.y_lim)
         # add circles to indication the standard deviation, i.e., the influence of each cluster
         self.circles = [ax.add_patch(plt.Circle((0, 0), radius=0, color='k', fill=None, lw=2)) for _ in
                         range(self.m_ori)]
-        return self.lines + self.line_centers + self.circles + [self.title]
+        return self.lines + self.line_centers + self.circles + [self.text]
 
     def init_theta_ita(self):
         """
@@ -87,12 +87,12 @@ class pcm_fs2():
         labels = np.argmax(u_orig, axis=1)
 
         # plot the fcm initialization result
-        # fig, ax = plt.subplots()# assume 2-d data
-        # for label in range(self.m):
-        #     ax.plot(self.x[labels == label][:,0], self.x[labels == label][:,1], '.',
-        #          color=colors[label])
-        # ax.set_title('the fcm initialization')
-
+        fig, ax = plt.subplots(dpi=300)# assume 2-d data
+        for label in range(self.m):
+            ax.plot(self.x[labels == label][:,0], self.x[labels == label][:,1], '.',
+                 color=colors[label])
+        ax.set_title('FCM initialization:%2d clusters'%self.m)
+        plt.savefig(r".\video\fig1_ini_%d.png"%self.m, dpi=fig.dpi, bbox_inches='tight')
         # initialize theta, i.e., the centers
         self.theta = cntr
         # now compute ita
@@ -160,18 +160,20 @@ class pcm_fs2():
         pass
 
     def fit(self):
-        # The main loop
-        p = 0
-        # This re-initialization is necessary if we use animation.save. The reason is: FuncAnimation needs a
+        """
+         # This re-initialization is necessary if we use animation.save. The reason is: FuncAnimation needs a
         # save_count parameter to know the  mount of frame data to keep around for saving movies. So the animation
         # first runs the fit() function to get the number of runs of the algorithm and save the movie, then this number
         #  is  the run times for the next animation run. This second run is the one we see, not the one we save.
         #  So we should make sure that the second run of fit() has exactly the same enviroment as the first run.
+        :return:
+        """
+        # The main loop
+        p = 0
         self.m=self.m_ori
         self.init_animation()
         self.init_theta_ita()
         while p < self.maxiter:
-            print "in fit:",p,self.m
             theta_ori = self.theta.copy()
             self.update_u_theta()
             self.cluster_elimination()
@@ -190,8 +192,8 @@ class pcm_fs2():
         :param p:
         :return:
         """
-        self.title.set_text("%d th iteration." % p)
-        # self.title.set_text(p)
+        tmp_text="Iteration times:%2d\n"%p
+        tmp_text+=r"$\alpha={:.2f},\sigma_v={:.2f}$".format(self.alpha_cut,self.sig_v0)+"\n"
         labels = np.argmax(self.u, axis=1)
         # the following logic is as this: if the final cluster number is equal to the specified value
         # then draw all the clusters, otherwise, the deleted clusters are not plotted
@@ -201,7 +203,7 @@ class pcm_fs2():
                 line_center.set_data(self.theta[label][0], self.theta[label][1])
                 circle.center = self.theta[label][0], self.theta[label][1]
                 circle.set_radius(self.ita[label])
-                print label, self.ita[label], len(self.ita)
+                # print label, self.ita[label], len(self.ita)
         else:
             for label, line, line_center, circle in zip(range(self.m), self.lines[:self.m], self.line_centers[:self.m],
                                                         self.circles[:self.m]):
@@ -215,5 +217,6 @@ class pcm_fs2():
                 line.set_data([], [])
                 line_center.set_data([], [])
                 circle.set_radius(0)
-        # return self.lines,self.line_centers,self.title
-        return self.lines + self.line_centers + self.circles + [self.title]
+        tmp_text+="Initial    number:%2d\nCurrent number:%2d"%(self.m_ori,self.m)
+        self.text.set_text(tmp_text)
+        return self.lines + self.line_centers + self.circles + [self.text]
