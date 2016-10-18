@@ -17,7 +17,8 @@ v_exp_marginal = np.vectorize(exp_marginal)
 
 
 class pcm_fs2():
-    def __init__(self, X, m, sig_v0, ax, x_lim, y_lim, alpha_cut=0.1, error=0.005, maxiter=10000):
+    def __init__(self, X, m, sig_v0, ax, x_lim, y_lim, alpha_cut=0.1, error=0.005, maxiter=10000, ini_save_name="",
+                 last_frame_name=""):
         """
         :param X: scikit-learn form, i.e., pf shape (n_samples, n_features)
         :param m: NO.of initial clusters
@@ -34,6 +35,8 @@ class pcm_fs2():
         self.alpha_cut = alpha_cut
         self.error = error
         self.maxiter = maxiter
+        self.ini_save_name = ini_save_name
+        self.last_frame_name=last_frame_name
         # use fcm to initialise the clusters
         self.init_theta_ita()
         pass
@@ -48,7 +51,7 @@ class pcm_fs2():
         # self.line_centers=[ax.plot([],[], 's',color=colors[label])[0] for label in range(self.m_ori) ]
         self.line_centers = [ax.plot([], [], 'rs')[0] for _ in range(self.m_ori)]
         # the title
-        self.text = ax.text(0.02,0.84,'', transform=ax.transAxes)
+        self.text = ax.text(0.02, 0.84, '', transform=ax.transAxes)
         # the limit of axixes
         ax.set_xlim(self.x_lim)
         ax.set_ylim(self.y_lim)
@@ -87,14 +90,14 @@ class pcm_fs2():
         labels = np.argmax(u_orig, axis=1)
 
         # plot the fcm initialization result
-        fig, ax = plt.subplots(dpi=300)# assume 2-d data
+        fig, ax = plt.subplots(dpi=300)  # assume 2-d data
         for label in range(self.m):
-            ax.plot(self.x[labels == label][:,0], self.x[labels == label][:,1], '.',
-                 color=colors[label])
+            ax.plot(self.x[labels == label][:, 0], self.x[labels == label][:, 1], '.',
+                    color=colors[label])
         ax.set_xlim(self.x_lim)
         ax.set_ylim(self.y_lim)
-        ax.set_title('FCM initialization:%2d clusters'%self.m)
-        plt.savefig(r".\video\fig8_ini_%d.png"%self.m, dpi=fig.dpi, bbox_inches='tight')
+        ax.set_title('FCM initialization:%2d clusters' % self.m)
+        plt.savefig(self.ini_save_name, dpi=fig.dpi, bbox_inches='tight')
         # initialize theta, i.e., the centers
         self.theta = cntr
         # now compute ita
@@ -114,7 +117,8 @@ class pcm_fs2():
         self.u = u
         # update theta (centers)
         for cntr_index in range(self.m):
-            samples_mask = u[:,cntr_index] >= self.alpha_cut  # only those without too much noise can be used to calculate centers
+            samples_mask = u[:,
+                           cntr_index] >= self.alpha_cut  # only those without too much noise can be used to calculate centers
             if np.any(samples_mask):  # avoid null value for the following calculation
                 self.theta[cntr_index] = np.sum(u[samples_mask][:, cntr_index][:, np.newaxis]
                                                 * self.x[samples_mask], axis=0) / sum(u[samples_mask][:, cntr_index])
@@ -161,6 +165,26 @@ class pcm_fs2():
             self.m -= p
         pass
 
+    def save_last_frame(self, p):
+        fig = plt.figure("last frame", dpi=300)
+        ax = fig.gca()
+        # the limit of axixes
+        ax.set_xlim(self.x_lim)
+        ax.set_ylim(self.y_lim)
+        tmp_text = "Iteration times:%2d\n" % p
+        tmp_text += r"$\alpha={:.2f},\sigma_v={:.2f}$".format(self.alpha_cut, self.sig_v0) + "\n"
+        tmp_text += "Initial    number:%2d\nCurrent number:%2d" % (self.m_ori, self.m)
+        ax.text(0.02, 0.84, tmp_text, transform=ax.transAxes)
+        labels = np.argmax(self.u, axis=1)
+        for label in range(self.m):
+            ax.plot(self.x[labels == label][:, 0], self.x[labels == label][:, 1], '.', color=colors[label])
+            ax.plot(self.theta[label][0], self.theta[label][1], 'rs')
+            ax.add_patch(plt.Circle((self.theta[label][0], self.theta[label][1]),
+                                    radius=self.ita[label], color='k', fill=None, lw=2))
+        plt.figure("last frame")
+        plt.savefig(self.last_frame_name, dpi=300)
+        pass
+
     def fit(self):
         """
          # This re-initialization is necessary if we use animation.save. The reason is: FuncAnimation needs a
@@ -172,7 +196,7 @@ class pcm_fs2():
         """
         # The main loop
         p = 0
-        self.m=self.m_ori
+        self.m = self.m_ori
         self.init_animation()
         self.init_theta_ita()
         while p < self.maxiter:
@@ -180,10 +204,10 @@ class pcm_fs2():
             self.update_u_theta()
             self.cluster_elimination()
             self.adapt_ita()
-
-            p += 1
             if (len(theta_ori) == len(self.theta)) and (np.linalg.norm(self.theta - theta_ori) < self.error):
+                self.save_last_frame(p - 1)
                 break
+            p += 1
             yield p  # here the current iteration result has been recorded in the class, the result is ready for plotting.
             # note that the yield statement returns p as an argument to the callback function __call__(self, p) which is called by the
             # animation process
@@ -194,8 +218,8 @@ class pcm_fs2():
         :param p:
         :return:
         """
-        tmp_text="Iteration times:%2d\n"%p
-        tmp_text+=r"$\alpha={:.2f},\sigma_v={:.2f}$".format(self.alpha_cut,self.sig_v0)+"\n"
+        tmp_text = "Iteration times:%2d\n" % p
+        tmp_text += r"$\alpha={:.2f},\sigma_v={:.2f}$".format(self.alpha_cut, self.sig_v0) + "\n"
         labels = np.argmax(self.u, axis=1)
         # the following logic is as this: if the final cluster number is equal to the specified value
         # then draw all the clusters, otherwise, the deleted clusters are not plotted
@@ -219,6 +243,6 @@ class pcm_fs2():
                 line.set_data([], [])
                 line_center.set_data([], [])
                 circle.set_radius(0)
-        tmp_text+="Initial    number:%2d\nCurrent number:%2d"%(self.m_ori,self.m)
+        tmp_text += "Initial    number:%2d\nCurrent number:%2d" % (self.m_ori, self.m)
         self.text.set_text(tmp_text)
         return self.lines + self.line_centers + self.circles + [self.text]

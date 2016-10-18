@@ -59,8 +59,13 @@ if __name__ == '__main__':
     # plot animation and save
     fig2 = plt.figure(figsize=fig_size, dpi=dpi, num=2)
     ax = fig2.gca()
-    n_cluster, sigma_v, alpha_cut = 10, 0.5, 0.1
-    clf = pcm_fs2(X, n_cluster, sigma_v, alpha_cut=alpha_cut, ax=ax, x_lim=(-20, 40), y_lim=(-10, 35))
+    n_cluster, sigma_v, alpha_cut = 10, 1, 0.1
+    # n_cluster, sigma_v, alpha_cut = 10, 0.5, 0.1
+    # n_cluster, sigma_v, alpha_cut = 10, 0.5, 0.2
+    ini_save_name = r".\video\fig8_ini_%d.png" % n_cluster
+    last_frame_name = r'.\video\fig8_n_%d_sigmav_%.1f_alpha_%.1f_last_frame.png' % (n_cluster, sigma_v, alpha_cut)
+    clf = pcm_fs2(X, n_cluster, sigma_v, alpha_cut=alpha_cut, ax=ax, x_lim=(-20, 40), y_lim=(-10, 35),
+                  ini_save_name=ini_save_name, last_frame_name=last_frame_name)
     # we should set "blit=False,repeat=False" or the program would fail. "init_func=clf.init_animation" plot the
     # background of each frame There is not much point to use blit=True, if most parts of your plot should be
     # refreshed. see http://stackoverflow.com/questions/14844223/python-matplotlib-blit-to-axes-or-sides-of-the
@@ -69,7 +74,7 @@ if __name__ == '__main__':
     #  just a way to avoid re-drawing everything if only some things are changing. If everything is changing,
     # there's no point in using blitting. Just re-draw the plot.
     anim = animation.FuncAnimation(fig2, clf, frames=clf.fit,
-                                   init_func=clf.init_animation, interval=700, blit=True, repeat=False)
+                                   init_func=clf.init_animation, interval=1500, blit=True, repeat=False)
     anim.save(r'.\video\fig8_n_%d_sigmav_%.1f_alpha_%.1f.mp4' % (n_cluster, sigma_v, alpha_cut),
               fps=None, extra_args=['-vcodec', 'libx264'], dpi='figure')
     plt.show()
