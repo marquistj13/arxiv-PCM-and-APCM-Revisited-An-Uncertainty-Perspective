@@ -94,7 +94,7 @@ class pcm_fs2():
         ax.set_xlim(self.x_lim)
         ax.set_ylim(self.y_lim)
         ax.set_title('FCM initialization:%2d clusters'%self.m)
-        plt.savefig(r".\video\fig6_ini_%d.png"%self.m, dpi=fig.dpi, bbox_inches='tight')
+        plt.savefig(r".\video\fig8_ini_%d.png"%self.m, dpi=fig.dpi, bbox_inches='tight')
         # initialize theta, i.e., the centers
         self.theta = cntr
         # now compute ita
