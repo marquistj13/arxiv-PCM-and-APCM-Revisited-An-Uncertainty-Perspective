@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 colors = ['b', 'orange', 'g', 'r', 'c', 'm', 'y', 'k', 'Brown', 'ForestGreen'] * 3
-plt.style.use('ggplot')
+plt.style.use('classic')
 
 
 def exp_marginal(d, v0, sigma_v0):
@@ -91,8 +91,10 @@ class pcm_fs2():
         for label in range(self.m):
             ax.plot(self.x[labels == label][:,0], self.x[labels == label][:,1], '.',
                  color=colors[label])
+        ax.set_xlim(self.x_lim)
+        ax.set_ylim(self.y_lim)
         ax.set_title('FCM initialization:%2d clusters'%self.m)
-        plt.savefig(r".\video\fig1_ini_%d.png"%self.m, dpi=fig.dpi, bbox_inches='tight')
+        plt.savefig(r".\video\fig6_ini_%d.png"%self.m, dpi=fig.dpi, bbox_inches='tight')
         # initialize theta, i.e., the centers
         self.theta = cntr
         # now compute ita
