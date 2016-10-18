@@ -4,8 +4,9 @@
 *.tex.bak
 *.thm
 
-# images
+# images,movies
 *.png
+*.mp4
 
 # Emacs file
 \#*\#
