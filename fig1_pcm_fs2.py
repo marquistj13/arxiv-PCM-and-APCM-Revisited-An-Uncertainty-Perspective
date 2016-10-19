@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from pcm_fs2 import pcm_fs2
 from sklearn.datasets import make_blobs
+from moviepy.video.io.ffmpeg_reader import FFMPEG_VideoReader
+from moviepy.video.io.ffmpeg_writer import FFMPEG_VideoWriter
+import os
 
 colors = ['b', 'orange', 'g', 'r', 'c', 'm', 'y', 'k', 'Brown', 'ForestGreen']
 plt.style.use('classic')
@@ -37,7 +40,7 @@ if __name__ == '__main__':
     dpi = 300
     fig_size = (8, 6)
     # plot ori data and save
-    fig1 = plt.figure(figsize=fig_size, dpi=dpi, num=1)
+    fig1 = plt.figure(figsize=fig_size, dpi=dpi, num="original data")
     ax_fig1 = fig1.gca()
     for label in range(2):
         ax_fig1.plot(X[y == label][:, 0], X[y == label][:, 1], '.',
@@ -48,7 +51,7 @@ if __name__ == '__main__':
     ax_fig1.set_title("Original Dataset")
     plt.savefig(r".\video\fig1_ori.png", dpi=dpi, bbox_inches='tight')
     # plot animation and save
-    fig2 = plt.figure(figsize=fig_size, dpi=dpi, num=2)
+    fig2 = plt.figure(figsize=fig_size, dpi=dpi, num="clustering process")
     ax = fig2.gca()
     ax.grid(True)
     n_cluster, sigma_v, alpha_cut = 10, 2, 0
@@ -57,10 +60,11 @@ if __name__ == '__main__':
     # n_cluster, sigma_v, alpha_cut = 2, 2, 0
     ini_save_name = r".\video\fig1_ini_%d.png" % n_cluster
     last_frame_name = r'.\video\fig1_n_%d_sigmav_%.1f_alpha_%.1f_last_frame.png' % (n_cluster, sigma_v, alpha_cut)
-    # the following trick is used to produce standard video (i.e., with 24 fps or 50 fps film and so on)
-    fps = 1
-    clf = pcm_fs2(X, n_cluster, sigma_v, alpha_cut=alpha_cut, ax=ax, x_lim=(-10, 20), y_lim=(-8, 16),
-                  ini_save_name=ini_save_name, last_frame_name=last_frame_name, fps=fps)
+    # video_save_name = r'.\video\fig1_n_%d_sigmav_%.1f_alpha_%.1f.mp4' % (n_cluster, sigma_v, alpha_cut)
+    tmp_video_name = r'.\video\fig1_n_%d_sigmav_%.1f_alpha_%.1f_tmp.mp4' % (n_cluster, sigma_v, alpha_cut)
+    video_save_newFps_name = r'.\video\fig1_n_%d_sigmav_%.1f_alpha_%.1f.mp4' % (n_cluster, sigma_v, alpha_cut)
+    clf = pcm_fs2(X, n_cluster, sigma_v, ax=ax, x_lim=(-10, 20), y_lim=(-8, 16), alpha_cut=alpha_cut,
+                  ini_save_name=ini_save_name, last_frame_name=last_frame_name)
     # we should set "blit=False,repeat=False" or the program would fail. "init_func=clf.init_animation" plot the
     # background of each frame There is not much point to use blit=True, if most parts of your plot should be
     # refreshed. see http://stackoverflow.com/questions/14844223/python-matplotlib-blit-to-axes-or-sides-of-the
@@ -69,9 +73,21 @@ if __name__ == '__main__':
     #  just a way to avoid re-drawing everything if only some things are changing. If everything is changing,
     # there's no point in using blitting. Just re-draw the plot.
     anim = animation.FuncAnimation(fig2, clf, frames=clf.fit,
-                                   init_func=clf.init_animation, interval=1, blit=True, repeat=False)
-    anim.save(r'.\video\fig1_n_%d_sigmav_%.1f_alpha_%.1f.mp4' % (n_cluster, sigma_v, alpha_cut),
-              fps=fps, extra_args=['-vcodec', 'libx264'], dpi=dpi)
-
+                                   init_func=clf.init_animation, interval=1000, blit=True, repeat=False)
+    anim.save(tmp_video_name, fps=None, extra_args=['-vcodec', 'libx264'], dpi=dpi)
+    new_fps = 24
+    play_slow_rate = 1  # controls how many times a frame repeats.
+    movie_reader = FFMPEG_VideoReader(tmp_video_name)
+    movie_writer = FFMPEG_VideoWriter(video_save_newFps_name, movie_reader.size, new_fps)
+    print "n_frames:", movie_reader.nframes
+    for i in range(movie_reader.nframes):
+        tmp_frame = movie_reader.read_frame()
+        # if i==0:
+        #     plt.imshow(tmp_frame)
+        [movie_writer.write_frame(tmp_frame) for _ in range(new_fps * play_slow_rate)]
+        pass
+    movie_reader.close()
+    movie_writer.close()
+    # os.remove(tmp_video_name)
     # plt.show()
     pass
