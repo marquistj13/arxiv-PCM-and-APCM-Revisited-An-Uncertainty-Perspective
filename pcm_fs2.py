@@ -18,7 +18,7 @@ v_exp_marginal = np.vectorize(exp_marginal)
 
 class pcm_fs2():
     def __init__(self, X, m, sig_v0, ax, x_lim, y_lim, alpha_cut=0.1, error=0.005, maxiter=10000, ini_save_name="",
-                 last_frame_name=""):
+                 last_frame_name="", fps=24):
         """
         :param X: scikit-learn form, i.e., pf shape (n_samples, n_features)
         :param m: NO.of initial clusters
@@ -36,7 +36,9 @@ class pcm_fs2():
         self.error = error
         self.maxiter = maxiter
         self.ini_save_name = ini_save_name
-        self.last_frame_name=last_frame_name
+        self.last_frame_name = last_frame_name
+        self.fps = fps
+        self.p = 0  # number of iterations
         # use fcm to initialise the clusters
         self.init_theta_ita()
         pass
@@ -90,7 +92,7 @@ class pcm_fs2():
         labels = np.argmax(u_orig, axis=1)
 
         # plot the fcm initialization result
-        fig, ax = plt.subplots(dpi=300)  # assume 2-d data
+        fig, ax = plt.subplots(figsize=(8, 6), dpi=300)  # assume 2-d data
         for label in range(self.m):
             ax.plot(self.x[labels == label][:, 0], self.x[labels == label][:, 1], '.',
                     color=colors[label])
@@ -195,29 +197,36 @@ class pcm_fs2():
         :return:
         """
         # The main loop
-        p = 0
+        self.p = 0
         self.m = self.m_ori
         self.init_animation()
         self.init_theta_ita()
-        while p < self.maxiter:
-            theta_ori = self.theta.copy()
-            self.update_u_theta()
-            self.cluster_elimination()
-            self.adapt_ita()
-            if (len(theta_ori) == len(self.theta)) and (np.linalg.norm(self.theta - theta_ori) < self.error):
-                self.save_last_frame(p - 1)
-                break
-            p += 1
-            yield p  # here the current iteration result has been recorded in the class, the result is ready for plotting.
+        flag_frame = 0
+        while self.p < self.maxiter:
+            if flag_frame % self.fps == 0:  # produce #fps same frames for one clustering
+                theta_ori = self.theta.copy()
+                self.update_u_theta()
+                self.cluster_elimination()
+                self.adapt_ita()
+                if (len(theta_ori) == len(self.theta)) and (np.linalg.norm(self.theta - theta_ori) < self.error):
+                    self.save_last_frame(self.p - 1)
+                    break
+                self.p += 1
+                print "in while:", self.p
+            flag_frame += 1
+            print "in while flag:", flag_frame
+
+            yield flag_frame  # here the current iteration result has been recorded in the class, the result is ready for plotting.
             # note that the yield statement returns p as an argument to the callback function __call__(self, p) which is called by the
             # animation process
 
-    def __call__(self, p):
+    def __call__(self, flag_frame):
         """
         (refer to 74.4 animation example code: bayes_update.py from Matplotlib, Release 1.4.3 page1632)
         :param p:
         :return:
         """
+        p = self.p
         tmp_text = "Iteration times:%2d\n" % p
         tmp_text += r"$\alpha={:.2f},\sigma_v={:.2f}$".format(self.alpha_cut, self.sig_v0) + "\n"
         labels = np.argmax(self.u, axis=1)
