@@ -60,7 +60,6 @@ if __name__ == '__main__':
     # n_cluster, sigma_v, alpha_cut = 2, 2, 0
     ini_save_name = r".\video\fig1_ini_%d.png" % n_cluster
     last_frame_name = r'.\video\fig1_n_%d_sigmav_%.1f_alpha_%.1f_last_frame.png' % (n_cluster, sigma_v, alpha_cut)
-    # video_save_name = r'.\video\fig1_n_%d_sigmav_%.1f_alpha_%.1f.mp4' % (n_cluster, sigma_v, alpha_cut)
     tmp_video_name = r'.\video\fig1_n_%d_sigmav_%.1f_alpha_%.1f_tmp.mp4' % (n_cluster, sigma_v, alpha_cut)
     video_save_newFps_name = r'.\video\fig1_n_%d_sigmav_%.1f_alpha_%.1f.mp4' % (n_cluster, sigma_v, alpha_cut)
     clf = pcm_fs2(X, n_cluster, sigma_v, ax=ax, x_lim=(-10, 20), y_lim=(-8, 16), alpha_cut=alpha_cut,
@@ -73,21 +72,32 @@ if __name__ == '__main__':
     #  just a way to avoid re-drawing everything if only some things are changing. If everything is changing,
     # there's no point in using blitting. Just re-draw the plot.
     anim = animation.FuncAnimation(fig2, clf, frames=clf.fit,
-                                   init_func=clf.init_animation, interval=1000, blit=True, repeat=False)
-    anim.save(tmp_video_name, fps=None, extra_args=['-vcodec', 'libx264'], dpi=dpi)
+                                   init_func=clf.init_animation, interval=2000, blit=True, repeat=False)
+    anim.save(tmp_video_name, fps=1, extra_args=['-vcodec', 'libx264'], dpi=dpi)
     new_fps = 24
-    play_slow_rate = 1  # controls how many times a frame repeats.
+    play_slow_rate = 1.5  # controls how many times a frame repeats.
     movie_reader = FFMPEG_VideoReader(tmp_video_name)
     movie_writer = FFMPEG_VideoWriter(video_save_newFps_name, movie_reader.size, new_fps)
     print "n_frames:", movie_reader.nframes
-    for i in range(movie_reader.nframes):
+    # the 1st frame of the saved video can't be directly read by movie_reader.read_frame(), I don't know why
+    # maybe it's a bug of anim.save, actually, if we look at the movie we get from anim.save
+    # we can easilly see that the 1st frame just close very soon.
+    # so I manually get it at time 0, this is just a trick, I think.
+    tmp_frame = movie_reader.get_frame(0)
+    [movie_writer.write_frame(tmp_frame) for _ in range(int(new_fps * play_slow_rate))]
+    # for the above reason, we should read (movie_reader.nframes-1) frames so that the last frame is not
+    # read twice (not that get_frame(0) alread read once)
+    # However, I soon figure out that it should be (movie_reader.nframes-2). The details: we have actually
+    # 6 frames, but (print movie_reader.nframes) is 7. I read the first frame through movie_reader.get_frame(0)
+    # then are are 5 left. So I should use movie_reader.nframes - 2. Note that in the case of: original fps=1
+    # new_fps = 24, play_slow_rate = 1.5 the result is: 1st frame last 1.8s, others 1.5s, i.e., the 1st frame
+    # has more duration. This is messy.
+    for i in range(movie_reader.nframes - 2):
         tmp_frame = movie_reader.read_frame()
-        # if i==0:
-        #     plt.imshow(tmp_frame)
-        [movie_writer.write_frame(tmp_frame) for _ in range(new_fps * play_slow_rate)]
+        [movie_writer.write_frame(tmp_frame) for _ in range(int(new_fps * play_slow_rate))]
         pass
     movie_reader.close()
     movie_writer.close()
-    # os.remove(tmp_video_name)
+    os.remove(tmp_video_name)
     # plt.show()
     pass
