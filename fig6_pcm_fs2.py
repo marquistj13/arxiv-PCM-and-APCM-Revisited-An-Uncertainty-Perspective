@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from pcm_fs2 import pcm_fs2
 from sklearn.datasets import make_blobs
+from moviepy.video.io.ffmpeg_reader import FFMPEG_VideoReader
+from moviepy.video.io.ffmpeg_writer import FFMPEG_VideoWriter
+import os
 
 colors = ['b', 'orange', 'g', 'r', 'c', 'm', 'y', 'k', 'Brown', 'ForestGreen']
 plt.style.use('classic')
@@ -41,6 +44,7 @@ if __name__ == '__main__':
     # plot ori data and save
     fig1 = plt.figure(figsize=fig_size, dpi=dpi, num=1)
     ax_fig1 = fig1.gca()
+    ax_fig1.grid(True)
     for label in range(3):
         ax_fig1.plot(X[y == label][:, 0], X[y == label][:, 1], '.',
                      color=colors[label], markersize=marker_size, label="Cluster %d" % (label + 1))
@@ -53,12 +57,14 @@ if __name__ == '__main__':
     fig2 = plt.figure(figsize=fig_size, dpi=dpi, num=2)
     ax = fig2.gca()
     n_cluster, sigma_v, alpha_cut = 3, 3, 0.9
-    # n_cluster, sigma_v, alpha_cut = 3, 3, 0.5
-    # n_cluster, sigma_v, alpha_cut = 10, 3, 0.9
-    # n_cluster, sigma_v, alpha_cut = 10, 4, 0.9
+    n_cluster, sigma_v, alpha_cut = 3, 3, 0.5
+    n_cluster, sigma_v, alpha_cut = 10, 3, 0.9
+    n_cluster, sigma_v, alpha_cut = 10, 4, 0.9
     ini_save_name = r".\video\fig6_ini_%d.png" % n_cluster
     last_frame_name = r'.\video\fig6_n_%d_sigmav_%.1f_alpha_%.1f_last_frame.png' % (n_cluster, sigma_v, alpha_cut)
-    clf = pcm_fs2(X, n_cluster, sigma_v, alpha_cut=alpha_cut, ax=ax, x_lim=(0.1, 3), y_lim=(-0.75, 2.75),
+    tmp_video_name = r'.\video\fig6_n_%d_sigmav_%.1f_alpha_%.1f_tmp.mp4' % (n_cluster, sigma_v, alpha_cut)
+    video_save_newFps_name = r'.\video\fig6_n_%d_sigmav_%.1f_alpha_%.1f.mp4' % (n_cluster, sigma_v, alpha_cut)
+    clf = pcm_fs2(X, n_cluster, sigma_v, ax=ax, x_lim=(0.1, 3), y_lim=(-0.75, 2.75), alpha_cut=alpha_cut,
                   ini_save_name=ini_save_name, last_frame_name=last_frame_name)
     # we should set "blit=False,repeat=False" or the program would fail. "init_func=clf.init_animation" plot the
     # background of each frame There is not much point to use blit=True, if most parts of your plot should be
@@ -68,9 +74,33 @@ if __name__ == '__main__':
     #  just a way to avoid re-drawing everything if only some things are changing. If everything is changing,
     # there's no point in using blitting. Just re-draw the plot.
     anim = animation.FuncAnimation(fig2, clf, frames=clf.fit,
-                                   init_func=clf.init_animation, interval=1500, blit=True, repeat=False)
-    anim.save(r'.\video\fig6_n_%d_sigmav_%.1f_alpha_%.1f.mp4' % (n_cluster, sigma_v, alpha_cut),
-              fps=None, extra_args=['-vcodec', 'libx264'], dpi='figure')
-
-    plt.show()
+                                   init_func=clf.init_animation, interval=2000, blit=True, repeat=False)
+    anim.save(tmp_video_name, fps=1, extra_args=['-vcodec', 'libx264'], dpi='figure')
+    new_fps = 24
+    play_slow_rate = 1.5  # controls how many times a frame repeats.
+    movie_reader = FFMPEG_VideoReader(tmp_video_name)
+    movie_writer = FFMPEG_VideoWriter(video_save_newFps_name, movie_reader.size, new_fps)
+    print "n_frames:", movie_reader.nframes
+    # the 1st frame of the saved video can't be directly read by movie_reader.read_frame(), I don't know why
+    # maybe it's a bug of anim.save, actually, if we look at the movie we get from anim.save
+    # we can easilly see that the 1st frame just close very soon.
+    # so I manually get it at time 0, this is just a trick, I think.
+    tmp_frame = movie_reader.get_frame(0)
+    [movie_writer.write_frame(tmp_frame) for _ in range(int(new_fps * play_slow_rate))]
+    # for the above reason, we should read (movie_reader.nframes-1) frames so that the last frame is not
+    # read twice (not that get_frame(0) alread read once)
+    # However, I soon figure out that it should be (movie_reader.nframes-2). The details: we have actually
+    # 6 frames, but (print movie_reader.nframes) is 7. I read the first frame through movie_reader.get_frame(0)
+    # then are are 5 left. So I should use movie_reader.nframes - 2. Note that in fig1_pcm_fs2.py
+    # in the case of: original fps=1
+    # new_fps = 24, play_slow_rate = 1.5 the result is: 1st frame last 1.8s, others 1.5s, i.e., the 1st frame
+    # has more duration. This is messy.
+    for i in range(movie_reader.nframes - 2):
+        tmp_frame = movie_reader.read_frame()
+        [movie_writer.write_frame(tmp_frame) for _ in range(int(new_fps * play_slow_rate))]
+        pass
+    movie_reader.close()
+    movie_writer.close()
+    os.remove(tmp_video_name)
+    # plt.show()
     pass

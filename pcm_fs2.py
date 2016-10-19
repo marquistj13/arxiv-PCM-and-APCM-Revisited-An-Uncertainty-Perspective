@@ -96,6 +96,7 @@ class pcm_fs2():
                     color=colors[label])
         ax.set_xlim(self.x_lim)
         ax.set_ylim(self.y_lim)
+        ax.grid(True)
         ax.set_title('FCM initialization:%2d clusters' % self.m)
         plt.savefig(self.ini_save_name, dpi=fig.dpi, bbox_inches='tight')
         # initialize theta, i.e., the centers
@@ -168,6 +169,7 @@ class pcm_fs2():
     def save_last_frame(self, p):
         fig = plt.figure("last frame", dpi=300)
         ax = fig.gca()
+        ax.grid(True)
         # the limit of axixes
         ax.set_xlim(self.x_lim)
         ax.set_ylim(self.y_lim)
@@ -175,6 +177,7 @@ class pcm_fs2():
         tmp_text += r"$\alpha={:.2f},\sigma_v={:.2f}$".format(self.alpha_cut, self.sig_v0) + "\n"
         tmp_text += "Initial    number:%2d\nCurrent number:%2d" % (self.m_ori, self.m)
         ax.text(0.02, 0.84, tmp_text, transform=ax.transAxes)
+        ax.set_title("Clustering Finished")
         labels = np.argmax(self.u, axis=1)
         for label in range(self.m):
             ax.plot(self.x[labels == label][:, 0], self.x[labels == label][:, 1], '.', color=colors[label])

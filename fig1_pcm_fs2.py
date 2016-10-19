@@ -42,6 +42,7 @@ if __name__ == '__main__':
     # plot ori data and save
     fig1 = plt.figure(figsize=fig_size, dpi=dpi, num="original data")
     ax_fig1 = fig1.gca()
+    ax_fig1.grid(True)
     for label in range(2):
         ax_fig1.plot(X[y == label][:, 0], X[y == label][:, 1], '.',
                      color=colors[label], markersize=marker_size, label="Cluster %d" % (label + 1))
@@ -55,9 +56,9 @@ if __name__ == '__main__':
     ax = fig2.gca()
     ax.grid(True)
     n_cluster, sigma_v, alpha_cut = 10, 2, 0
-    # n_cluster, sigma_v, alpha_cut = 10, 4, 0
-    # n_cluster, sigma_v, alpha_cut = 2, 1, 0
-    # n_cluster, sigma_v, alpha_cut = 2, 2, 0
+    n_cluster, sigma_v, alpha_cut = 10, 4, 0
+    n_cluster, sigma_v, alpha_cut = 2, 1, 0
+    n_cluster, sigma_v, alpha_cut = 2, 2, 0
     ini_save_name = r".\video\fig1_ini_%d.png" % n_cluster
     last_frame_name = r'.\video\fig1_n_%d_sigmav_%.1f_alpha_%.1f_last_frame.png' % (n_cluster, sigma_v, alpha_cut)
     tmp_video_name = r'.\video\fig1_n_%d_sigmav_%.1f_alpha_%.1f_tmp.mp4' % (n_cluster, sigma_v, alpha_cut)
@@ -89,7 +90,8 @@ if __name__ == '__main__':
     # read twice (not that get_frame(0) alread read once)
     # However, I soon figure out that it should be (movie_reader.nframes-2). The details: we have actually
     # 6 frames, but (print movie_reader.nframes) is 7. I read the first frame through movie_reader.get_frame(0)
-    # then are are 5 left. So I should use movie_reader.nframes - 2. Note that in the case of: original fps=1
+    # then are are 5 left. So I should use movie_reader.nframes - 2. Note that in fig1_pcm_fs2.py
+    # in the case of: original fps=1
     # new_fps = 24, play_slow_rate = 1.5 the result is: 1st frame last 1.8s, others 1.5s, i.e., the 1st frame
     # has more duration. This is messy.
     for i in range(movie_reader.nframes - 2):
