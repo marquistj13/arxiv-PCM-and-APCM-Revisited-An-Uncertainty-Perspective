@@ -56,6 +56,7 @@ if __name__ == '__main__':
     # plot animation and save
     fig2 = plt.figure(figsize=fig_size, dpi=dpi, num=2)
     ax = fig2.gca()
+    ax.grid(True)
     n_cluster, sigma_v, alpha_cut = 3, 3, 0.9
     n_cluster, sigma_v, alpha_cut = 3, 3, 0.5
     n_cluster, sigma_v, alpha_cut = 10, 3, 0.9
