@@ -31,6 +31,7 @@ def _generateFig8():
     y2 += 2
     X = np.vstack((x0, x1, x2))
     y = np.hstack((y0, y1, y2))
+    noise_label = np.zeros((len(noise)))+ 3
     # # Visualize the test data
     # fig0, ax0 = plt.subplots()
     # for label in range(3):
@@ -41,6 +42,7 @@ def _generateFig8():
     # ax0.set_ylim(-10, 35)
     # # ax0.set_title('Test data: 200 points x3 clusters.')
     X = np.vstack((X, noise))
+    y = np.hstack((y, noise_label))
     return X, y
 
 
@@ -53,7 +55,7 @@ if __name__ == '__main__':
     fig1 = plt.figure(figsize=fig_size, dpi=dpi, num=1)
     ax_fig1 = fig1.gca()
     ax_fig1.grid(True)
-    for label in range(3):
+    for label in range(4):
         ax_fig1.plot(X[y == label][:, 0], X[y == label][:, 1], '.',
                      color=colors[label], markersize=marker_size, label="Cluster %d" % (label + 1))
     ax_fig1.set_xlim(-20, 40)
