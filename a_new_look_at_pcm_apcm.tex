@@ -1,4 +1,4 @@
-% Created 2016-10-17 周一 10:27
+% Created 2016-10-21 周五 20:05
 \documentclass[journal]{IEEEtran}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -48,13 +48,24 @@ We propose a unified framework for pcm and apcm, from the viewpoint (or by consi
 \section{Introduction}
 \label{sec-1}
 
-What is the link between PCM and APCM?
-It seems that the main difference of them is whether $\gamma_j$ varies. Can they be unified in the same framework?
+Uncertainty usually exits in two forms: noisy points and the parameters estimated from noisy points.
 
-apcm introduces the concept of smallest physical cluster to cope with the situation where close clusters are equally sized. The unified framework will cope with this situation by noise level.
-The main difference(or clustering behavior?) between pcm and apcm is that in apcm we can protect the small cluster from being dragged to the big cluster by manually specifying the bandwidth of the  minimum physical cluster. In this way, if the bandwidth of the small cluster is over-estimated, minimum physical cluster bandwidth will correct it to a lower value, or larger value otherwise.
+The degree of confidence in data are treated differently in clustering algorithms.
+K-means \cite{jain_data_2010} assumes that all data are reliable. It is sensitive to outliers and noise. Even if an object is quite far away from the cluster center, it is still forced into a cluster and, thus, distorts the cluster shapes. ISODATA \cite{ball_clustering_1967} and PAM \cite{kaufman_finding_2009} both consider the effect of outliers in clustering procedures. ISODATA gets rid of clusters with few objects. PAM utilizes real data points (medoids) as the cluster prototypes and avoids the effect of outliers \cite{xu_survey_2005}.
+Fuzzy c-means (FCM) \cite{bezdek_pattern_2013} is also sensitive to noise and outliers, and the resulted memberships are relative values.  Possibilistic c-means (PCM) \cite{krishnapuram_possibilistic_1993} forces the memberships to decrease with the distance from cluster center. It's shown in \cite{dave_robust_1997} that PCM can be also interpreted as keeping $C\text{-noise}$ clusters to ensure that the memberships of noisy points are reduced. Furthermore, the memberships are controlled by a bandwidth parameter estimated from data.
 
-From formula x, we see that the membership of a point to some cluster is determined by the cluster center and the bandwidth. So we propose that the center update should be modified to avoid being dragged by the large cluster.
+The uncertainty of parameters estimated from noisy data is difficult to handle.
+Adaptive PCM (APCM) \cite{xenaki_novel_2016} considers the estimated bandwidth to be unreliable and introduces a hyper-parameter specified by the user to manually correct the bandwidth. The uncertainty of parameters can be handled in a more fuzzy way because the uncertainty of memberships is caused by the uncertainty of the estimated bandwidth. 
+A type-2 fuzzy set \cite{zadeh_concept_1975}\cite{mendel_type-2_2002} allows us to model one fuzziness over another fuzziness. Recently, the conditional fuzzy set framework of a type-2 fuzzy set is proposed so that we can explicitly model the uncertainty of memberships caused by some parameter.
+
+In this paper, we take a new look at PCM and APCM from the viewpoint of uncertainty.
+Our contribution are summarized as follows:
+\begin{enumerate}
+\item The uncertainty (fuzziness) of the estimated bandwidth parameter is specified by a hyper-parameter $\sigma_v$, and the uncertainty (fuzziness) of membership values caused by the estimated bandwidth parameter is modeled by a conditional fuzzy set.
+\item As to PCM-based clustering algorithms, we propose that each cluster can be seen as noise to other clusters. This conclusion comes from the fact that the existence of close physical clusters makes clustering difficult. This new form of noise is characterized by noise level $\alpha$ of the data set.
+\item Parameters $\sigma_v$ and $\alpha$ makes the clustering process more easy to control. Furthermore, main features of PCM and APCM are unified in this new clustering framework.
+\item Experiments show that the estimated bandwidth uncertainty $\sigma_v$ depends on noise level $\alpha$. In fact, the relation between $\sigma_v$ and $\alpha$ is simple: both $\alpha$ and $\sigma_v$ should be large when there are very close clusters in the dataset because we are very uncertain about the estimated bandwidth. This fact reveals that uncertainty of the estimated bandwidth can also be a type-2 fuzzy set and its uncertainty is caused by $\alpha$. The dependence of $\sigma_v$ on $\alpha$ can be studied in further research.
+\end{enumerate}
 
 \section{Review of PCM and APCM, and Motivations}
 \label{sec-2}
@@ -146,18 +157,18 @@ According to Zadeh \cite{zadeh_concept_1975}, a type-2 fuzzy set (T2 FS) is a fu
 
 \begin{definition}[type-2 fuzzy sets]
 \label{type2-fs}
-A type-2 fuzzy set $\tilde{X}$ is a fuzzy set defined on the universe of discourse $\Omega_X$ whose membership value $\mu_\tilde{X}(x)$ for a given $x\in\Omega_X$ is a type-1 fuzzy set  $U(x)=\mu_\tilde{X}(x)$ defined on $\Omega_X\subseteq[0,1]$ with membership function $\mu_{U(x)}(x,\mu_x)$ where $\mu_x\in\Omega_X\subseteq[0,1]$. The x is called \emp{primary variable} and $\mu_x$ is called the \emp{secondary variable}.
+A type-2 fuzzy set $\tilde{X}$ is a fuzzy set defined on the universe of discourse $\Omega_X$ whose membership value $\mu_\tilde{X}(x)$ for a given $x\in\Omega_X$ is a type-1 fuzzy set  $U(x)=\mu_\tilde{X}(x)$ defined on $\Omega_X\subseteq[0,1]$ with membership function $\mu_{U(x)}(x,\mu_x)$ where $\mu_x\in\Omega_X\subseteq[0,1]$. The x is called \emph{primary variable} and $\mu_x$ is called the \emph{secondary variable}.
 \end{definition}
 
 It's clear that T2 FS is just that one fussiness (uncertainty) depends on another fuzziness. However Definition \ref{type2-fs} makes T2 FS a complex subject. To simplify this problem, Li-Xin Wang \cite{wang_new_2016} proposes a conditional fuzzy set framework:
 
 \begin{definition}[conditional fuzzy sets]
 \label{conditional-fs}
-Let $X$ and $V$ be fuzzy sets defined on $\Omega_X$ and $\Omega_Y$, respectively. A \emph{conditional fuzzy set}, denoted as $X|V$, is a fuzzy set defined on $\Omega_X$ with membership function:
+Let $X$ and $V$ be fuzzy sets defined on $\Omega_X$ and $\Omega_Y$, respectively. A \emphh{conditional fuzzy set}, denoted as $X|V$, is a fuzzy set defined on $\Omega_X$ with membership function:
 \begin{equation}
 \mu_{X|V}(x|V),\quad  x\in\Omega_X
 \end{equation}
-depending on the fuzzy set $V$ whose membership function is $\mu_V(v)$ with $v\in\Omega_V$. The x is called the \emp{primary variable} and $v$ is called the \emp{secondary variable}; the membership function $\mu_{X|V}(x|V)$ characterizes the \emp{primary fuzziness} while the membership function $\mu_V(v)$ characterizes the \emp{secondary fuzziness}.
+depending on the fuzzy set $V$ whose membership function is $\mu_V(v)$ with $v\in\Omega_V$. The x is called the \emph{primary variable} and $v$ is called the \emph{secondary variable}; the membership function $\mu_{X|V}(x|V)$ characterizes the \emph{primary fuzziness} while the membership function $\mu_V(v)$ characterizes the \emph{secondary fuzziness}.
 \end{definition}
 
 This framework resembles the concept of conditional probability in probability theory, which studies the dependence of one randomness on the other randomness. It is shown in \cite{wang_new_2016} that the above two definitions are equivalent. However the conditional fuzzy set framework provide a much more natural framework to model the dependence among multiple fuzziness than the type-2 fuzzy set formulation.
@@ -174,7 +185,7 @@ In the study of several random variables, the statistics of each are called marg
 
 \begin{definition}[marginal fuzzy sets, Compositional Rule of Inference Scheme]
 \label{marginal-fs}
-Let $X|V$ be a conditional fuzzy set defined in Definition \ref{conditional-fs} whoese membership function $\mu_{X|V}(x,v)$ is given by \eqref{fuzzy_relation}. The \emp{marginal fuzzy set} of $X|V$, denoted as $X$, is a type-1 fuzzy set on $\Omega_X$ whose membership function $\mu_X(x)$ is determined through Zadeh's Compositional Rule of Inference:
+Let $X|V$ be a conditional fuzzy set defined in Definition \ref{conditional-fs} whoese membership function $\mu_{X|V}(x,v)$ is given by \eqref{fuzzy_relation}. The \emph{marginal fuzzy set} of $X|V$, denoted as $X$, is a type-1 fuzzy set on $\Omega_X$ whose membership function $\mu_X(x)$ is determined through Zadeh's Compositional Rule of Inference:
 \begin{equation}
 \label{marginal_fs}
 \mu_X(x)=\max_{v\in\Omega_V}\min[\mu_{X|V}(x|v),\mu_V(v)],\;\;x\in\Omega_X.
@@ -295,7 +306,7 @@ The UPCM algorithm is explicitly stated in Algorithm \ref{alg:upcm}.
 \label{sec-4-2}
 In this subsection, we show the performance of UPCM on dataset \ref{fig1} and dataset \ref{fig6}. We also show the parameter-choosing flexibility endowed by UPCM.
 
-Experiment 1: This experiment on dataset Fig.\ref{fig1} illustrates how PCM and APCM are unified in UPCM.
+\textbf{Experiment 1:} This experiment on dataset Fig.\ref{fig1} illustrates how PCM and APCM are unified in UPCM.
 Fig.\ref{estimation_error_contrast} shows the center-estimation error computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$ with respect to parameters of UPCM and APCM. 
 The result of UPCM is shown iIn Fig.\ref{fig_transition_apcm_pcm}. The PCM region means that estimated clusters (prototypes) are both in the large cluster (Cluster 1 in Fig.\ref{fig1_ori}), and the APCM region means that estimated clusters (prototypes) are in each physical cluster respectively.
 In the PCM region, the parameters given to UPCM allows the small cluster to have enough bandwidth (mobility) to move to the dense region of the whole data set (Actually, this dense region is the weighted average of points in the dataset), according to \eqref{pcm_theta_update}. At the same time, the large cluster (prototype) stays in the dense region of the large physical cluster. In other words, the small cluster is dragged towards to the large cluster. For dataset Fig.\ref{fig1} in this experiment, the two prototypes are close enough to merge into one cluster prototype when parameters (or UPCM) are in the PCM region. However, if the small physical cluster has more points, say 400, the two prototypes will merge only when we specify a large $\sigma_v$, as can be seen in Fig.\ref{fig1_merge_case_upcm}.
@@ -327,7 +338,7 @@ intermediate states like "not very good". In this sense, we conclude that the ma
 \label{fig1_merge_case_upcm}
 \end{figure}
 
-Experiment 2: This experiment shows that the main difference between dataset Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} is the noise level. 
+\textbf{Experiment 2:} This experiment shows that the main difference between dataset Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} is the noise level. 
 The resulting cluster number of UPCM with $m_{ini}=10$ on dataset Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} are shown in Fig.\ref{fig1_comprose} and Fig.\ref{fig6_comprose} respectively. The results verifies that dataset Fig.\ref{fig6_ori} is more noisy than Fig.\ref{fig1_ori}. 
 We can see from Fig.\ref{fig6_comprose} that for the data set Fig.\ref{fig6_ori} and initialization of Fig.\ref{fig6_init}, it's better to specify a high noise level $\alpha$ so that the algorithm still estimates the correct number of clusters in a wide range of $\sigma_v$. In contrast, dataset Fig.\ref{fig1_ori} is less noisy than dataset Fig.\ref{fig6_ori} in the sense that the two clusters are not too close, so the algorithm's performance didn't rely too much on the specification of $\alpha$.
 
@@ -347,13 +358,14 @@ Fig.\ref{fig_transition_apcm_pcm} where a large noise-level parameter $\alpha$ a
 \section{Discussions and Further Research}
 \label{sec-5}
 The UPCM algorithm introduced in this paper unifies PCM and APCM in the same framework. As demonstrated on dataset Fig.\ref{fig1} in Section \ref{sec-4}, UPCM reduces to PCM when we set a small $\alpha$ or a large $\sigma_v$, and UPCM reduces to APCM when clusters are confined in their physical clusters and possible cluster elimination are ensured.
-The main difference between APCM and UPCM is the way we deal with the bandwidth correction.
+The main difference between APCM and UPCM is the way we deal with bandwidth correction.
 APCM exerts strong control over the bandwidth correction process, i.e., the estimated bandwidth is directly scaled by the specified parameter \ref{corrected_eta}, which indicates that APCM doesn't trust the estimated bandwidth. In contrast, UPCM accepts the estimated bandwidth with a certain degree and then micro-adjusts it through $\sigma_v$. Further, the parameters of UPCM are related to uncertainty, i.e., $\alpha$ indicates the noise level (uncertainty) of the dataset, and $\sigma_v$ indicates the uncertainty of the estimated bandwidth. So UPCM is a PCM-based algorithm from the uncertainty point of view.
 
-Further researches can be carried out according to the following two points:
+Further researches can be carried out in two directions:
 \begin{enumerate}
-\item The steepness of a membership function curve is controlled by the bandwidth parameter. The marginal fuzzy set \ref{marginal_result} incorporates uncertainty of the bandwidth by making a Gaussian membership function curve flatter instead of making it steeper. This observation raises a question: does the steepness of a general non-Gaussian membership function curve also reflect uncertainty of the bandwidth? If so, a small cluster with small bandwidth can be interpreted as having less bandwidth uncertainty than a large cluster. In other words, the bandwidth itself can reflect the degree of uncertainty of bandwidth. Note that the steepness of the membership function curve represents the degree membership values differentiate between two points. So a small bandwidth may mean that we are certain about the fact that membership values of two points are very different. This interpretation about the shape of a  membership function can provide a new view of fuzzy clustering, and needs further investigation.
-\item Based on analysis of the interplay between $\alpha$ and $\sigma_v$ in Section \ref{sec-4-2}, we can choose parameters $\alpha$ and $\sigma_v$ in the following way: specifying a small noise level $\alpha$ means that we are less uncertain about the estimated bandwidth, so we should also specify a small $\sigma_v$, and a large $\alpha$ should correspond to a large $\sigma_v$. This observation indicate that we can relate the choosing of $\sigma_v$ to the noise level $\alpha$. That is, the uncertainty (fuzziness) of the bandwidth \eqref{secondary_fuzziness_v} can also be a type-2 fuzzy set with primary variable $\sigma_v$ and secondary variable $\alpha$ (see Definition \ref{conditional-fs}). Then we can cancel out  parameter $\sigma_v$ so there is only one parameter $\alpha$ for the user to choose. In this way, the clustering process is only controlled by noise level $\alpha$ of the dataset. However, modeling the relationship between $\sigma_v$ and $\alpha$ is a difficult issue and needs further research.
+\item The steepness of a membership function curve is controlled by the bandwidth parameter. The marginal fuzzy set \ref{marginal_result} incorporates uncertainty of the bandwidth by making a Gaussian membership function curve flatter instead of making it steeper. 
+This observation leads to the conclusion that the steepness of a Gaussian membership function curve reflects uncertainty of the bandwidth. So a small cluster with small bandwidth can be interpreted as having less bandwidth uncertainty than a large cluster. In other words, the bandwidth itself can reflect the degree of uncertainty of bandwidth. Note that the steepness of the membership function curve represents the degree membership values differentiate between two points. So a small bandwidth may mean that we are certain about the fact that membership values of two points are very different. This interpretation about the shape of a Gaussian  membership function can provide a new view of fuzzy clustering, and needs further investigation.
+\item Based on analysis of the interplay between $\alpha$ and $\sigma_v$ in Section \ref{sec-4-2}, we can choose parameters $\alpha$ and $\sigma_v$ in the following way: specifying a small noise level $\alpha$ means that we are less uncertain about the estimated bandwidth, so we should also specify a small $\sigma_v$, and a large $\alpha$ should correspond to a large $\sigma_v$. This observation indicate that we can relate the choosing of $\sigma_v$ to noise level $\alpha$. That is, the uncertainty (fuzziness) of the bandwidth \eqref{secondary_fuzziness_v} can also be a type-2 fuzzy set with primary variable $\sigma_v$ and secondary variable $\alpha$ (see Definition \ref{conditional-fs}). Then we can cancel out  parameter $\sigma_v$ so there is only one parameter $\alpha$ for the user to choose. In this way, the clustering process is only controlled by noise level $\alpha$ of the dataset. However, modeling the relationship between $\sigma_v$ and $\alpha$ is a difficult issue and needs further research.
 \end{enumerate}
 \bibliographystyle{IEEEtran}
 \bibliography{D:/emacs/etc/ZoteroOutput,IEEEabrv}
