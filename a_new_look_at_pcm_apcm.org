@@ -117,10 +117,10 @@ where $n_j$ and $\mu_j$ are the number of points in $A_j$ and the mean vector of
 \begin{figure}[!t]
    \centering
    \subfloat[]
-    {\includegraphics[width=1.75in]{img/fig1_ori.png}\label{fig1_ori}}
+    {\includegraphics[width=0.5\columnwidth]{img/fig1_ori.png}\label{fig1_ori}}
    %\quad
    \subfloat[]
-    {\includegraphics[width=1.75in]{img/fig1_init.png}\label{fig1_init}}
+    {\includegraphics[width=0.5\columnwidth]{img/fig1_init.png}\label{fig1_init}}
 \caption{(a) Dataset 1. (b) 10 initial partitions obtained by FCM.}
 \label{fig1}
 \end{figure}
@@ -129,10 +129,10 @@ where $n_j$ and $\mu_j$ are the number of points in $A_j$ and the mean vector of
 \begin{figure}[!t]
    \centering
    \subfloat[]
-    {\includegraphics[width=1.75in]{img/fig6_ori.png}\label{fig6_ori}}
+    {\includegraphics[width=0.5\columnwidth]{img/fig6_ori.png}\label{fig6_ori}}
    %\quad
    \subfloat[]
-    {\includegraphics[width=1.75in]{img/fig6_init.png}\label{fig6_init}}
+    {\includegraphics[width=0.5\columnwidth]{img/fig6_init.png}\label{fig6_init}}
 \caption{(a) Dataset 2. (b) 10 initial partitions obtained by FCM.}
 \label{fig6}
 \end{figure}
@@ -242,14 +242,14 @@ Let $d(x_i,x_0)$ denote the distance from a point $x_i$ to the center $x_0$. The
 \begin{figure}[!t]
    \centering
    \subfloat[]
-    {\includegraphics[width=1.75in]{img/type2_mf_1_primary.png}\label{primary_fuzziness}}
+    {\includegraphics[width=0.5\columnwidth]{img/type2_mf_1_primary.png}\label{primary_fuzziness}}
    %\quad
    \subfloat[]
-    {\includegraphics[width=1.75in]{img/type2_mf_2_secondary.png}\label{secondary_fuzziness}}
+    {\includegraphics[width=0.5\columnwidth]{img/type2_mf_2_secondary.png}\label{secondary_fuzziness}}
    \\
    %\quad
    \subfloat[]
-    {\includegraphics[width=1.75in]{img/type2_mf_3_marginal.png}\label{marginal_fuzziness}}
+    {\includegraphics[width=0.5\columnwidth]{img/type2_mf_3_marginal.png}\label{marginal_fuzziness}}
   \caption{Illustration  of type-2 fuzzy set for incorporating uncertainty. (a) Primary fuzziness. (b) Secondary fuzziness with various $\sigma_v\text{s}$. (c) The final marginal fuzzy set after incorporating  uncertainty of the bandwidth with different degrees indexed by $\sigma_v$.}
 \label{type2_fs_uncertainty}
 \end{figure}
@@ -345,10 +345,10 @@ intermediate states like "not very good". In this sense, we conclude that the ma
 \begin{figure}[!t]
    \centering
    \subfloat[]
-    {\includegraphics[width=1.75in]{img/plot_sigmaV_data_2initial.png}\label{fig_transition_apcm_pcm}}
+    {\includegraphics[width=0.5\columnwidth]{img/plot_sigmaV_data_2initial.png}\label{fig_transition_apcm_pcm}}
    %\quad
    \subfloat[]
-    {\includegraphics[width=1.75in]{img/plot_sigmaV_data_apcm.png}\label{fig_apcm_estimation_error}}
+    {\includegraphics[width=0.5\columnwidth]{img/plot_sigmaV_data_apcm.png}\label{fig_apcm_estimation_error}}
 \caption{The center-estimation error computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$ is used to illustrate the behavior of UPCM and APCM. Note that the estimated two cluster centers are both considered to be $\hat{\theta}_1$ when the algorithm results in only $1$ cluster to make sure it's reasonable to compute $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$. (a) The center-estimation error (the vertical axis) with respect to degree of uncertainty $\sigma_v$ (the horizontal axis) under various noise levels ($\alpha$). The centers are estimated by UPCM with $m_{ini}=2$ on dataset Fig.\ref{fig1}. In the APCM region, the estimated clusters are almost exactly in the two physical clusters. In the PCM region, the small cluster is "dragged" towards the large cluster. (b) The center-estimation error (the vertical axis) with respect to $\alpha$ (the horizontal axis). The centers are estimated by APCM with $m_{ini}=2$ on dataset Fig.\ref{fig1}.}
 \label{estimation_error_contrast}
 \end{figure}
@@ -357,10 +357,10 @@ intermediate states like "not very good". In this sense, we conclude that the ma
 \begin{figure}[!t]
    \centering
    \subfloat[]
-    {\includegraphics[width=1.75in]{img/fig1_notmerge.png}\label{fig1_notmerge}}
+    {\includegraphics[width=0.5\columnwidth]{img/fig1_notmerge.png}\label{fig1_notmerge}}
    %\quad
    \subfloat[]
-    {\includegraphics[width=1.75in]{img/fig1_merge.png}\label{fig1_merge}}
+    {\includegraphics[width=0.5\columnwidth]{img/fig1_merge.png}\label{fig1_merge}}
 \caption{The clustering result of UPCM on dataset Fig.\ref{fig1}, in which the small cluster now has 400 points. Parameters are chosen so that UPCM operates in the PCM region corresponding to Fig.\ref{fig_transition_apcm_pcm}. (a) $m_{ini}=2$, $\alpha=4$, $\sigma_v=0$ (b) $m_{ini}=2$, $\alpha=6$, $\sigma_v=0$}
 \label{fig1_merge_case_upcm}
 \end{figure}
