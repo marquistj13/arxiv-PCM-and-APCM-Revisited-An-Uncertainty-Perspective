@@ -29,32 +29,33 @@
 #+LATEX_HEADER: \interdisplaylinepenalty=2500
 
 #+TITLE: A New Look at PCM and APCM
-
+#+BEGIN_LaTeX
 \begin{abstract}
-We propose a unified framework for pcm and apcm, from the viewpoint (or by considering?) of uncertainty of the bandwidth parameter. It's shown that the difference between them is how much confidence we have in the data. In fact, the uncertainty of the bandwidth parameter is into the membership of  a point, this is done by using Prof. LiXin Wang's new formulation of the Type 2 fuzzy set, i.e. the conditional fuzzy set framework. Thus this paper also serves as a justify for this new formulation.
+In this paper, we take a new look at the possibilistic c-means (PCM) and adaptive PCM (APCM) clustering algorithms from the viewpoint of uncertainty. We analyze the clustering behavior of PCM-based algorithms and introduce parameters $\sigma_v$ and $\alpha$ to characterize the uncertainty of estimated bandwidth and noise level of the dataset respectively. Then uncertainty (fuzziness) of membership values caused by uncertainty of the estimated bandwidth parameter is modeled by a conditional fuzzy set, which is a new formulation of the type-2 fuzzy set. Experiments show that parameters $\sigma_v$ and $\alpha$ make the clustering process more easy to control, and main features of PCM and APCM are unified in this new clustering framework.  Finally we present further researches of this paper.
 \end{abstract}
-
+\begin{IEEEkeywords}
+possibilistic  clustering, uncertainty, conditional fuzzy set, type-2 fuzzy set, noise level
+\end{IEEEkeywords}
+#+END_LaTeX
 ** Introduction
-clustering is widely used.
-Clustering is performed on feature points. prototype-based clustering.
-
-Uncertainty usually exits in two forms: noisy points and the parameters estimated from noisy points.
+The goal of clustering analysis is to discover natural groups of a set of points according to intrinsic characteristics or similarity \cite{jain_data_2010}. A large portion of clustering algorithms are prototype-based, i.e., clusters are represented by vectors in the data space. Prototype-based clustering algorithms aim to move prototypes into dense data regions. However, the performance of clustering algorithms can be severely affected by uncertainty in the dataset. Generally, uncertainty exits in two forms: noisy points and the parameters estimated from noisy points.
 
 The degree of confidence in data are treated differently in clustering algorithms.
 K-means \cite{jain_data_2010} assumes that all data are reliable. It is sensitive to outliers and noise. Even if an object is quite far away from the cluster center, it is still forced into a cluster and, thus, distorts the cluster shapes. ISODATA \cite{ball_clustering_1967} and PAM \cite{kaufman_finding_2009} both consider the effect of outliers in clustering procedures. ISODATA gets rid of clusters with few objects. PAM utilizes real data points (medoids) as the cluster prototypes and avoids the effect of outliers \cite{xu_survey_2005}.
 Fuzzy c-means (FCM) \cite{bezdek_pattern_2013} is also sensitive to noise and outliers, and the resulted memberships are relative values.  Possibilistic c-means (PCM) \cite{krishnapuram_possibilistic_1993} forces the memberships to decrease with the distance from cluster center. It's shown in \cite{dave_robust_1997} that PCM can be also interpreted as keeping $c\text{-noise}$ clusters to ensure that the memberships of outliers are reduced. Furthermore, the memberships are controlled by a bandwidth parameter estimated from data.
 
-The uncertainty of parameters estimated from noisy data is difficult to handle.
-Adaptive PCM (APCM) \cite{xenaki_novel_2016} considers the estimated bandwidth to be unreliable and introduces a hyper-parameter specified by the user to manually correct the bandwidth. The uncertainty of bandwidth can be handled in a more fuzzy way because the uncertainty of memberships is caused by the uncertainty of the estimated bandwidth. 
+On the other hand, the uncertainty of parameters estimated from noisy data is rather complicated to handle.
+Adaptive PCM (APCM) \cite{xenaki_novel_2016} considers the estimated bandwidth to be unreliable and introduces a hyper-parameter specified by the user to manually correct the bandwidth. In fact, the uncertainty of bandwidth can be handled in a more fuzzy way because the uncertainty of memberships is caused by the uncertainty of the estimated bandwidth. 
 As we know, the type-2 fuzzy set \cite{zadeh_concept_1975}\cite{mendel_type-2_2002} allows us to model one fuzziness over another fuzziness. Recently, the conditional fuzzy set framework \cite{wang_new_2016} of a type-2 fuzzy set is proposed so that we can explicitly model the uncertainty of memberships caused by some parameter.
 
 In this paper, we take a new look at PCM and APCM from the viewpoint of uncertainty.
-Our contribution are summarized as follows:
+Our contributions are summarized as follows:
 1. The uncertainty (fuzziness) of the estimated bandwidth parameter is specified by a hyper-parameter $\sigma_v$, and the uncertainty (fuzziness) of membership values caused by the estimated bandwidth parameter is modeled by a conditional fuzzy set.
 2. As to PCM-based clustering algorithms, we propose that each cluster can be seen as noise to other clusters. This conclusion comes from the fact that the existence of close physical clusters makes clustering difficult. This new form of noise is characterized by noise level $\alpha$ of the data set.
 3. Parameters $\sigma_v$ and $\alpha$ make the clustering process more easy to control. Furthermore, main features of PCM and APCM are unified in this new clustering framework.
-4. Experiments show that the bandwidth uncertainty $\sigma_v$ depends on noise level $\alpha$. In fact, the relation between $\sigma_v$ and $\alpha$ is simple: both $\alpha$ and $\sigma_v$ should be large when there are very close clusters in the dataset because we are very uncertain about the estimated bandwidth. This fact reveals that uncertainty of the estimated bandwidth can also be modeled by a type-2 fuzzy set and its uncertainty is caused by $\alpha$. The dependence of $\sigma_v$ on $\alpha$ can be studied in further research.
+4. Experiments show that the bandwidth uncertainty $\sigma_v$ depends on noise level $\alpha$. In fact, the relation between $\sigma_v$ and $\alpha$ is simple: both $\alpha$ and $\sigma_v$ should be large when there are very close clusters in the dataset because we are very uncertain about the estimated bandwidth. This fact reveals that uncertainty of the estimated bandwidth can also be modeled by a type-2 fuzzy set and its uncertainty is caused by $\alpha$. The dependence of $\sigma_v$ on $\alpha$ can be studied in further researches.
 
+The rest of this paper is organized as follows. Section \ref{sec-2} analyzes the clustering behavior of PCM based algorithms and presents the motivations of this paper. Section \ref{sec-3} introduces how to incorporate uncertainty of the estimated bandwidth into uncertainty of the membership function. In Section \ref{sec-4}, we present the unified framework (UPCM) of PCM and APCM. In Section \ref{sec-5}, we discuss the difference between APCM and UPCM in handling uncertainty. Further researches are also presented.
 ** Review of PCM and APCM, and Motivations
 In this section, we first review the possibilistic c-means (PCM) and adaptive PCM (APCM) clustering algorithms. Then we analyze two typical clustering problems and present the motivations of this paper.
 *** PCM and APCM Review
