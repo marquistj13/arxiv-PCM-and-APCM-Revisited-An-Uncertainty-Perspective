@@ -121,7 +121,7 @@ where $n_j$ and $\mu_j$ are the number of points in $A_j$ and the mean vector of
    %\quad
    \subfloat[]
     {\includegraphics[width=1.75in]{img/fig1_init.png}\label{fig1_init}}
-\caption{(a) Dataset 1. (b) 10 initial partitions obataind by FCM.}
+\caption{(a) Dataset 1. (b) 10 initial partitions obtained by FCM.}
 \label{fig1}
 \end{figure}
 #+END_LaTeX
@@ -133,7 +133,7 @@ where $n_j$ and $\mu_j$ are the number of points in $A_j$ and the mean vector of
    %\quad
    \subfloat[]
     {\includegraphics[width=1.75in]{img/fig6_init.png}\label{fig6_init}}
-\caption{(a) Dataset 2. (b) 10 initial partitions obataind by FCM.}
+\caption{(a) Dataset 2. (b) 10 initial partitions obtained by FCM.}
 \label{fig6}
 \end{figure}
 #+END_LaTeX
@@ -255,7 +255,7 @@ Let $d(x_i,x_0)$ denote the distance from a point $x_i$ to the center $x_0$. The
 \end{figure}
 #+END_LaTeX
 
-The above example is illustrated in Fig.\ref{type2_fs_uncertainty}. Fig.\ref{primary_fuzziness} shows the primary fuzziness when $x_0$ is estimated as 12.5 and $v_0$ is estimated as 2.5 but with uncertainty. Fig.\ref{secondary_fuzziness} shows the secondary fuzziness (uncertainty) of $v_0$ with various $\sigma_v\text{s}$. Note that we don't intend to model the uncertainty of $\sigma_v$ here. So we assume $\sigma_v$ is a given value. Fig.\ref{marginal_fuzziness} shows the marginal fuzzy fuzzy set into which the uncertainty has been incorporated.
+The above example is illustrated in Fig.\ref{type2_fs_uncertainty}. Fig.\ref{primary_fuzziness} shows the primary fuzziness when $x_0$ is estimated as 12.5 and $v_0$ is estimated as 2.5 but with uncertainty. Fig.\ref{secondary_fuzziness} shows the secondary fuzziness (uncertainty) of $v_0$ with various $\sigma_v\text{s}$. Note that we don't intend to model the uncertainty of $\sigma_v$ here. So we assume $\sigma_v$ is a given value. Fig.\ref{marginal_fuzziness} shows the marginal fuzzy set into which the uncertainty has been incorporated.
 
 We can see from \eqref{marginal_result} and Fig.\ref{marginal_fuzziness} that the marginal fuzzy set curve is flatter when the estimated bandwidth has much uncertainty, i.e., $\sigma_v$ is large.
 For a specific $\sigma_v$, the corrected bandwidth ($v_{new}$ in \eqref{marginal_result}) is almost the same as $v_0$ when $d(x_i,x_0)$ is small, and $v_{new}$ increases as $d(x_i,x_0)$ becomes large.
@@ -298,7 +298,7 @@ Then update of the membership function \eqref{pcm_theta_update} is modified acco
 #+END_LaTeX
 where $\gamma_j=\left(0.5\eta_{j}+0.5\sqrt{\eta_{j}^{2}+4\sigma_vd_{ij}}\right)^2$.
 
-The above reformulation of PCM and APCM constitutes the unified framework (UPCM) for the clustering process. In UPCM, $\alpha$ and $\sigma_v$ are used together to constrain each cluster to stay in there physical clusters, and to eliminate clusters in the same dense region at the same time.
+The above reformulation of PCM and APCM constitutes the unified framework (UPCM) for the clustering process. In UPCM, $\alpha$ and $\sigma_v$ are used together to constrain each cluster to stay in their physical clusters, and to eliminate clusters in the same dense region at the same time.
 The UPCM algorithm is explicitly stated in Algorithm \ref{alg:upcm}.
 #+BEGIN_LaTeX
 \begin{algorithm}[H]
@@ -332,7 +332,7 @@ In this subsection, we show the performance of UPCM on dataset \ref{fig1} and da
 
 *Experiment 1:* This experiment on dataset Fig.\ref{fig1} illustrates how PCM and APCM are unified in UPCM.
 Fig.\ref{estimation_error_contrast} shows the center-estimation error computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$ with respect to parameters of UPCM and APCM. 
-The result of UPCM is shown iIn Fig.\ref{fig_transition_apcm_pcm}. The PCM region means that estimated clusters (prototypes) are both in the large cluster (Cluster 1 in Fig.\ref{fig1_ori}), and the APCM region means that estimated clusters (prototypes) are in each physical cluster respectively.
+The result of UPCM is shown in Fig.\ref{fig_transition_apcm_pcm}. The PCM region means that estimated clusters (prototypes) are both in the large cluster (Cluster 1 in Fig.\ref{fig1_ori}), and the APCM region means that estimated clusters (prototypes) are in each physical cluster respectively.
 In the PCM region, the parameters given to UPCM allows the small cluster to have enough bandwidth (mobility) to move to the dense region of the whole data set (Actually, this dense region is the weighted average of points in the dataset), according to \eqref{pcm_theta_update}. At the same time, the large cluster (prototype) stays in the dense region of the large physical cluster. In other words, the small cluster is dragged towards to the large cluster. For dataset Fig.\ref{fig1} in this experiment, the two prototypes are close enough to merge into one cluster prototype when parameters (or UPCM) are in the PCM region. However, if the small physical cluster has more points, say 400, the two prototypes will merge only when we specify a large $\sigma_v$, as can be seen in Fig.\ref{fig1_merge_case_upcm}.
 In the APCM region, the bandwidth (mobility) of each cluster is properly confined through $\sigma_v$ and $\alpha$, so both clusters are correctly estimated.
 
@@ -370,7 +370,7 @@ intermediate states like "not very good". In this sense, we conclude that the ma
 The resulting cluster number of UPCM with $m_{ini}=10$ on dataset Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} are shown in Fig.\ref{fig1_comprose} and Fig.\ref{fig6_comprose} respectively. The results verifies that dataset Fig.\ref{fig6_ori} is more noisy than Fig.\ref{fig1_ori}. 
 We can see from Fig.\ref{fig6_comprose} that for the data set Fig.\ref{fig6_ori} and initialization of Fig.\ref{fig6_init}, it's better to specify a high noise level $\alpha$ so that the algorithm still estimates the correct number of clusters in a wide range of $\sigma_v$. In contrast, dataset Fig.\ref{fig1_ori} is less noisy than dataset Fig.\ref{fig6_ori} in the sense that the two clusters are not too close, so the algorithm's performance didn't rely too much on the specification of $\alpha$.
 
-Fig.\ref{fig1_comprose} and Fig.\ref{fig6_comprose} also illustrate the the interplay between $\alpha$ and $\sigma_v$, i.e., a large specification of noise level $\alpha$ indicate that fewer points are actually contributed to the adaption of prototype $\theta_j$, so we should specify a large $\sigma_v$ to give the clusters in one physical cluster more mobility to merge. This relation between $\alpha$ and $\sigma_v$ also interprets the result of 
+Fig.\ref{fig1_comprose} and Fig.\ref{fig6_comprose} also illustrate the interplay between $\alpha$ and $\sigma_v$, i.e., a large specification of noise level $\alpha$ indicate that fewer points are actually contributed to the adaption of prototype $\theta_j$, so we should specify a large $\sigma_v$ to give the clusters in one physical cluster more mobility to merge. This relation between $\alpha$ and $\sigma_v$ also interprets the result of 
 Fig.\ref{fig_transition_apcm_pcm} where a large noise-level parameter $\alpha$ allows us to specify a wide range of $\sigma_v$ and UPCM still produces good clusters.
 #+CAPTION: The number of clusters resulted from UPCM with $m_{ini}=10$ on dataset Fig.\ref{fig1}. The horizontal axis represents the noise level $\alpha$. The vertical axis represents the bandwidth estimation uncertainty $\sigma_v$.
 #+NAME: fig1_comprose
