@@ -153,11 +153,11 @@ In summary, the choice of $\alpha$ in the correction term should be dealt with d
    So we should correct the bandwidth in a more reasonable way.
 
 This paper aims to address the above two needs. 
-To address the second need, Section \ref{sec-3} shows how to use the type-2 fuzzy set to incorporate uncertainty of the estimated bandwidth into the membership value of point $\mathbf{x}_i$. As will be seen in Section \ref{sec-4}, the first need is addressed by introducing a noise level parameter so that Fig.\ref{fig1} and Fig.\ref{fig6} can be treated differently. Then we show that after addressing these two needs, PCM and APCM are unified in the same framework (UPCM).
+To address the second need, Section \ref{sec-3} shows how to use the type-2 fuzzy set to incorporate uncertainty of the estimated bandwidth into the membership value of point $\mathbf{x}_i$. As will be seen in Section \ref{sec-4}, the first need is addressed by introducing a noise level parameter so that Fig.\ref{fig1} and Fig.\ref{fig6} can be treated differently. After addressing these two needs, we reformulate PCM and APCM into the same framework (UPCM).
 ** The Conditional Fuzzy Set Framework
 In this section, we first review the conditional fuzzy set framework. Then we show through an example that this new definition of a type-2 fuzzy is natural and reasonable to incorporate the uncertainty of the estimated bandwidth.
 *** The Conditional Fuzzy Set Framework Review
-According to Zadeh \cite{zadeh_concept_1975}, a type-2 fuzzy set (T2 FS) is a fuzzy set whose membership values are type-1 fuzzy set on $[0,1]$. When written in more precise mathematical terms,  this definition becomes as follows \cite{wang_new_2016}:
+According to Zadeh \cite{zadeh_concept_1975}, a type-2 fuzzy set (T2 FS) is a fuzzy set whose membership values are type-1 fuzzy set on $[0,1]$. When written in more precise mathematical terms, this definition becomes as follows \cite{wang_new_2016}:
 
 #+BEGIN_LaTeX
 \begin{definition}[type-2 fuzzy sets]
@@ -166,7 +166,7 @@ A type-2 fuzzy set $\tilde{X}$ is a fuzzy set defined on the universe of discour
 \end{definition}
 #+END_LaTeX
 
-It's clear that T2 FS is just that one fussiness (uncertainty) depends on another fuzziness. However Definition \ref{type2-fs} makes T2 FS a complex subject. To simplify this problem, Li-Xin Wang \cite{wang_new_2016} proposes a conditional fuzzy set framework:
+It's clear that T2 FS is just that one fuzziness (uncertainty) depends on another fuzziness. However Definition \ref{type2-fs} makes T2 FS a complex subject. To simplify this problem, Li-Xin Wang \cite{wang_new_2016} proposes a conditional fuzzy set framework:
 
 #+BEGIN_LaTeX
 \begin{definition}[conditional fuzzy sets]
@@ -196,7 +196,7 @@ In the study of several random variables, the statistics of each are called marg
 #+BEGIN_LaTeX
 \begin{definition}[marginal fuzzy sets, Compositional Rule of Inference Scheme]
 \label{marginal-fs}
-Let $X|V$ be a conditional fuzzy set defined in Definition \ref{conditional-fs} whoese membership function $\mu_{X|V}(x,v)$ is given by \eqref{fuzzy_relation}. The \emph{marginal fuzzy set} of $X|V$, denoted as $X$, is a type-1 fuzzy set on $\Omega_X$ whose membership function $\mu_X(x)$ is determined through Zadeh's Compositional Rule of Inference:
+Let $X|V$ be a conditional fuzzy set defined in Definition \ref{conditional-fs} whose membership function $\mu_{X|V}(x,v)$ is given by \eqref{fuzzy_relation}. The \emph{marginal fuzzy set} of $X|V$, denoted as $X$, is a type-1 fuzzy set on $\Omega_X$ whose membership function $\mu_X(x)$ is determined through Zadeh's Compositional Rule of Inference:
 \begin{equation}
 \label{marginal_fs}
 \mu_X(x)=\max_{v\in\Omega_V}\min[\mu_{X|V}(x|v),\mu_V(v)],\;\;x\in\Omega_X.
@@ -228,7 +228,7 @@ where $\sigma_v$ is a given constant which represents the uncertainty of paramet
 \end{IEEEeqnarray}
 #+END_LaTeX
 where $v_{new}=\left(0.5v_0+0.5\sqrt{v_0^2+4\sigma_v|x-x_0|}\right)^2$.
-The last line is achieved at the highest point of the intersection $\exp\left(-\frac{|x-x_0|^2}{V^2}\right)=\exp\left(-\frac{(v-v_0)^2}{\sigma^2_v}\right)$ which gives:
+The last step is achieved at the highest point of the intersection $\exp\left(-\frac{|x-x_0|^2}{V^2}\right)=\exp\left(-\frac{(v-v_0)^2}{\sigma^2_v}\right)$ which gives:
 #+BEGIN_LaTeX
 \begin{IEEEeqnarray*}{ll}
 v_{new1} &= 0.5v_0+0.5\sqrt{v_0^2+4\sigma_v|x-x_0|}\geq v_0, \\
