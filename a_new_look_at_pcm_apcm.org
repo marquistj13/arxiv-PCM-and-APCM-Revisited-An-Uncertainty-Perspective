@@ -38,7 +38,9 @@ possibilistic  clustering, uncertainty, conditional fuzzy set, type-2 fuzzy set,
 \end{IEEEkeywords}
 #+END_LaTeX
 ** Introduction
-The goal of clustering analysis is to discover natural groups of a set of points according to intrinsic characteristics or similarity \cite{jain_data_2010}. A large portion of clustering algorithms are prototype-based, i.e., clusters are represented by vectors in the data space. Prototype-based clustering algorithms aim to move prototypes into dense data regions. However, the performance of clustering algorithms can be severely affected by uncertainty in the dataset. Generally, uncertainty exits in two forms: noisy points and the parameters estimated from noisy points.
+The goal of clustering analysis is to discover natural groups of a set of points according to intrinsic characteristics or similarity \cite{jain_data_2010}. A large portion of clustering algorithms are prototype-based, i.e., clusters are represented by vectors in the data space. Prototype-based clustering algorithms aim to move prototypes into dense data regions. So we can say that the prototype (cluster center) represents the cluster.
+
+However, the performance of clustering algorithms can be severely affected by uncertainty in the dataset. Generally, uncertainty exits in two forms: noisy points and the parameters estimated from noisy points.
 
 The degree of confidence in data are treated differently in clustering algorithms.
 K-means \cite{jain_data_2010} assumes that all data are reliable. It is sensitive to outliers and noise. Even if an object is quite far away from the cluster center, it is still forced into a cluster, which distorts the cluster shapes. ISODATA \cite{ball_clustering_1967} and PAM \cite{kaufman_finding_2009} both consider the effect of outliers in clustering procedures. ISODATA gets rid of clusters with few objects. PAM utilizes real data points (medoids) as the cluster prototypes and avoids the effect of outliers \cite{xu_survey_2005}.
