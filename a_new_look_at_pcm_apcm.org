@@ -53,7 +53,7 @@ Our contributions are summarized as follows:
 1. The uncertainty (fuzziness) of the estimated bandwidth parameter is specified by a hyper-parameter $\sigma_v$, and the uncertainty (fuzziness) of membership values caused by the estimated bandwidth parameter is modeled by a conditional fuzzy set.
 2. As to PCM-based clustering algorithms, we propose that each cluster can be seen as noise to other clusters. This conclusion comes from the fact that the existence of close physical clusters makes clustering difficult. This new form of noise is characterized by noise level $\alpha$ of the data set.
 3. The introduction of parameters $\sigma_v$ and $\alpha$ reformulates PCM and APCM from the perspective of uncertainty. Furthermore, main features of PCM and APCM are unified in this new clustering framework.
-4. Experiments show that the bandwidth uncertainty $\sigma_v$ depends on noise level $\alpha$. In fact, the relation between $\sigma_v$ and $\alpha$ is simple: when there are very close clusters in the dataset, we should set a high noise level $\alpha$, and because the estimated bandwidth is very uncertain in this case, we should also set a high $\sigma_v$.
+4. Experiments show that the bandwidth uncertainty $\sigma_v$ depends on noise level $\alpha$. 
    This fact reveals that uncertainty of the estimated bandwidth can also be modeled by a type-2 fuzzy set and its uncertainty is caused by $\alpha$. The dependence of $\sigma_v$ on $\alpha$ can be studied in further researches.
 
 The rest of this paper is organized as follows. Section \ref{sec-2} analyzes the clustering behavior of PCM based algorithms and presents the motivations of this paper. Section \ref{sec-3} introduces how to incorporate uncertainty of the estimated bandwidth into uncertainty of the membership function. In Section \ref{sec-4}, we present the unified framework (UPCM) of PCM and APCM. In Section \ref{sec-5}, we discuss the difference between APCM and UPCM in handling uncertainty. Further researches are also presented.
@@ -63,21 +63,21 @@ In this section, we first review the possibilistic c-means (PCM) and adaptive PC
 Typicality is one of the most commonly used interpretations of memberships in applications of fuzzy set theory. The membership value produced by fuzzy c-means (FCM) \cite{bezdek_pattern_2013} can't be used to indicate the typicality of a point in the cluster. Possibilistic c-means (PCM) \cite{krishnapuram_possibilistic_1993} solves this problem by forcing the membership of a point to be small if it's far from the cluster center (prototype). This intuition is incorporated into the objection function by adding a penalty term:
 #+BEGIN_LaTeX
 \begin{equation}
-J(\Theta,U)=\sum_{j=1}^{c}J_j=\sum_{j=1}^{c}\left[\sum_{i=1}^{N}u_{ij}d_{ij}^2+\gamma_j \sum_{i=1}^{N}f(u_{ij})\right]
+J(\mathbf{\Theta},\mathbf{U})=\sum_{j=1}^{c}J_j=\sum_{j=1}^{c}\left[\sum_{i=1}^{N}u_{ij}d_{ij}^2+\gamma_j \sum_{i=1}^{N}f(u_{ij})\right]
 \end{equation}
 #+END_LaTeX
-where $\Theta=(\theta_1,\ldots,\theta_c)$ is a $c$-tuple of prototypes, $d_{ij}$ is the distance of feature point $x_i$ to prototype $\theta_j$, $N$ is the total number of feature vectors, $c$ is the number of clusters, and $U=[u_{ij}]$ is a $N\times c$ matrix where $u_{ij}$ denotes the /degree of compatibility/ of $x_i$ to the $j\text{th}$ cluster $C_j$ which is represented by $\theta_j$. $\gamma_j$ can be seen as a bandwidth parameter of the possibility (membership) distribution for each cluster. Note that either $\gamma_j$ or $\sqrt{\gamma_j}$ can be referred to as the bandwidth for convenience in this paper. $f(\cdot)$ is a decreasing function of $u_{ij}$ and forces the $u_{ij}$ as large as possible, thus avoiding the trivial solution that $u_{ij}=0$. A good choice for $f(\cdot)$ is proposed in \cite{krishnapuram_possibilistic_1996}:
+where $\mathbf{\Theta}=(\boldsymbol{\theta}_1,\ldots,\boldsymbol{\theta}_c)$ is a $c$-tuple of prototypes, $d_{ij}$ is the distance of feature point $\mathbf{x}_i$ to prototype $\boldsymbol{\theta}_j$, $N$ is the total number of feature vectors, $c$ is the number of clusters, and $\mathbf{U}=[u_{ij}]$ is a $N\times c$ matrix where $u_{ij}$ denotes the /degree of compatibility/ of $\mathbf{x}_i$ to the $j\text{th}$ cluster $C_j$ which is represented by $\boldsymbol{\theta}_j$. $\gamma_j$ can be seen as a bandwidth parameter of the possibility (membership) distribution for each cluster. Note that either $\gamma_j$ or $\sqrt{\gamma_j}$ can be referred to as the bandwidth for convenience in this paper. $f(\cdot)$ is a decreasing function of $u_{ij}$ and forces the $u_{ij}$ as large as possible, thus avoiding the trivial solution that $u_{ij}=0$. A good choice for $f(\cdot)$ is proposed in \cite{krishnapuram_possibilistic_1996}:
 #+BEGIN_LaTeX
 \begin{equation}
 f(u_{ij})=u_{ij}\log u_{ij}-u_{ij}
 \end{equation}
 #+END_LaTeX 
 
-After minimizing $J(\Theta,U)$ with respect to $u_{ij}$ and $\theta_j$, we get the following update equations:
+After minimizing $J(\mathbf{\Theta},\mathbf{U})$ with respect to $u_{ij}$ and $\boldsymbol{\theta}_j$, we get the following update equations:
 #+BEGIN_LaTeX
 \begin{IEEEeqnarray}{ll}
 u_{ij}&=\exp\left(-\frac{d^2_{ij}}{\gamma_j}\right) \label{pcm_u_update}  \\
-\theta_j&=\frac{\Sigma_{i=1}^Nu_{ij}x_i}{\Sigma_{i=1}^Nu_{ij}} \label{pcm_theta_update}
+\boldsymbol{\theta}_j&=\frac{\Sigma_{i=1}^Nu_{ij}\mathbf{x}_i}{\Sigma_{i=1}^Nu_{ij}} \label{pcm_theta_update}
 \end{IEEEeqnarray}
 #+END_LaTeX
 
@@ -87,11 +87,11 @@ In PCM, clusters do not have a lot of mobility, so a reasonable good initializat
 \gamma_j=\frac{\Sigma_{i=1}^Nu_{ij}^{FCM}d^2_{ij}}{\Sigma_{i=1}^Nu_{ij}^{FCM}}
 \end{equation}
 #+END_LaTeX 
-where $d_{ij}=||x_i-\theta_j||$, $\theta_j\text{s}$ and $u_{ij}^{FCM}\text{s}$ are the final FCM estimates for cluster prototypes and membership values respectively. Then $\gamma_j\text{s}$ are fixed and iterations are performed until a specific termination criterion is met.
+where $d_{ij}=||\mathbf{x}_i-\boldsymbol{\theta}_j||$, $\boldsymbol{\theta}_j\text{s}$ and $u_{ij}^{FCM}\text{s}$ are the final FCM estimates for cluster prototypes and membership values respectively. Then $\gamma_j\text{s}$ are fixed and iterations are performed until a specific termination criterion is met.
 
 As pointed out in \cite{krishnapuram_possibilistic_1996}, PCM is primarily a mode-seeking algorithm. In other words, the algorithm can potentially find $c$ dense regions from a data set that may not have $c$ clusters. However, due to the well-known fact that since no link exists among clusters, each $J_j$ can be minimized independently, the $c$ dense regions found may be coincident, as reported in \cite{barni_comments_1996}. It was suggested in \cite{krishnapuram_possibilistic_1996} that this behavior is "a blessing in disguise" and can be utilized by merging coincident clusters after over-specifying $c$. This idea is implemented in the adaptive possibilistic c-means algorithm (APCM) \cite{xenaki_novel_2016} by adapting $\gamma_j$ at each iteration. Cluster $C_j$ is merged with another cluster and is eliminated when there are no points in cluster $C_j$ or $\gamma_j$ becomes $0$. This cluster elimination ability allows us to over-specify the cluster number and the algorithm still produces a reasonable number of clusters, which makes the algorithm very flexible because we don't need to have strong prior knowledge of the cluster number.
 
-However we should prevent the unexpected cluster elimination. In the case where two physical clusters of very different variance that are located very close to each other (see Fig.\ref{fig1_ori}), the prototype of the small variance cluster is affected by the data points of its nearby big cluster which has numerous points, according to \eqref{pcm_u_update} and \eqref{pcm_theta_update}. As a result, the two prototypes will merge. APCM alleviates this issue by introducing a parameter in $\gamma_j$ to manually scale the bandwidth:
+However we should prevent the unexpected cluster elimination. In the case where two physical clusters with very different variance are located very close to each other (see Fig.\ref{fig1_ori}), the prototype of the small variance cluster is affected by the data points of its nearby big cluster which has numerous points, according to \eqref{pcm_u_update} and \eqref{pcm_theta_update}. As a result, the two prototypes will merge. APCM alleviates this issue by introducing a parameter in $\gamma_j$ to manually scale the bandwidth:
 #+BEGIN_LaTeX
 \begin{equation}
 \label{corrected_eta}
@@ -105,14 +105,14 @@ where $\hat{\eta}$ is a constant defined as the minimum among all initial $\eta_
 \eta_j=\frac{\Sigma_{i=1}^Nu_{ij}^{FCM}d_{ij}}{\Sigma_{i=1}^Nu_{ij}^{FCM}}  
 \end{equation}
 #+END_LaTeX 
-where $d_{ij}=||x_i-\theta_j||$, $\theta_j\text{s}$ and $u_{ij}^{FCM}\text{s}$ in \eqref{apcm_eta_init} are the final parameter estimates obtained by FCM. $\eta_j$ is updated at each iteration as the /mean absolute deviation/ of the most compatible to cluster $C_j$ data points which form a set $A_j$, i.e., $A_j=\{x_i|u_{ij}=\max_r u_{ir}\}$.
+where $d_{ij}=||\mathbf{x}_i-\boldsymbol{\theta}_j||$, $\boldsymbol{\theta}_j\text{s}$ and $u_{ij}^{FCM}\text{s}$ in \eqref{apcm_eta_init} are the final parameter estimates obtained by FCM. $\eta_j$ is updated at each iteration as the /mean absolute deviation/ of the most compatible to cluster $C_j$ data points which form a set $A_j$, i.e., $A_j=\{\mathbf{x}_i|u_{ij}=\max_r u_{ir}\}$.
 #+BEGIN_LaTeX
 \begin{equation}
 \label{apcm_eta_update}
-\eta_j=\frac{1}{n_j}\sum_{x_i\in A_j}||x_i-\mu_j||
+\eta_j=\frac{1}{n_j}\sum_{\mathbf{x}_i\in A_j}||\mathbf{x}_i-\boldsymbol{\mu}_j||
 \end{equation}
 #+END_LaTeX 
-where $n_j$ and $\mu_j$ are the number of points in $A_j$ and the mean vector of points in $A_j$ respectively. APCM only allows points in $A_j$ to update $\eta_j$, which is an essential condition for succeeding cluster elimination, as by this way, $\eta_j$ can decrease to $0$. APCM chooses $\mu_j$ and not $\theta_j$ to update $\eta_j$ because $\theta_j$ may vary significantly while $\mu_j$ is more stable during the first few iterations.
+where $n_j$ and $\boldsymbol{\mu}_j$ are the number of points in $A_j$ and the mean vector of points in $A_j$ respectively. APCM only allows points in $A_j$ to update $\eta_j$, which is an essential condition for succeeding cluster elimination, as by this way, $\eta_j$ can decrease to $0$. APCM chooses $\boldsymbol{\mu}_j$ and not $\boldsymbol{\theta}_j$ to update $\eta_j$ because $\boldsymbol{\theta}_j$ may vary significantly while $\boldsymbol{\mu}_j$ is more stable during the first few iterations.
 *** Motivations 
 #+BEGIN_LaTeX
 \begin{figure}[!t]
@@ -138,7 +138,7 @@ where $n_j$ and $\mu_j$ are the number of points in $A_j$ and the mean vector of
 \label{fig6}
 \end{figure}
 #+END_LaTeX
-Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} are two typical clustering problems. The two clusters in Fig.\ref{fig1_ori} are generated by normal distributions with centers $c1=[13, 13]^T$, $c2=[5, 0]^T$, covariance matrixes $\Sigma_1=I$, $\Sigma_2=3.7^2I$, $N_1=200$ points, and $N_2=1000$ points  respectively, where $I$ is the $2\times 2$ identity matrix. The three clusters in Fig.\ref{fig6_ori} are generated by normal distributions with  centers $c_1=[1, 0]^T$, $c_2=[2.25, 1.5]^T$, $c_3=[1.75, 2]^T$ respectively, all with $N=400$ points, and covariance matrixes are all $\Sigma=0.2^2I$. Fig.\ref{fig1_init} and Fig.\ref{fig6_init} show the initialization results obtained by FCM with 10 clusters. Note that the initial clusters in each physical cluster should merge, while clusters in different physical clusters shouldn't.
+Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} are two typical clustering problems. The two clusters in Fig.\ref{fig1_ori} are generated by normal distributions with centers $\mathbf{c_1}=[13, 13]^T$, $\mathbf{c_2}=[5, 0]^T$, covariance matrixes $\mathbf{\Sigma_1}=\mathbf{I}$, $\mathbf{\Sigma_2}=3.7^2\mathbf{I}$, $N_1=200$ points, and $N_2=1000$ points  respectively, where $I$ is the $2\times 2$ identity matrix. The three clusters in Fig.\ref{fig6_ori} are generated by normal distributions with  centers $\mathbf{c_1}=[1, 0]^T$, $\mathbf{c_2}=[2.25, 1.5]^T$, $\mathbf{c_3}=[1.75, 2]^T$ respectively, all with $N=400$ points, and covariance matrixes are all $\mathbf{\Sigma}=0.2^2\mathbf{I}$. Fig.\ref{fig1_init} and Fig.\ref{fig6_init} show the initialization results obtained by FCM with 10 clusters. Note that the initial clusters in each physical cluster should merge, while clusters in different physical clusters shouldn't.
 
 The two physical clusters in Fig.\ref{fig1} are well separated. With the initialization of Fig.\ref{fig1_init}, APCM estimates $\eta_j$ via \eqref{apcm_eta_update}, which is corrected by $\hat{\eta}/\alpha$ and we get the bandwidth $\gamma_j$ via \eqref{corrected_eta}. The only care is that the bandwidth correction term $\hat{\eta}/\alpha$ specified by the user is not too small so that the small initialization clusters of Cluster $1$ have enough mobility to move to the dense region of each physical cluster and  merge, according to \eqref{pcm_theta_update} (Note that large bandwidth means more mobility and to avoid the case where all clusters merge into one cluster, $\hat{\eta}/\alpha$ also should not be too large. This fact can be seen in Fig.7 of \cite{xenaki_novel_2016} when $\alpha$ is small).
 As to Fig.\ref{fig6}, Cluster $2$ and Cluster $3$ are not well separated, so we should take more care. The bandwidth correction term $\hat{\eta}/\alpha$ should not be too small so that the small initialization clusters of each physical cluster can merge. The term $\hat{\eta}/\alpha$ also shouldn't be too large so that Cluster $2$ and Cluster $3$ don't have enough mobility to merge.
@@ -150,7 +150,7 @@ In summary, the choice of $\alpha$ in the correction term should be dealt with d
    However, we are less confident about the membership value of a point far from the prototype (cluster center) than the membership value of a point near the prototype. So we should have a more flexible bandwidth correction technique.
 
 This paper aims to address the above two needs. 
-To address the second need, Section \ref{sec-3} shows how to use the type-2 fuzzy set to incorporate uncertainty of the estimated bandwidth into the membership value of point $x_i$. As will be seen in Section \ref{sec-4}, the first need is addressed by introducing a noise level parameter so that Fig.\ref{fig1} and Fig.\ref{fig6} can be treated differently. Then we show that after addressing these two needs, PCM and APCM are unified in the same framework (UPCM).
+To address the second need, Section \ref{sec-3} shows how to use the type-2 fuzzy set to incorporate uncertainty of the estimated bandwidth into the membership value of point $\mathbf{x}_i$. As will be seen in Section \ref{sec-4}, the first need is addressed by introducing a noise level parameter so that Fig.\ref{fig1} and Fig.\ref{fig6} can be treated differently. Then we show that after addressing these two needs, PCM and APCM are unified in the same framework (UPCM).
 ** The Conditional Fuzzy Set Framework
 In this section, we first review the conditional fuzzy set framework. Then we show through an example that this new definition of a type-2 fuzzy is natural and reasonable to incorporate the uncertainty of the estimated bandwidth.
 *** The Conditional Fuzzy Set Framework Review
@@ -203,7 +203,7 @@ Let $X|V$ be a conditional fuzzy set defined in Definition \ref{conditional-fs} 
 
 Then the basic philosophy to deal with type-2 fuzziness is to use \eqref{marginal_fs} to "cancel out" the secondary fuzziness $V$ and transform the type-2 problems back to the ordinary type-1 framework. We can explicitly model the uncertainty of the membership caused by some parameter $V$ and "cancel" $V$ to get the type-1 marginal fuzzy set. Then the effect of the uncertainty of $V$ is incorporated into type-1 marginal fuzzy set. 
 *** An Example to Illustrate the Incorporation of Uncertainty
-Suppose we have estimated the center $x_0$ and bandwidth $v_0$ of a Gaussian membership function $\mu_X(x)$ to represent some cluster, and we want to consider the uncertainty of $\mu_X(x)$ caused by the uncertainty of the bandwidth parameter $V$. First, the conditional fuzzy set $X|V$ is constructed as follows:
+Suppose we have estimated the one-dimensional center $x_0$ and bandwidth $v_0$ of a Gaussian membership function $\mu_X(x)$ to represent some cluster, and we want to consider the uncertainty of $\mu_X(x)$ caused by the uncertainty of the bandwidth parameter $V$. First, the conditional fuzzy set $X|V$ is constructed as follows:
 #+BEGIN_LaTeX
 \begin{equation}
 \mu_{X|V}(x|V)=\exp\left(-\frac{|x-x_0|^2}{V^2}\right)
@@ -238,7 +238,7 @@ Then we get \eqref{marginal_result} through
 $\max\left[\exp\left(-\frac{|x-x_0|^2}{v_{new1}^2}\right),\exp\left(-\frac{|x-x_0|^2}{v_{new2}^2}\right)\right]=\exp\left(-\frac{|x-x_0|^2}{v_{new1}^2}\right)$.
 \end{equation*}
 #+END_LaTeX
-Let $d(x_i,x_0)$ denote the distance from a point $x_i$ to the center $x_0$. Then result \eqref{marginal_result} can be generalized by replacing $|x-c|$ with $d(x_i,x_0)$.
+Let $d(\mathbf{x}_i,\mathbf{x}_0)$ denote the distance from a point $\mathbf{x}_i$ to the center $\mathbf{x}_0$. Then result \eqref{marginal_result} can be generalized by replacing $|x-c|$ with $d(\mathbf{x}_i,\mathbf{x}_0)$.
 #+BEGIN_LaTeX
 \begin{figure}[!t]
    \centering
@@ -259,8 +259,8 @@ Let $d(x_i,x_0)$ denote the distance from a point $x_i$ to the center $x_0$. The
 The above example is illustrated in Fig.\ref{type2_fs_uncertainty}. Fig.\ref{primary_fuzziness} shows the primary fuzziness when $x_0$ is estimated as 12.5 and $v_0$ is estimated as 2.5 but with uncertainty. Fig.\ref{secondary_fuzziness} shows the secondary fuzziness (uncertainty) of $v_0$ with various $\sigma_v\text{s}$. Note that we don't intend to model the uncertainty of $\sigma_v$ here. So we assume $\sigma_v$ is a given value. Fig.\ref{marginal_fuzziness} shows the marginal fuzzy set into which the uncertainty has been incorporated.
 
 We can see from \eqref{marginal_result} and Fig.\ref{marginal_fuzziness} that the marginal fuzzy set curve is flatter when the estimated bandwidth has much uncertainty, i.e., $\sigma_v$ is large.
-For a specific $\sigma_v$, the corrected bandwidth ($v_{new}$ in \eqref{marginal_result}) is almost the same as $v_0^2$ when $d(x_i,x_0)$ is small, and $v_{new}$ increases as $d(x_i,x_0)$ becomes large.
-In other words, the uncertainty of the bandwidth $v_0$ is incorporated into the marginal fuzzy set $\mu_X(x)$ in such a way that membership function of points with small $d(x_i,x_0)$ remains almost the same shape as the one with $\sigma_v=0$ (i.e., with no uncertainty in $v_0$), and membership function of points with large $d(x_i,x_0)$ deviates much from the one with $\sigma_v=0$. The degree of deviation is controlled by $\sigma_v$ and $d(x_i,x_0)$. This behavior is very intuitive in the sense that the uncertainty of bandwidth $v_0$ is obviously reflected in the membership of $x_i$ only when $x_i$ is far from the center and $x_i$ can be seen as a noisy datum in this case. 
+For a specific $\sigma_v$, the corrected bandwidth ($v_{new}$ in \eqref{marginal_result}) is almost the same as $v_0^2$ when $d(\mathbf{x}_i,\mathbf{x}_0)$ is small, and $v_{new}$ increases as $d(\mathbf{x}_i,\mathbf{x}_0)$ becomes large.
+In other words, the uncertainty of the bandwidth $v_0$ is incorporated into the marginal fuzzy set $\mu_X(x)$ in such a way that membership function of points with small $d(\mathbf{x}_i,\mathbf{x}_0)$ remains almost the same shape as the one with $\sigma_v=0$ (i.e., with no uncertainty in $v_0$), and membership function of points with large $d(\mathbf{x}_i,\mathbf{x}_0)$ deviates much from the one with $\sigma_v=0$. The degree of deviation is controlled by $\sigma_v$ and $d(\mathbf{x}_i,\mathbf{x}_0)$. This behavior is very intuitive in the sense that the uncertainty of bandwidth $v_0$ is obviously reflected in the membership of $\mathbf{x}_i$ only when $\mathbf{x}_i$ is far from the center and $\mathbf{x}_i$ can be seen as a noisy datum in this case. 
 
 From the above analysis, we conclude that it's reasonable to use the marginal fuzzy set to incorporate the uncertainty of the bandwidth. But it's not easy to specify $\sigma_v$ so that the uncertainty of the bandwidth is properly represented. In next section, we will show that the choice of $\sigma_v$ depends on noise level of the data set.
 ** The Unified Framework
@@ -276,18 +276,18 @@ Based on this observation, we propose to introduce the concept of /noise level/ 
 #+BEGIN_LaTeX
 \begin{equation}
 \label{upcm_theta_update}
-\theta_j=\frac{\Sigma_{i=1}^Nu_{ij}x_i}{\Sigma_{i=1}^Nu_{ij}} \quad \text{for}\;u_{ij}\geq \alpha.
+\boldsymbol{\theta}_j=\frac{\Sigma_{i=1}^Nu_{ij}\mathbf{x}_i}{\Sigma_{i=1}^Nu_{ij}} \quad \text{for}\;u_{ij}\geq \alpha.
 \end{equation}
 #+END_LaTeX 
-The $\alpha\text{-cut}$ trick is used in \cite{krishnapuram_possibilistic_1993} to compute the bandwidth with only the "good" feature point, and it's used here to update the prototype. By setting an appropriate $\alpha$, the influence of points in other clusters on the $\theta_j$ update is reduced. So we can select different $\alpha\text{s}$ for dataset Fig.\ref{fig1} and Fig.\ref{fig6}.
+The $\alpha\text{-cut}$ trick is used in \cite{krishnapuram_possibilistic_1993} to compute the bandwidth with only the "good" feature point, and it's used here to update the prototype. By setting an appropriate $\alpha$, the influence of points in other clusters on the $\boldsymbol{\theta}_j$ update is reduced. So we can select different $\alpha\text{s}$ for dataset Fig.\ref{fig1} and Fig.\ref{fig6}.
 
 The uncertainty of bandwidth estimation can be attributed to the noise in data points, according to \eqref{apcm_eta_update}. Then this uncertainty causes the uncertainty of the membership value of a point through \eqref{pcm_u_update}.
 In Section \ref{sec-3-2}, the intuition that we are less confident about the membership value of a point far from the prototype (cluster center) than the membership value of a point near the prototype, is respected in the conditional fuzzy set formulation of the membership function. This conditional fuzzy set formulation \eqref{marginal_result} allows us to control the shape of the membership function through the bandwidth uncertainty parameter $\sigma_v$ in a more flexible way than simply scaling the bandwidth like \eqref{corrected_eta}.
-In summary, the bandwidth $\eta_j$ is calculated with noisy points, and then the uncertainty of the membership value of a point calculated with this uncertain $\eta_j$ is modeled through the conditional fuzzy set framework. For ease of computation, we use $\theta_j$ to replace $\mu_j$ in \eqref{apcm_eta_update}:
+In summary, the bandwidth $\eta_j$ is calculated with noisy points, and then the uncertainty of the membership value of a point calculated with this uncertain $\eta_j$ is modeled through the conditional fuzzy set framework. For ease of computation, we use $\boldsymbol{\theta}_j$ to replace $\boldsymbol{\mu}_j$ in \eqref{apcm_eta_update}:
 #+BEGIN_LaTeX
 \begin{equation}
 \label{upcm_eta_update}
-\eta_j=\frac{1}{n_j}\sum_{x_i\in A_j}||x_i-\theta_j||
+\eta_j=\frac{1}{n_j}\sum_{\mathbf{x}_i\in A_j}||\mathbf{x}_i-\boldsymbol{\theta}_j||
 \end{equation}
 #+END_LaTeX 
 Then update of the membership function \eqref{pcm_theta_update} is modified according to \eqref{marginal_result} as follows:
@@ -303,7 +303,7 @@ The above reformulation of PCM and APCM constitutes the unified framework (UPCM)
 The UPCM algorithm is explicitly stated in Algorithm \ref{alg:upcm}.
 #+BEGIN_LaTeX
 \begin{algorithm}[H]
-\caption{ [$\Theta$, $U$, $label$] = UPCM($X$, $m_{ini}$, $\alpha$, $\sigma_v$)}
+\caption{ [$\Theta$, $U$, $label$] = UPCM($\mathbf{X}$, $m_{ini}$, $\alpha$, $\sigma_v$)}
 \label{alg:upcm}
 \begin{algorithmic}[1]
 \Require {$X$, $m_{ini}$, $\alpha$, $\sigma_v$}
@@ -332,7 +332,7 @@ The UPCM algorithm is explicitly stated in Algorithm \ref{alg:upcm}.
 In this subsection, we show the performance of UPCM on dataset \ref{fig1} and dataset \ref{fig6}. We also show the parameter-choosing flexibility endowed by UPCM.
 
 *Experiment 1:* This experiment on dataset Fig.\ref{fig1} illustrates how PCM and APCM are unified in UPCM.
-Fig.\ref{estimation_error_contrast} shows the center-estimation error computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$ with respect to parameters of UPCM and APCM. 
+Fig.\ref{estimation_error_contrast} shows the center-estimation error computed via $\Sigma_j||\mathbf{\hat{\theta}_j}-\mathbf{\theta_j^{True}}||$ with respect to parameters of UPCM and APCM. 
 The result of UPCM is shown in Fig.\ref{fig_transition_apcm_pcm}. The PCM region means that estimated clusters (prototypes) are both in the large cluster (Cluster 1 in Fig.\ref{fig1_ori}), and the APCM region means that estimated clusters (prototypes) are in each physical cluster respectively.
 In the PCM region, the parameters given to UPCM allows the small cluster to have enough bandwidth (mobility) to move to the dense region of the whole data set (Actually, this dense region is the weighted average of points in the dataset), according to \eqref{pcm_theta_update}. At the same time, the large cluster (prototype) stays in the dense region of the large physical cluster. In other words, the small cluster is dragged towards to the large cluster. For dataset Fig.\ref{fig1} in this experiment, the two prototypes are close enough to merge into one cluster prototype when parameters (or UPCM) are in the PCM region. However, if the small physical cluster has more points, say 400, the two prototypes will merge only when we specify a large $\sigma_v$, as can be seen in Fig.\ref{fig1_merge_case_upcm}.
 In the APCM region, the bandwidth (mobility) of each cluster is properly confined through $\sigma_v$ and $\alpha$, so both clusters are correctly estimated.
@@ -350,7 +350,7 @@ intermediate states like "not very good". In this sense, we conclude that the ma
    %\quad
    \subfloat[]
     {\includegraphics[width=0.5\columnwidth]{img/plot_sigmaV_data_apcm.png}\label{fig_apcm_estimation_error}}
-\caption{The center-estimation error computed via $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$ is used to illustrate the behavior of UPCM and APCM. Note that the estimated two cluster centers are both considered to be $\hat{\theta}_1$ when the algorithm results in only $1$ cluster to make sure it's reasonable to compute $\Sigma_i||\hat{\theta}_i-\theta_i^{True}||$. (a) The center-estimation error (the vertical axis) with respect to degree of uncertainty $\sigma_v$ (the horizontal axis) under various noise levels ($\alpha$). The centers are estimated by UPCM with $m_{ini}=2$ on dataset Fig.\ref{fig1}. In the APCM region, the estimated clusters are almost exactly in the two physical clusters. In the PCM region, the small cluster is "dragged" towards the large cluster. (b) The center-estimation error (the vertical axis) with respect to $\alpha$ (the horizontal axis). The centers are estimated by APCM with $m_{ini}=2$ on dataset Fig.\ref{fig1}.}
+\caption{The center-estimation error computed via $\Sigma_j||\mathbf{\hat{\theta}_j}-\mathbf{\theta_j^{True}}||$ is used to illustrate the behavior of UPCM and APCM. Note that the estimated two cluster centers are both considered to be $\hat{\theta}_1$ when the algorithm results in only $1$ cluster to make sure it's reasonable to compute $\Sigma_j||\mathbf{\hat{\theta}_j}-\mathbf{\theta_j^{True}}||$. (a) The center-estimation error (the vertical axis) with respect to degree of uncertainty $\sigma_v$ (the horizontal axis) under various noise levels ($\alpha$). The centers are estimated by UPCM with $m_{ini}=2$ on dataset Fig.\ref{fig1}. In the APCM region, the estimated clusters are almost exactly in the two physical clusters. In the PCM region, the small cluster is "dragged" towards the large cluster. (b) The center-estimation error (the vertical axis) with respect to $\alpha$ (the horizontal axis). The centers are estimated by APCM with $m_{ini}=2$ on dataset Fig.\ref{fig1}.}
 \label{estimation_error_contrast}
 \end{figure}
 #+END_LaTeX
@@ -371,7 +371,7 @@ intermediate states like "not very good". In this sense, we conclude that the ma
 The resulting cluster number of UPCM with $m_{ini}=10$ on dataset Fig.\ref{fig1_ori} and Fig.\ref{fig6_ori} are shown in Fig.\ref{fig1_comprose} and Fig.\ref{fig6_comprose} respectively. The results verifies that dataset Fig.\ref{fig6_ori} is more noisy than Fig.\ref{fig1_ori}. 
 We can see from Fig.\ref{fig6_comprose} that for the data set Fig.\ref{fig6_ori} and initialization of Fig.\ref{fig6_init}, it's better to specify a high noise level $\alpha$ so that the algorithm still estimates the correct number of clusters in a wide range of $\sigma_v$. In contrast, dataset Fig.\ref{fig1_ori} is less noisy than dataset Fig.\ref{fig6_ori} in the sense that the two clusters are not too close, so the algorithm's performance didn't rely too much on the specification of $\alpha$.
 
-Fig.\ref{fig1_comprose} and Fig.\ref{fig6_comprose} also illustrate the interplay between $\alpha$ and $\sigma_v$, i.e., a large specification of noise level $\alpha$ indicate that fewer points are actually contributed to the adaption of prototype $\theta_j$, so we should specify a large $\sigma_v$ to give the clusters in one physical cluster more mobility to merge. This relation between $\alpha$ and $\sigma_v$ also interprets the result of 
+Fig.\ref{fig1_comprose} and Fig.\ref{fig6_comprose} also illustrate the interplay between $\alpha$ and $\sigma_v$, i.e., a large specification of noise level $\alpha$ indicate that fewer points are actually contributed to the adaption of prototype $\boldsymbol{\theta}_j$, so we should specify a large $\sigma_v$ to give the clusters in one physical cluster more mobility to merge. This relation between $\alpha$ and $\sigma_v$ also interprets the result of 
 Fig.\ref{fig_transition_apcm_pcm} where a large noise-level parameter $\alpha$ allows us to specify a wide range of $\sigma_v$ and UPCM still produces good clusters.
 #+CAPTION: The number of clusters resulted from UPCM with $m_{ini}=10$ on dataset Fig.\ref{fig1}. The horizontal axis represents the noise level $\alpha$. The vertical axis represents the bandwidth estimation uncertainty $\sigma_v$.
 #+NAME: fig1_comprose
