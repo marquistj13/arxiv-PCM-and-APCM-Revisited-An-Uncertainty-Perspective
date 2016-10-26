@@ -4,7 +4,7 @@
 # set DATE to void to avoid it's display
 #+DATE: 
 #+LATEX_CLASS: IEEEtran
-#+LaTeX_CLASS_OPTIONS: [12pt,journal,onecolumn,draftcls]
+#+LaTeX_CLASS_OPTIONS: [journal]
 #+LATEX_HEADER: \usepackage[thmmarks, amsmath, thref]{ntheorem}
 #+LATEX_HEADER: \theoremstyle{definition}
 # Adds automatic line break, if heading is too long
@@ -164,7 +164,7 @@ According to Zadeh \cite{zadeh_concept_1975}, a type-2 fuzzy set (T2 FS) is a fu
 #+BEGIN_LaTeX
 \begin{definition}[type-2 fuzzy sets]
 \label{type2-fs}
-A type-2 fuzzy set $\tilde{X}$ is a fuzzy set defined on the universe of discourse $\Omega_X$ whose membership value $\mu_\tilde{X}(x)$ for a given $x\in\Omega_X$ is a type-1 fuzzy set  $U(x)=\mu_\tilde{X}(x)$ defined on $\Omega_X\subseteq[0,1]$ with membership function $\mu_{U(x)}(x,\mu_x)$ where $\mu_x\in\Omega_X\subseteq[0,1]$. The x is called \emph{primary variable} and $\mu_x$ is called the \emph{secondary variable}.
+A type-2 fuzzy set $\tilde{X}$ is a fuzzy set defined on the universe of discourse $\Omega_X$ whose membership value $\mu_{\tilde{X}}(x)$ for a given $x\in\Omega_X$ is a type-1 fuzzy set  $U(x)=\mu_{\tilde{X}}(x)$ defined on $\Omega_X\subseteq[0,1]$ with membership function $\mu_{U(x)}(x,\mu_x)$ where $\mu_x\in\Omega_X\subseteq[0,1]$. The x is called \emph{primary variable} and $\mu_x$ is called the \emph{secondary variable}.
 \end{definition}
 #+END_LaTeX
 
@@ -173,7 +173,7 @@ It's clear that T2 FS is just that one fuzziness (uncertainty) depends on anothe
 #+BEGIN_LaTeX
 \begin{definition}[conditional fuzzy sets]
 \label{conditional-fs}
-Let $X$ and $V$ be fuzzy sets defined on $\Omega_X$ and $\Omega_Y$, respectively. A \emphh{conditional fuzzy set}, denoted as $X|V$, is a fuzzy set defined on $\Omega_X$ with membership function:
+Let $X$ and $V$ be fuzzy sets defined on $\Omega_X$ and $\Omega_Y$, respectively. A \emph{conditional fuzzy set}, denoted as $X|V$, is a fuzzy set defined on $\Omega_X$ with membership function:
 \begin{equation}
 \mu_{X|V}(x|V),\quad  x\in\Omega_X
 \end{equation}
@@ -238,9 +238,8 @@ v_{new2} &= 0.5v_0-0.5\sqrt{v_0^2-4\sigma_v|x-x_0|}\leq v_0.
 \end{IEEEeqnarray*}
 #+END_LaTeX
 Then we get \eqref{marginal_result} through 
-#+BEGIN_LaTeX
 \begin{equation*}
-$\max\left[\exp\left(-\frac{|x-x_0|^2}{v_{new1}^2}\right),\exp\left(-\frac{|x-x_0|^2}{v_{new2}^2}\right)\right]=\exp\left(-\frac{|x-x_0|^2}{v_{new1}^2}\right)$.
+\max\left[\exp\left(-\frac{|x-x_0|^2}{v_{new1}^2}\right),\exp\left(-\frac{|x-x_0|^2}{v_{new2}^2}\right)\right]=\exp\left(-\frac{|x-x_0|^2}{v_{new1}^2}\right).
 \end{equation*}
 #+END_LaTeX
 Let $d(\mathbf{x}_i,\mathbf{x}_0)$ denote the distance from a point $\mathbf{x}_i$ to the center $\mathbf{x}_0$. Then result \eqref{marginal_result} can be generalized by replacing $|x-c|$ with $d(\mathbf{x}_i,\mathbf{x}_0)$.
@@ -318,7 +317,7 @@ The UPCM algorithm is explicitly stated in Algorithm \ref{alg:upcm}.
 \Repeat
 \State Update $U$ via \eqref{upcm_u_update}
 \State Update $\Theta$ via \eqref{upcm_theta_update}
-\Statex {\Comment {Possible cluster elimination}
+\Statex {\Comment {Possible cluster elimination}}
 \For{$i \leftarrow 1 \textbf{ to } N$}
 \State \textbf{Set:} $label(i)=r$ if $u_{ir}=\max_j u_{ij}$
 \EndFor
@@ -328,7 +327,7 @@ The UPCM algorithm is explicitly stated in Algorithm \ref{alg:upcm}.
 \State Update $\eta_j$ via \eqref{upcm_eta_update}
 \State Cluster $j$ is eliminated if $\eta_j=0$ (This happens if there is only one point in Cluster $j$)
 \State \textbf{Set:} $m=m-p$ if  $p$ clusters are eliminated
-\Until{the change in ${\theta}_j$'s between two successive iterations becomes sufficiently small or the number of iterations is reached}\\
+\Until{the change in $\theta_j$'s between two successive iterations becomes sufficiently small or the number of iterations is reached}\\
 \Return {$\Theta$, $U$, $label$}
 \end{algorithmic}
 \end{algorithm}
