@@ -238,6 +238,7 @@ v_{new2} &= 0.5v_0-0.5\sqrt{v_0^2-4\sigma_v|x-x_0|}\leq v_0.
 \end{IEEEeqnarray*}
 #+END_LaTeX
 Then we get \eqref{marginal_result} through 
+#+BEGIN_LaTeX
 \begin{equation*}
 \max\left[\exp\left(-\frac{|x-x_0|^2}{v_{new1}^2}\right),\exp\left(-\frac{|x-x_0|^2}{v_{new2}^2}\right)\right]=\exp\left(-\frac{|x-x_0|^2}{v_{new1}^2}\right).
 \end{equation*}
@@ -323,7 +324,7 @@ The UPCM algorithm is explicitly stated in Algorithm \ref{alg:upcm}.
 \EndFor
 \State Cluster $j$ is eliminated if $j \notin label$
 \State \textbf{Set:} $m=m-p$ if  $p$ clusters are eliminated
-\Statex {\Comment {Bandwidth update and possible cluster elimination}
+\Statex {\Comment {Bandwidth update and possible cluster elimination}}
 \State Update $\eta_j$ via \eqref{upcm_eta_update}
 \State Cluster $j$ is eliminated if $\eta_j=0$ (This happens if there is only one point in Cluster $j$)
 \State \textbf{Set:} $m=m-p$ if  $p$ clusters are eliminated
