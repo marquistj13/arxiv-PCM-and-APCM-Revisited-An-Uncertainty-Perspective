@@ -3,6 +3,12 @@
 *.pdf
 *.tex.bak
 *.thm
+*.aux
+*.blg
+*.log
+*.out
+*.gz
+
 
 # images,movies
 *.png
