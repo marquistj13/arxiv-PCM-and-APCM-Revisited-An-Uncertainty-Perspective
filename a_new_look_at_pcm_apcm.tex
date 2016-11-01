@@ -1,30 +1,18 @@
 % Created 2016-10-26 周三 21:35
 \documentclass[journal,transmag]{IEEEtran}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{fixltx2e}
-\usepackage{graphicx}
-\usepackage{longtable}
-\usepackage{float}
-\usepackage{wrapfig}
-\usepackage{rotating}
-\usepackage[normalem]{ulem}
-\usepackage{amsmath}
-\usepackage{textcomp}
-\usepackage{marvosym}
-\usepackage{wasysym}
-\usepackage{amssymb}
+\usepackage{amsmath,amssymb,graphicx}
+\usepackage[caption=false,font=footnotesize]{subfig}
 \usepackage{hyperref}
-\tolerance=1000
-\usepackage[thmmarks, amsmath, thref]{ntheorem}
-\theoremstyle{definition}
+
+\usepackage[thmmarks, amsmath]{ntheorem}
 \makeatletter \renewtheoremstyle{plain} {\item{\theorem@headerfont ##1\ ##2\theorem@separator}~}  {\item{\theorem@headerfont ##1\ ##2\ (##3)\theorem@separator}~}
 \theoremheaderfont{\normalfont\bfseries}
 \theoremseparator{:}
 \theorembodyfont{\normalfont}
 \theoremsymbol{\ensuremath{\blacksquare}}
 \newtheorem{definition}{Definition}
-\usepackage[caption=false,font=footnotesize]{subfig}
+
+
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
@@ -34,16 +22,13 @@
 \interdisplaylinepenalty=2500
 \date{}
 \title{PCM and APCM Revisited: An Uncertainty Perspective}
-\hypersetup{
-  pdfkeywords={},
-  pdfsubject={},
-  pdfcreator={Emacs 24.5.1 (Org mode 8.2.10)}}
+
 \begin{document}
 
 \author{\IEEEauthorblockN{Peixin~Hou\IEEEauthorrefmark{1}, Hao~Deng\IEEEauthorrefmark{2}, Jiguang~Yue\IEEEauthorrefmark{1}, and Shuguang~Liu\IEEEauthorrefmark{3}}
 \IEEEauthorblockA{\IEEEauthorrefmark{1}Department of Control Science and Engineering, Tongji University}
-\IEEEauthorblockA{\IEEEauthorrefmark{2}School of Physics and Electronics, Henan University} 
-\IEEEauthorblockA{\IEEEauthorrefmark{3}Department of Hydraulic Engineering, Tongji University}% 
+\IEEEauthorblockA{\IEEEauthorrefmark{2}School of Physics and Electronics, Henan University}
+\IEEEauthorblockA{\IEEEauthorrefmark{3}Department of Hydraulic Engineering, Tongji University}%
 }
 
 \IEEEtitleabstractindextext{%
@@ -388,6 +373,6 @@ This observation leads to the conclusion that the steepness of a Gaussian member
 \item Based on analysis of the interplay between $\alpha$ and $\sigma_v$ in Section \ref{sec-4-2}, we can choose parameters $\alpha$ and $\sigma_v$ in the following way: specifying a small noise level $\alpha$ means that we are less uncertain about the estimated bandwidth, so we should also specify a small $\sigma_v$, and a large $\alpha$ should correspond to a large $\sigma_v$. This observation indicates that we can relate the choosing of $\sigma_v$ to noise level $\alpha$. That is, the uncertainty (fuzziness) of the bandwidth \eqref{secondary_fuzziness_v} can also be a type-2 fuzzy set with primary variable $\sigma_v$ and secondary variable $\alpha$ (see Definition \ref{conditional-fs}). Then we can cancel out  parameter $\sigma_v$ so there is only one parameter $\alpha$ for the user to choose. In this way, the clustering process is only controlled by noise level $\alpha$ of the dataset. However, modeling the relationship between $\sigma_v$ and $\alpha$ is a difficult issue and needs further research.
 \end{enumerate}
 \bibliographystyle{IEEEtran}
-\bibliography{D:/emacs/etc/ZoteroOutput,IEEEabrv}
+\bibliography{./ZoteroOutput,IEEEabrv}
 % Emacs 24.5.1 (Org mode 8.2.10)
 \end{document}
