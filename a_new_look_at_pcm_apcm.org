@@ -297,10 +297,10 @@ In summary, the bandwidth $\eta_j$ is calculated with noisy points, and then the
 #+END_LaTeX 
 Then update of the membership function \eqref{pcm_theta_update} is modified according to \eqref{marginal_result} as follows:
 #+BEGIN_LaTeX
-\begin{IEEEeqnarray}{ll}
+\begin{equation}
 \label{upcm_u_update}
 \mu_{ij}=\exp\left(-\frac{d_{ij}^2}{\gamma_j}\right)
-\end{IEEEeqnarray}
+\end{equation}
 #+END_LaTeX
 where $\gamma_j=\left(0.5\eta_{j}+0.5\sqrt{\eta_{j}^{2}+4\sigma_vd_{ij}}\right)^2$ and $d_{ij}=||\mathbf{x}_i-\boldsymbol{\theta}_j||$.
 
