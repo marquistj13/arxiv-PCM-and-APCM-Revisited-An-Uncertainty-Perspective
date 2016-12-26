@@ -221,7 +221,7 @@ and the uncertainty (fuzziness) of $V$ is also modeled as a Gaussian fuzzy set w
 \mu_V(v)=\exp\left(-\frac{(v-v_0)^2}{\sigma^2_v}\right)
 \end{equation}
 #+END_LaTeX
-where $\sigma_v$ is a given constant which represents the uncertainty of parameter $V$. Then according to Definition \ref{marginal-fs} \eqref{marginal_fs}, the marginal fuzzy set $X$ of $X|V$ with membership function:
+where $\sigma_v$ is a given constant which represents the uncertainty of parameter $V$. Then according to Definition \ref{marginal-fs} \eqref{marginal_fs}, the marginal fuzzy set $X$ of $X|V$ with membership function is:
 #+BEGIN_LaTeX
 \begin{IEEEeqnarray}{ll}
 \label{marginal_result}
@@ -295,7 +295,7 @@ In summary, the bandwidth $\eta_j$ is calculated with noisy points, and then the
 \eta_j=\frac{1}{n_j}\sum_{\mathbf{x}_i\in A_j}||\mathbf{x}_i-\boldsymbol{\theta}_j||
 \end{equation}
 #+END_LaTeX 
-Then update of the membership function \eqref{pcm_theta_update} is modified according to \eqref{marginal_result} as follows:
+Then update of the membership function \eqref{pcm_u_update} is modified according to \eqref{marginal_result} as follows:
 #+BEGIN_LaTeX
 \begin{equation}
 \label{upcm_u_update}
